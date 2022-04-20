@@ -1,9 +1,9 @@
 package com.example.studybuddy.models
 
 data class BasicStudent(val _id:String,
-val firstname:string
-lastname:string;
-email:string;
-username:string;
-location:string;
-hideData:boolean;)
+                        val firstname:String,
+                        val lastname:String,
+                        val email:String,
+                        val username:String,
+                        val location:String,
+                        val hideData:Boolean)
