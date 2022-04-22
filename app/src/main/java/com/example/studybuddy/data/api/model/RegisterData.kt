@@ -1,4 +1,4 @@
-package com.example.studybuddy.models
+package com.example.studybuddy.data.api.model
 
 data class RegisterData(val firstname:String,
                         val lastname:String,

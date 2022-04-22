@@ -1,4 +1,4 @@
-package com.example.studybuddy.models
+package com.example.studybuddy.data.api.model
 
 data class JoinRequest(
     val groupId:String, //needed to know where to send request to

@@ -1,4 +1,4 @@
-package com.example.studybuddy.models
+package com.example.studybuddy.data.api.model
 
 data class ChangeableGroupData(
     val groupName:String,

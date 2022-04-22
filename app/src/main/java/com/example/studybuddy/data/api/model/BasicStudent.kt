@@ -1,4 +1,4 @@
-package com.example.studybuddy.models
+package com.example.studybuddy.data.api.model
 
 data class BasicStudent(val _id:String,
                         val firstname:String,
