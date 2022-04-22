@@ -10,7 +10,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 //Pass the API via dependency injection for loose coupling
-/*
+
 class AuthenticationRepository @Inject constructor (
     private val authenticationApi:AuthenticationApi) {
     //async function...
@@ -21,9 +21,10 @@ class AuthenticationRepository @Inject constructor (
             Log.i("error",e.toString())
             return e.toString()
         }
-        return response
+        return response.text
     }
-}*/
+}
+/*
 class AuthenticationRepository  constructor (
     private val authenticationApi:AuthenticationApi = Retrofit.Builder().addConverterFactory(
         GsonConverterFactory.create())
@@ -41,4 +42,4 @@ class AuthenticationRepository  constructor (
         Log.i("testAuth",response.text)
         return response
     }
-}
+}*/

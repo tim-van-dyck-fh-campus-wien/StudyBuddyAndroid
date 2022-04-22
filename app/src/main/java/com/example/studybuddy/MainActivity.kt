@@ -15,7 +15,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.studybuddy.navigation.MainNavigation
 import com.example.studybuddy.ui.theme.StudyBuddyTheme
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

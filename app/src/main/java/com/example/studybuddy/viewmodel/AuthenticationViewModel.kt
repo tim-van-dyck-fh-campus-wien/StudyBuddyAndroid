@@ -7,7 +7,7 @@ import com.example.studybuddy.data.repositories.authentication.AuthenticationRep
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-/*
+
 @HiltViewModel
 class AuthenticationViewModel @Inject constructor(
     private val repository:AuthenticationRepository
@@ -20,7 +20,8 @@ class AuthenticationViewModel @Inject constructor(
         }
         return "asdf"
     }
-}*/
+}
+/*
 class AuthenticationViewModel constructor(
     private val repository:AuthenticationRepository = AuthenticationRepository()
 ) : ViewModel(){
@@ -32,4 +33,4 @@ class AuthenticationViewModel constructor(
         }
         return "asdf"
     }
-}
+}*/
