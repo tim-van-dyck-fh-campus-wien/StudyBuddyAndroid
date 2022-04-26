@@ -8,6 +8,8 @@ import retrofit2.Call
 //API Service Class
 interface AuthenticationApi {
     //Retrofit creates the necessary code for us!
+
+    //base URL is defined in ApiConstants
     @GET("auth")
-    suspend fun getTest():test//Is a async function
+    suspend fun getTest():test//Is a async function (coroutine for this?)
 }

@@ -27,12 +27,16 @@ object AppModule {
         return app as BaseApplication
     }
 
+
+    /**
+     * Goes together (I guess) for each API call
+     */
     @Singleton
-    @Provides
+    @Provides //the repo for the API call
     fun provideAuthenticationRepository(api:AuthenticationApi) = AuthenticationRepository(api)
 
     @Singleton
-    @Provides
+    @Provides //the API to the retrofit instance, thus be able to use the service
     fun provideAuthenticationApi():AuthenticationApi{
         return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
             .baseUrl(ApiConstants.BASE_URL)
