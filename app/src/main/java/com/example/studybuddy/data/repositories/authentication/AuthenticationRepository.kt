@@ -5,6 +5,7 @@ import com.example.studybuddy.data.api.ApiConstants
 import com.example.studybuddy.data.api.AuthenticationApi
 import com.example.studybuddy.data.api.model.LoginData
 import com.example.studybuddy.data.api.model.RegisterData
+import com.example.studybuddy.data.api.model.SingleGroupId
 import com.example.studybuddy.data.api.model.test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 //Pass the API via dependency injection for loose coupling
 
-class AuthenticationRepository @Inject constructor (
+class AuthenticationRepository constructor (
     private val authenticationApi:AuthenticationApi) {
     //async function...
     suspend fun getTest():String{
@@ -25,7 +26,11 @@ class AuthenticationRepository @Inject constructor (
         }
         return response.text
     }
-    suspend fun register(registerData: RegisterData):Boolean{
+    suspend fun register(registerData: RegisterData) = authenticationApi.register(registerData)
+    suspend fun login(loginData: LoginData)= authenticationApi.login(loginData)
+    suspend fun studentIsAdminOfGroup(singleGroupId: SingleGroupId)=authenticationApi.checkIfStudentIsAdminOfGroup(singleGroupId)
+    suspend fun isUserLoggedIn()=authenticationApi.isUserLoggedIn()
+    /*suspend fun register(registerData: RegisterData):Boolean{
        val response = authenticationApi.register(registerData = registerData)
         if(response.isSuccessful){
             Log.i("authAPI/register",response.body().toString())
@@ -34,8 +39,21 @@ class AuthenticationRepository @Inject constructor (
         return false
     }
     suspend fun login(loginData: LoginData):Boolean{
+        val response = authenticationApi.login(loginData = loginData)
+        if(response.isSuccessful){
+            Log.i("authAPI/login",response.body().toString())
+            return true
+        }
         return false
     }
+    suspend fun studentIsAdminOfGroup(singleGroupId: SingleGroupId):Boolean{
+        val response = authenticationApi.checkIfStudentIsAdminOfGroup(singleGroupId)
+        if(response.isSuccessful){
+            Log.i("authAPI/studentIsAdmin",response.body().toString())
+            return true
+        }
+        return false
+    }*/
 }
 /*
 class AuthenticationRepository  constructor (

@@ -24,5 +24,7 @@ interface AuthenticationApi {
     suspend fun login(@Body loginData:LoginData):Response<Unit>
 
     @GET("group/authorizationCheck")
-    suspend fun checkIfStudentIsAdminOfGroup(@Body singleGroupId: SingleGroupId)
+    suspend fun checkIfStudentIsAdminOfGroup(@Body singleGroupId: SingleGroupId):Response<Unit>
+    @GET("auth/checkAuthentication")
+    suspend fun isUserLoggedIn():Response<Unit>
 }

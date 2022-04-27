@@ -13,13 +13,13 @@ interface StudyGroupApi {
     suspend fun createStudyGroup(@Body createStudyGroup: CreateStudyGroup):Response<SingleStudyGroup>//Is a async function
 
     @GET("studyGroups/{district}")
-    suspend fun getFilteredStudyGroups(@Path("district") district:String):Response<GroupStudyGroups>
+    suspend fun getFilteredStudyGroups(@Path("district") district:String):Response<List<SingleStudyGroup>>
 
     @GET("studyGroups")
-    suspend fun getAllStudyGroups():Response<GroupStudyGroups>
+    suspend fun getAllStudyGroups():Response<List<SingleStudyGroup>>
 
     @GET("studyGroups/groups/myGroups")
-    suspend fun getMyGroups():Response<GroupStudyGroups>
+    suspend fun getMyGroups():Response<List<SingleStudyGroup>>
 
     //Use this if the logged in student is NO Admin!
     //Function for admins in ManageStudyGroupApi

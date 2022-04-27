@@ -20,16 +20,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.studybuddy.data.api.model.LoginData
+import com.example.studybuddy.data.preferences.AppPreferences
 import com.example.studybuddy.navigation.MainNavigation
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.ui.theme.StudyBuddyTheme
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
+import com.example.studybuddy.viewmodel.StudyGroupViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Needed to initialize our AppPreferences object.
+        //Needed for session management!
+        AppPreferences.setup(applicationContext)
         setContent {
 
             StudyBuddyTheme {
@@ -38,8 +44,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainNavigation()
-                    //Greeting(name = "asdf")
+                    //MainNavigation()
+                    Greeting(name = "asdf")
                 }
             }
         }
@@ -48,12 +54,22 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String) {
-    val authenticationViewModel: AuthenticationViewModel = viewModel()
-    authenticationViewModel.loadTest()
-    authenticationViewModel.register()
+    backendTests()
     Text(text = "Hello $name!")
 }
 
+private fun initializeAppPreferences(){
+}
+@Composable
+fun backendTests() {
+    val authenticationViewModel: AuthenticationViewModel = viewModel()
+    val studyGroupViewModel: StudyGroupViewModel = viewModel()
+    val loginData = LoginData("tvd2204", "campus09129")
+    authenticationViewModel.login(loginData)
+    //val test = studyGroupViewModel.getAllStudyGroups()
+    authenticationViewModel.isStudentLoggedIn()
+    studyGroupViewModel.getAllStudyGroups()
+}
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
