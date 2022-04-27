@@ -42,14 +42,15 @@ class AuthenticationViewModel @Inject constructor(
         }
     }
 
-    fun login(loginData: LoginData){
+    fun login(loginData: LoginData,failure:(String)->Unit={},success:()->Unit={}){
         Log.i("LOGIIN","WORKS")
         viewModelScope.launch{
             val response = repository.login(loginData)
             if(response.isSuccessful){//If registering worked...
                 Log.i("login",response.code().toString())
-                isStudentLoggedIn()
+                success()
             }else{
+                failure(response.message())
                 onError("Error: ${response.message()}")
             }
         }
@@ -65,12 +66,14 @@ class AuthenticationViewModel @Inject constructor(
             }
         }
     }
-    fun isStudentLoggedIn(){
+    fun isStudentLoggedIn(sucess:()->Unit = {}, failure:()->Unit = {}){
         viewModelScope.launch{
             val response = repository.isUserLoggedIn()
             if(response.isSuccessful){
                 Log.i("AuthAPI-LoggedIn",response.code().toString())
+                sucess()
             }else{
+                failure()
                 Log.w("AuthAPI-LoggedIn",response.code().toString())
             }
         }

@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
         //Needed to initialize our AppPreferences object.
         //Needed for session management!
         AppPreferences.setup(applicationContext)
+
         setContent {
 
             StudyBuddyTheme {
@@ -44,22 +45,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    //MainNavigation()
-                    Greeting(name = "asdf")
+                    MainNavigation()
+                    //Greeting(name = "asdf")
                 }
             }
         }
     }
 }
-
 @Composable
-fun Greeting(name: String) {
-    backendTests()
-    Text(text = "Hello $name!")
+fun checkLogin(){
+
 }
 
-private fun initializeAppPreferences(){
-}
 @Composable
 fun backendTests() {
     val authenticationViewModel: AuthenticationViewModel = viewModel()
@@ -70,6 +67,16 @@ fun backendTests() {
     authenticationViewModel.isStudentLoggedIn()
     studyGroupViewModel.getAllStudyGroups()
 }
+
+@Composable
+fun Greeting(name: String) {
+    backendTests()
+    Text(text = "Hello $name!")
+}
+
+private fun initializeAppPreferences(){
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {

@@ -1,6 +1,5 @@
 package com.example.studybuddy.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -13,17 +12,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.studybuddy.Greeting
+import com.example.studybuddy.data.api.model.LoginData
 import com.example.studybuddy.navigation.ScreenNames
-import com.example.studybuddy.ui.theme.StudyBuddyTheme
-import java.text.SimpleDateFormat
+import com.example.studybuddy.viewmodel.AuthenticationViewModel
 import java.util.*
 
 @Composable
-fun LoginScreen(navController: NavHostController = rememberNavController(),
+fun LoginScreen(
+    navController: NavHostController = rememberNavController(),
+    authenticationViewModel: AuthenticationViewModel,
                 //onLoginClick: () -> Unit = {},
                 //onRegisterInsteadClick: () -> Unit = {}
     ){
+    //If the student is already logged in, go to the home screen!
+   authenticationViewModel.isStudentLoggedIn(sucess = {
+        navController.navigate(ScreenNames.HomeScreen.name)
+    })
+
+
     Column (modifier = Modifier.fillMaxWidth().fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
@@ -54,7 +60,13 @@ fun LoginScreen(navController: NavHostController = rememberNavController(),
             onClick = {
                 if (username.isNotEmpty() and password.isNotEmpty()) {
                     // todo: login
-                    //onLoginClick()
+                        val loginData = LoginData(username,password)
+                    authenticationViewModel.login(loginData = loginData,failure = {
+                        //todo: Add behaviour if the login fails
+                    }){
+                        navController.navigate(ScreenNames.HomeScreen.name)
+                    }
+
                     // todo: check if password is correct
                     navController.navigate(ScreenNames.HomeScreen.name)
                     username = ""
@@ -81,5 +93,5 @@ fun LoginScreen(navController: NavHostController = rememberNavController(),
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    LoginScreen()
+    //LoginScreen()
 }
