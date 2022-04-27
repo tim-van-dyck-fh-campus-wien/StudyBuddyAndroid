@@ -31,12 +31,13 @@ class AuthenticationViewModel @Inject constructor(
     }
 
     fun register(registerData: RegisterData=
-                     RegisterData("hans","test", "hansi", "hans123@stud.fh-campuswien.ac.at", "campus09", "c20104750555", "1070",2030)){
+                     RegisterData("hans","test", "hansi", "hans123@stud.fh-campuswien.ac.at", "campus09", "c20104750555", "1070",2030), failure:(String)->Unit={},success:()->Unit={}){
         viewModelScope.launch {
            val response = repository.register(registerData)
             if(response.isSuccessful){//If registering worked...
-
+                success()
             }else{
+                failure(response.message())
                 onError("Error: ${response.message()}")
             }
         }
