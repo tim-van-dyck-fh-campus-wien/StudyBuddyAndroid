@@ -3,6 +3,8 @@ package com.example.studybuddy.data.repositories.authentication
 import android.util.Log
 import com.example.studybuddy.data.api.ApiConstants
 import com.example.studybuddy.data.api.AuthenticationApi
+import com.example.studybuddy.data.api.model.LoginData
+import com.example.studybuddy.data.api.model.RegisterData
 import com.example.studybuddy.data.api.model.test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,6 +24,17 @@ class AuthenticationRepository @Inject constructor (
             return e.toString()
         }
         return response.text
+    }
+    suspend fun register(registerData: RegisterData):Boolean{
+       val response = authenticationApi.register(registerData = registerData)
+        if(response.isSuccessful){
+            Log.i("authAPI/register",response.body().toString())
+            return true
+        }
+        return false
+    }
+    suspend fun login(loginData: LoginData):Boolean{
+        return false
     }
 }
 /*

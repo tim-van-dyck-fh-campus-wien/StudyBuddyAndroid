@@ -3,6 +3,7 @@ package com.example.studybuddy.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.studybuddy.data.api.model.RegisterData
 import com.example.studybuddy.data.repositories.authentication.AuthenticationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,6 +21,14 @@ class AuthenticationViewModel @Inject constructor(
         }
         return "asdf"
     }
+
+    fun register(registerData: RegisterData=
+                     RegisterData("hans","test", "hansi", "hans123@stud.fh-campuswien.ac.at", "campus09", "c20104750555", "1070",2030)){
+        viewModelScope.launch {
+            repository.register(registerData = registerData)
+        }
+    }
+
 }
 /*
 class AuthenticationViewModel constructor(
