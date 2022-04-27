@@ -1,6 +1,7 @@
 package com.example.studybuddy.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -15,6 +16,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.studybuddy.DisplayBottomBar
 import com.example.studybuddy.navigation.ScreenNames
+import com.example.studybuddy.widgets.StudyGroupRow
 
 @Composable
 fun HomeScreen(navController: NavHostController){
@@ -23,6 +25,10 @@ fun HomeScreen(navController: NavHostController){
 
 @Composable
 fun HomeContent(){
-    Text(text = "HomeScreen")
+    Column {
+        Text(text = "HomeScreen")
+        StudyGroupRow()
+    }
+
 }
 
