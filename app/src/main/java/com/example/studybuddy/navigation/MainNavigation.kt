@@ -11,9 +11,9 @@ import com.example.studybuddy.screens.*
 fun MainNavigation(){
     val navController = rememberNavController()
 
-    //NavHost(navController = navController, startDestination = ScreenNames.LoginScreen.name  ){
+    NavHost(navController = navController, startDestination = ScreenNames.LoginScreen.name  ){
     //changed start destination to homeScreen to see the preview:
-    NavHost(navController = navController, startDestination = ScreenNames.HomeScreen.name  ){
+    //NavHost(navController = navController, startDestination = ScreenNames.HomeScreen.name  ){
             composable(ScreenNames.LoginScreen.name){
                 LoginScreen(navController = navController)
             }
