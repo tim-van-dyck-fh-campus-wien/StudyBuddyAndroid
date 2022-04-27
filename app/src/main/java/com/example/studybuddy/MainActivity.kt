@@ -50,6 +50,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: String) {
     val authenticationViewModel: AuthenticationViewModel = viewModel()
     authenticationViewModel.loadTest()
+    authenticationViewModel.register()
     Text(text = "Hello $name!")
 }
 
