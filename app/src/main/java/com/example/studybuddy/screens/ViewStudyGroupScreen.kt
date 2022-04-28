@@ -6,9 +6,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
-import com.example.studybuddy.data.dummies.DummyModel
-import com.example.studybuddy.data.dummies.filterGroup
-import com.example.studybuddy.data.dummies.getDummyGroups
+import com.example.studybuddy.data.api.model.SingleStudyGroup
+import com.example.studybuddy.data.api.model.filterGroup
+import com.example.studybuddy.data.api.model.getDummyGroups
+
+
 
 @Composable
 fun ViewStudyGroupScreen(
@@ -18,6 +20,6 @@ fun ViewStudyGroupScreen(
 }
 
 @Composable
-fun ViewStudyGroupContent(studyGroup:DummyModel = getDummyGroups()[0]){
+fun ViewStudyGroupContent(studyGroup:SingleStudyGroup = getDummyGroups()[0]){
     Text(text = "ViewStudyGroupScreen ${studyGroup._id}, ${studyGroup.name}")
 }

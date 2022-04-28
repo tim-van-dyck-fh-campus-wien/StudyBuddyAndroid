@@ -17,7 +17,7 @@ class StudyGroupViewModel @Inject constructor(
 ) : ViewModel(){
     val errorMessage = MutableLiveData<String>()
     val studyGroupsSearchList =MutableLiveData<List<SingleStudyGroup>>()
-    fun getAllStudyGroups(){
+    fun getAllStudyGroups() {
         Log.i("Test","test")
         viewModelScope.launch {
             val response = repository.getAllStudyGroups()
@@ -33,6 +33,7 @@ class StudyGroupViewModel @Inject constructor(
     private fun onError(message:String){
 
     }
+
 
 }
 /*

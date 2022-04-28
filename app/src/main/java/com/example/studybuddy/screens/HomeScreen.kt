@@ -10,8 +10,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
-import com.example.studybuddy.data.dummies.DummyModel
-import com.example.studybuddy.data.dummies.getDummyGroups
+import com.example.studybuddy.data.api.model.SingleStudyGroup
+import com.example.studybuddy.data.api.model.getDummyGroups
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.widgets.JoinButton
 import com.example.studybuddy.widgets.StudyGroupRow
@@ -25,13 +25,13 @@ fun HomeScreen(navController: NavHostController = rememberNavController()){
 
 
 @Composable
-fun HomeContent(studyGroupList :List<DummyModel>,
+fun HomeContent(studyGroupList :List<SingleStudyGroup>,
                 navController: NavHostController = rememberNavController()){
         Text(text = "HomeScreen")
         LazyColumn{
             items(studyGroupList){
                 studyGroup ->
-                StudyGroupRow(studyGroup = studyGroup,
+                StudyGroupRow(studyGroup = getDummyGroups()[0],
                     onItemClick = {
                             studyGroupSingle ->
                             Log.d("navigation", "cur studyGroupID = $studyGroupSingle")

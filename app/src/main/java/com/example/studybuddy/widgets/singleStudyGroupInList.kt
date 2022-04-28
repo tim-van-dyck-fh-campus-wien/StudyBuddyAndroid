@@ -26,18 +26,18 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.studybuddy.data.api.model.SingleStudyGroup
-import com.example.studybuddy.data.dummies.DummyModel
-import com.example.studybuddy.data.dummies.getDummyGroups
+
 
 
 /**
  * This function shows a simple display of a Study Group in a List of Study Groups
  * Intended for Group Lists
  */
-@Preview
+//@Preview
 @Composable
 fun StudyGroupRow(
-            studyGroup: DummyModel = getDummyGroups()[0],
+            studyGroup: SingleStudyGroup,
+            //studyGroup: DummyModel = getDummyGroups()[0],
             onItemClick: (String) -> Unit = {},
             content: @Composable () -> Unit = {}
             //test content for JoinStudyGroup
@@ -166,7 +166,10 @@ fun StudyGroupRow(
     }
 
 @Composable
-fun DisplayStudyGroupIcon(studyGroup: DummyModel = getDummyGroups()[0]){
+fun DisplayStudyGroupIcon(
+    studyGroup: SingleStudyGroup,
+    //studyGroup: DummyModel = getDummyGroups()[0]
+){
     // PICTURE
     Surface(
 
@@ -196,7 +199,10 @@ fun DisplayStudyGroupIcon(studyGroup: DummyModel = getDummyGroups()[0]){
 
 
 @Composable
-fun DisplayArrowContent(studyGroup: DummyModel = getDummyGroups()[0], showContent:Boolean,
+fun DisplayArrowContent(
+    studyGroup: SingleStudyGroup,
+    //studyGroup: DummyModel = getDummyGroups()[0],
+    showContent:Boolean,
                         //content for Button to Join Group - Button should be used, where List is called from
                         //search, but is not needed from List of my Study Groups
                         content: @Composable () -> Unit = {}
@@ -226,7 +232,8 @@ fun DisplayArrowContent(studyGroup: DummyModel = getDummyGroups()[0], showConten
 }
     @Composable
     fun JoinButton(
-        studyGroup: DummyModel = getDummyGroups()[0],
+        studyGroup: SingleStudyGroup,
+        //studyGroup: DummyModel = getDummyGroups()[0],
         onButtonClicked: (String) -> Unit = {},
     ) {
         Button(
