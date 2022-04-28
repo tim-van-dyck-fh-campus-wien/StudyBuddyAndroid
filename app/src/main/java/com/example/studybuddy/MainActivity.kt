@@ -111,14 +111,14 @@ fun DisplayBottomBar(navController: NavController,
                 )
 
                 // ViewStudyGroupsScreen
-                BottomNavigationItem(
+                /*BottomNavigationItem(
                     icon = { Icon(imageVector = Icons.Default.List, contentDescription = "ViewStudyGroupsScreen") },
                     selected = currentRoute == ScreenNames.ViewStudyGroup.name,
                     onClick = {
                         Log.d("nav", "ViewStudyGroupsScreen clicked")
                         navController.navigate(ScreenNames.ViewStudyGroup.name)
                     },
-                )
+                )*/
 
                 // FindStudyGroupsScreen
                 BottomNavigationItem(
