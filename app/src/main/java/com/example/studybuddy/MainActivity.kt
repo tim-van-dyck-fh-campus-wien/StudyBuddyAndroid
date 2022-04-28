@@ -85,8 +85,9 @@ fun DefaultPreview() {
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-fun DisplayBottomBar(navController: NavController,
+fun DisplayBottomBar(navController: NavController = rememberNavController(),
                      content: @Composable () -> Unit = {}){
     //val navController = rememberNavController()
     Scaffold(

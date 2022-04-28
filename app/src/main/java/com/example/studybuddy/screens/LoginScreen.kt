@@ -17,10 +17,11 @@ import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
 import java.util.*
 
+
 @Composable
 fun LoginScreen(
     navController: NavHostController = rememberNavController(),
-    authenticationViewModel: AuthenticationViewModel,
+    authenticationViewModel: AuthenticationViewModel ,
                 //onLoginClick: () -> Unit = {},
                 //onRegisterInsteadClick: () -> Unit = {}
     ){

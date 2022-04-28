@@ -48,7 +48,7 @@ fun getDummyGroups(): List<DummyModel>{
              hide=false,
         ),
         DummyModel(
-            name = "Dummy1",
+            name = "Dummy2",
             location = "1090",
             description = "learning all about Mobile App Development on Android",
             topic="MAD",

@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
 
 @Composable
-fun ViewStudyGroupScreen(navController: NavHostController){
+fun ViewStudyGroupScreen(navController: NavHostController, studyGroupID: String?){
     DisplayBottomBar (navController = navController) { ViewStudyGroupContent() }
 }
 

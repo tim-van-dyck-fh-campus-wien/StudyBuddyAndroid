@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.studybuddy.data.api.model.SingleStudyGroup
 import com.example.studybuddy.data.dummies.DummyModel
 import com.example.studybuddy.data.dummies.getDummyGroups
 
@@ -37,7 +38,10 @@ import com.example.studybuddy.data.dummies.getDummyGroups
 fun StudyGroupRow(
             studyGroup: DummyModel = getDummyGroups()[0],
             onItemClick: (String) -> Unit = {},
-            onJoinButtonClick: (String) -> Unit = {},
+            content: @Composable () -> Unit = {}
+            //test content for JoinStudyGroup
+
+            //onJoinButtonClick: (String) -> Unit = {},
 
 ) {
     var showContent by remember {
@@ -59,21 +63,31 @@ fun StudyGroupRow(
                 shape = RoundedCornerShape(corner = CornerSize(16.dp)),
                 elevation = 6.dp
             ) {
-                Row(/*verticalAlignment = Alignment.Top,*/ modifier = Modifier.padding(5.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(5.dp)
+                        ) {
 
                     Column(
+                        horizontalAlignment = Alignment.Start,
                         modifier = Modifier
-                            .padding(25.dp)
+                            .padding(horizontal = 15.dp, vertical = 17.dp)
                             .width(200.dp)
+
+
                     ) {
 
                         Text(
+                            modifier = Modifier.padding(horizontal = 5.dp),
                             text = studyGroup.name,
                             style = MaterialTheme.typography.h5,
                             fontStyle = FontStyle.Italic
                         )
-                        Text(text = studyGroup.topic, style = MaterialTheme.typography.caption)
+                        Divider(modifier = Modifier.padding(5.dp))
+                        Text(modifier = Modifier.padding(horizontal = 5.dp),text = studyGroup.topic, style = MaterialTheme.typography.caption)
+                        Divider(modifier = Modifier.padding(5.dp))
                         Text(
+                            modifier = Modifier.padding(horizontal = 5.dp),
                             text = "Located in: ${studyGroup.location}",
                             style = MaterialTheme.typography.caption
                         )
@@ -97,7 +111,9 @@ fun StudyGroupRow(
 
                         }
                         // actual Content is defined here, depending on current state of showContent
-                        Column(modifier = Modifier.width(200.dp)) {
+                        // todo: rewrite into modular version with extra button to join to use join button flexibly where needed
+                        // see Work in Progress below, needs testing
+                       /** Column(modifier = Modifier.width(200.dp)) {
                             AnimatedVisibility(
                                 visible = showContent,
                                 enter = expandVertically(expandFrom = Alignment.Top)
@@ -105,21 +121,32 @@ fun StudyGroupRow(
                                 Column() {
                                     Divider(modifier = Modifier.padding(5.dp))
 
-                                        Text(
+                                    Text(
+                                        modifier = Modifier.padding(horizontal = 5.dp),
                                         text = "How we describe ourselves: ${studyGroup.description}",
                                         style = MaterialTheme.typography.caption)
                                     Divider(modifier = Modifier.padding(5.dp))
 
-                                        Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
-                                            onClick = { onJoinButtonClick(studyGroup._id) }) {
-                                            Text(text = "Send Join Request")
-                                        }
-
-                                        Divider(modifier = Modifier.padding(5.dp))
+                                    Button(
+                                        modifier = Modifier.padding(horizontal = 5.dp),
+                                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+                                        onClick = { onJoinButtonClick(studyGroup._id) }) {
+                                        Text(text = "Send Join Request")
                                     }
 
+                                    Divider(modifier = Modifier.padding(5.dp))
                                 }
+
                             }
+                        }*/
+
+                       // content()
+                        //rewrite this in content when called
+                        DisplayArrowContent(showContent = showContent, studyGroup = studyGroup){
+                            content()
+
+                            //JoinButton(studyGroup = studyGroup, /*todo: onButtonClicked*/ )
+                        }
                         }
                     Column(modifier = Modifier
                         .padding(5.dp)){
@@ -164,3 +191,48 @@ fun DisplayStudyGroupIcon(studyGroup: DummyModel = getDummyGroups()[0]){
 
     }
 }
+
+
+@Composable
+fun DisplayArrowContent(studyGroup: DummyModel = getDummyGroups()[0], showContent:Boolean,
+                        //content for Button to Join Group - Button should be used, where List is called from
+                        //search, but is not needed from List of my Study Groups
+                        content: @Composable () -> Unit = {}
+                        ) {
+    Column(modifier = Modifier.width(200.dp)) {
+        AnimatedVisibility(
+            visible = showContent,
+            enter = expandVertically(expandFrom = Alignment.Top)
+        ) {
+            Column() {
+                Divider(modifier = Modifier.padding(5.dp))
+
+                Text(
+                    modifier = Modifier.padding(horizontal = 5.dp),
+                    text = "How we describe ourselves: ${studyGroup.description}",
+                    style = MaterialTheme.typography.caption
+                )
+                Divider(modifier = Modifier.padding(5.dp))
+
+                content()
+
+                //Divider(modifier = Modifier.padding(5.dp))
+            }
+
+        }
+    }
+}
+    @Composable
+    fun JoinButton(
+        studyGroup: DummyModel = getDummyGroups()[0],
+        onButtonClicked: (String) -> Unit = {},
+    ) {
+        Button(
+            modifier = Modifier.padding(horizontal = 5.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+            onClick = { onButtonClicked(studyGroup._id) }) {
+            Text(text = "Send Join Request")
+        }
+    }
+
+
