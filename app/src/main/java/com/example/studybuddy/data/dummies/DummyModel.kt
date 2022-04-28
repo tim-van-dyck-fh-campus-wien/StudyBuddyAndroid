@@ -1,9 +1,6 @@
 package com.example.studybuddy.data.dummies
 
-import com.example.studybuddy.data.api.model.Appointment
-import com.example.studybuddy.data.api.model.BasicStudent
-import com.example.studybuddy.data.api.model.JoinRequest
-import com.example.studybuddy.data.api.model.Message
+import com.example.studybuddy.data.api.model.*
 
 data class DummyModel(
     val name:String,
@@ -73,4 +70,8 @@ fun getDummyGroups(): List<DummyModel>{
             hide=false,
         )
     )
+}
+
+fun filterGroup(studyGroupID: String?) :DummyModel{
+    return getDummyGroups().filter {studyGroup -> studyGroup._id == studyGroupID}[0]
 }

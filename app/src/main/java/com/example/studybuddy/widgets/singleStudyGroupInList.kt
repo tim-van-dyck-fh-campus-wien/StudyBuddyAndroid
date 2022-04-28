@@ -1,5 +1,6 @@
 package com.example.studybuddy.widgets
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.foundation.clickable
@@ -58,6 +59,7 @@ fun StudyGroupRow(
                     .fillMaxWidth()
                     .heightIn(min = 130.dp)
                     .clickable {
+                        Log.d("navigation", "cur StudyGroup is: ${studyGroup._id}")
                         onItemClick(studyGroup._id)  //damit ich single study group besuchen kann (?) - funktioniert jetzt evtl anders
                     },
                 shape = RoundedCornerShape(corner = CornerSize(16.dp)),

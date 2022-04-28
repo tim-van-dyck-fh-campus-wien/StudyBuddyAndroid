@@ -114,10 +114,10 @@ fun DisplayBottomBar(navController: NavController = rememberNavController(),
                 // ViewStudyGroupsScreen
                 /*BottomNavigationItem(
                     icon = { Icon(imageVector = Icons.Default.List, contentDescription = "ViewStudyGroupsScreen") },
-                    selected = currentRoute == ScreenNames.ViewStudyGroup.name,
+                    selected = currentRoute == ScreenNames.ViewStudyGroupScreen.name,
                     onClick = {
                         Log.d("nav", "ViewStudyGroupsScreen clicked")
-                        navController.navigate(ScreenNames.ViewStudyGroup.name)
+                        navController.navigate(ScreenNames.ViewStudyGroupScreen.name)
                     },
                 )*/
 

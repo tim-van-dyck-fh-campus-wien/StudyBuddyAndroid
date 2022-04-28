@@ -5,7 +5,7 @@ enum class ScreenNames {
     HomeScreen,
     CreateStudyGroups,
     FindStudyGroups,
-    ViewStudyGroup,
+    ViewStudyGroupScreen,
     ProfileScreen,
     //ManageStudyGroup
 }

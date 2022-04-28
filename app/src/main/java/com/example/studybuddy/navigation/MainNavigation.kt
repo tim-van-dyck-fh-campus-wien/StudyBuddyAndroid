@@ -1,5 +1,6 @@
 package com.example.studybuddy.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -32,15 +33,26 @@ fun MainNavigation(){
             composable(ScreenNames.ProfileScreen.name){
                 ProfileScreen(navController = navController)
             }
-            composable(ScreenNames.ViewStudyGroup.name + "/{studyGroup}",
-                arguments=listOf(navArgument("studyGroup") {
-                    type = NavType.StringType
-                }))
-            {
-                //to enable navigation to a specific group & display its info in ViewStudyGroupScreen
-                    backStackEntry ->
-                ViewStudyGroupScreen(navController = navController, studyGroupID = backStackEntry.arguments?.getString("studyGroup"))
-            }
+
+        /*composable(ScreenNames.ViewStudyGroupScreen.name){
+            ViewStudyGroupScreen(navController = navController )
+        }
+
+         */
+
+
+          composable(ScreenNames.ViewStudyGroupScreen.name + "/{studyGroup}",
+              arguments=listOf(navArgument("studyGroup") {
+                  type = NavType.StringType
+              }))
+          {
+              //to enable navigation to a specific group & display its info in ViewStudyGroupScreen
+                  backStackEntry ->
+              Log.d("navigation", "cur backStackEntry $backStackEntry")
+              ViewStudyGroupScreen(navController = navController, studyGroupID = backStackEntry.arguments?.getString("studyGroup"))
+          }
+
+
 
         }
     }
