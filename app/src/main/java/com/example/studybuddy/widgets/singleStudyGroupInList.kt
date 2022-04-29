@@ -26,24 +26,23 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.studybuddy.data.api.model.SingleStudyGroup
-
+import com.example.studybuddy.data.api.model.getDummyGroups
+import org.w3c.dom.Text
 
 
 /**
  * This function shows a simple display of a Study Group in a List of Study Groups
  * Intended for Group Lists
  */
-//@Preview
+@Preview
 @Composable
 fun StudyGroupRow(
-            studyGroup: SingleStudyGroup,
-            //studyGroup: DummyModel = getDummyGroups()[0],
+            studyGroup: SingleStudyGroup = getDummyGroups()[0],
             onItemClick: (String) -> Unit = {},
+            //test content for JoinStudyGroupButton
             content: @Composable () -> Unit = {}
-            //test content for JoinStudyGroup
 
             //onJoinButtonClick: (String) -> Unit = {},
-
 ) {
     var showContent by remember {
         mutableStateOf(false)
@@ -69,30 +68,15 @@ fun StudyGroupRow(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.padding(5.dp)
                         ) {
-
                     Column(
                         horizontalAlignment = Alignment.Start,
                         modifier = Modifier
                             .padding(horizontal = 15.dp, vertical = 17.dp)
                             .width(200.dp)
-
-
                     ) {
+                        // this displays generally visible StudyGroup Info
 
-                        Text(
-                            modifier = Modifier.padding(horizontal = 5.dp),
-                            text = studyGroup.name,
-                            style = MaterialTheme.typography.h5,
-                            fontStyle = FontStyle.Italic
-                        )
-                        Divider(modifier = Modifier.padding(5.dp))
-                        Text(modifier = Modifier.padding(horizontal = 5.dp),text = studyGroup.topic, style = MaterialTheme.typography.caption)
-                        Divider(modifier = Modifier.padding(5.dp))
-                        Text(
-                            modifier = Modifier.padding(horizontal = 5.dp),
-                            text = "Located in: ${studyGroup.location}",
-                            style = MaterialTheme.typography.caption
-                        )
+                        DisplayGeneralGroupTextInfo(studyGroup = studyGroup)
 
                         // show Content Icon is changed here, as well as Boolean value
                         when (showContent) {
@@ -113,7 +97,7 @@ fun StudyGroupRow(
 
                         }
                         // actual Content is defined here, depending on current state of showContent
-                        // todo: rewrite into modular version with extra button to join to use join button flexibly where needed
+                        // todo: delete this part, if join button actually works as intended
                         // see Work in Progress below, needs testing
                        /** Column(modifier = Modifier.width(200.dp)) {
                             AnimatedVisibility(
@@ -141,13 +125,8 @@ fun StudyGroupRow(
 
                             }
                         }*/
-
-                       // content()
-                        //rewrite this in content when called
                         DisplayArrowContent(showContent = showContent, studyGroup = studyGroup){
                             content()
-
-                            //JoinButton(studyGroup = studyGroup, /*todo: onButtonClicked*/ )
                         }
                         }
                     Column(modifier = Modifier
@@ -155,9 +134,6 @@ fun StudyGroupRow(
                         DisplayStudyGroupIcon(studyGroup = studyGroup)
                     }
                     }
-
-
-
                 }
 
             }
@@ -165,37 +141,6 @@ fun StudyGroupRow(
         }
     }
 
-@Composable
-fun DisplayStudyGroupIcon(
-    studyGroup: SingleStudyGroup,
-    //studyGroup: DummyModel = getDummyGroups()[0]
-){
-    // PICTURE
-    Surface(
-
-        modifier = Modifier
-            .size(120.dp)
-            .padding(12.dp),
-        //.fillMaxHeight(),
-        shape = RoundedCornerShape(corner= CornerSize(6.dp)),
-        color = Color.LightGray,
-        elevation = 6.dp,
-
-    ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                //.data(studyGroup.icon)
-                .data(Icon(modifier = Modifier
-                    .padding(5.dp),imageVector = Icons.Default.Edit, contentDescription = "IconDummy"))
-                .crossfade(true)
-                .build(),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.clip(RoundedCornerShape(corner= CornerSize(6.dp)))
-        )
-
-    }
-}
 
 
 @Composable
@@ -221,27 +166,12 @@ fun DisplayArrowContent(
                     style = MaterialTheme.typography.caption
                 )
                 Divider(modifier = Modifier.padding(5.dp))
-
+                //this is the Join Button, if used when StudyGroupRow is called
                 content()
-
-                //Divider(modifier = Modifier.padding(5.dp))
             }
 
         }
     }
 }
-    @Composable
-    fun JoinButton(
-        studyGroup: SingleStudyGroup,
-        //studyGroup: DummyModel = getDummyGroups()[0],
-        onButtonClicked: (String) -> Unit = {},
-    ) {
-        Button(
-            modifier = Modifier.padding(horizontal = 5.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
-            onClick = { onButtonClicked(studyGroup._id) }) {
-            Text(text = "Send Join Request")
-        }
-    }
 
 

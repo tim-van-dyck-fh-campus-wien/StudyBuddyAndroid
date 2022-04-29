@@ -1,19 +1,16 @@
 package com.example.studybuddy.screens
 
 import android.util.Log
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
 import com.example.studybuddy.data.api.model.SingleStudyGroup
 import com.example.studybuddy.data.api.model.getDummyGroups
 import com.example.studybuddy.navigation.ScreenNames
-import com.example.studybuddy.widgets.JoinButton
 import com.example.studybuddy.widgets.StudyGroupRow
 
 @Composable
@@ -41,7 +38,7 @@ fun HomeContent(studyGroupList :List<SingleStudyGroup>,
                     }
                 ) {
                     //test with join button, actually not needed here
-                    //JoinButton()
+                    //GroupButton()
                 }
             }
         }

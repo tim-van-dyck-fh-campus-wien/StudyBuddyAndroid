@@ -1,7 +1,6 @@
 package com.example.studybuddy.data.api.model
 
-import com.example.studybuddy.data.dummies.DummyModel
-import io.reactivex.Single
+
 
 data class SingleStudyGroup(
     val name:String,
@@ -38,6 +37,14 @@ fun getDummyGroups(): List<SingleStudyGroup>{
             messages= listOf(
                 Message(text = "messageContent", groupId = "00001", sender_id = BasicStudent(_id = "1", firstname = "trick", lastname = "duck", email = "trick.duck@fh-campuswien.ac.at", username = "trick", location="1090", hideData = false)) ,
                 Message(text = "messageContent Answer 2", groupId = "00001", sender_id = BasicStudent(_id = "2", firstname = "tick", lastname = "duck", email = "tick.duck@fh-campuswien.ac.at", username = "tick", location="1030", hideData = false)),
+                Message(text = "messageContent Answer 3", groupId = "00001", sender_id = BasicStudent(_id = "2", firstname = "tick", lastname = "duck", email = "tick.duck@fh-campuswien.ac.at", username = "tick", location="1030", hideData = false)),
+                Message(text = "messageContent Answer 4", groupId = "00001", sender_id = BasicStudent(_id = "2", firstname = "tick", lastname = "duck", email = "tick.duck@fh-campuswien.ac.at", username = "tick", location="1030", hideData = false)),
+                Message(text = "messageContent Answer 5", groupId = "00001", sender_id = BasicStudent(_id = "2", firstname = "tick", lastname = "duck", email = "tick.duck@fh-campuswien.ac.at", username = "tick", location="1030", hideData = false)),
+                Message(text = "messageContent Answer 6", groupId = "00001", sender_id = BasicStudent(_id = "2", firstname = "tick", lastname = "duck", email = "tick.duck@fh-campuswien.ac.at", username = "tick", location="1030", hideData = false)),
+                Message(text = "messageContent Answer 7", groupId = "00001", sender_id = BasicStudent(_id = "2", firstname = "tick", lastname = "duck", email = "tick.duck@fh-campuswien.ac.at", username = "tick", location="1030", hideData = false)),
+                Message(text = "messageContent Answer 8", groupId = "00001", sender_id = BasicStudent(_id = "2", firstname = "tick", lastname = "duck", email = "tick.duck@fh-campuswien.ac.at", username = "tick", location="1030", hideData = false)),
+                Message(text = "messageContent Answer 9", groupId = "00001", sender_id = BasicStudent(_id = "2", firstname = "tick", lastname = "duck", email = "tick.duck@fh-campuswien.ac.at", username = "tick", location="1030", hideData = false)),
+
             ),
             joinRequests= listOf(
                 JoinRequest(groupId = "00001", text = "join request", sender_id = "4", _id = "23")
@@ -60,10 +67,7 @@ fun getDummyGroups(): List<SingleStudyGroup>{
                 Appointment(date = "23.5.2021", topic = "Heuristic Search", _id = "01")
             ),
             _id="0000",
-            messages= listOf(
-                Message(text = "messageContent", groupId = "00001", sender_id = BasicStudent(_id = "1", firstname = "trick", lastname = "duck", email = "trick.duck@fh-campuswien.ac.at", username = "trick", location="1090", hideData = false)) ,
-
-                ),
+            messages= listOf(),
             joinRequests= listOf(
                 JoinRequest(groupId = "00001", text = "join request", sender_id = "4", _id = "25")
             ),

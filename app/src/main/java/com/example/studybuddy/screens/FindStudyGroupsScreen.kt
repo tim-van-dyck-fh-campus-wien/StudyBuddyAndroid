@@ -9,9 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
 import com.example.studybuddy.data.api.model.getDummyGroups
-import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.StudyGroupViewModel
-import com.example.studybuddy.widgets.JoinButton
+import com.example.studybuddy.widgets.GroupButton
 import com.example.studybuddy.widgets.StudyGroupRow
 
 @Composable
@@ -23,6 +22,7 @@ fun FindStudyGroupsScreen(
         FindStudyGroupsContent(navController = navController, studyGroupViewModel = studyGroupViewModel)
     }
 }
+
 
 @Composable
 fun FindStudyGroupsContent(
@@ -39,12 +39,13 @@ fun FindStudyGroupsContent(
         items(studyGroupList){
             studyGroup ->
             StudyGroupRow(studyGroup = studyGroup){
-                JoinButton(studyGroup = studyGroup, onButtonClicked =
+                GroupButton(studyGroup = studyGroup, onButtonClicked =
                 {
                     group ->
                     Log.d("join", "send join RQ to group $group ")
-                }
-                )
+                },
+                    text = "Send Join Request"
+                ){}
             }
         }
     }
