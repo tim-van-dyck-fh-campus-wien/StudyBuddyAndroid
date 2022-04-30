@@ -80,8 +80,8 @@ fun LoginScreen(
         Button(
             modifier = Modifier.padding(0.dp),
             onClick = {
-                // todo: open register page
-                //onRegisterInsteadClick()
+                // open register page
+                navController.navigate(ScreenNames.RegisterScreen.name)
                 username = ""
                 password = ""
             }) {

@@ -23,6 +23,9 @@ fun MainNavigation(){
             composable(ScreenNames.LoginScreen.name){
                 LoginScreen(navController = navController, authenticationViewModel)
             }
+            composable(ScreenNames.RegisterScreen.name){
+                RegisterScreen(navController = navController, authenticationViewModel)
+            }
             composable(ScreenNames.HomeScreen.name){
                 HomeScreen(navController = navController)
             }
