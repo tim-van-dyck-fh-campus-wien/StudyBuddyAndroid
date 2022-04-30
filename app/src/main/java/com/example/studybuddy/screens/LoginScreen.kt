@@ -1,5 +1,6 @@
 package com.example.studybuddy.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -8,10 +9,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.studybuddy.R
 import com.example.studybuddy.data.api.model.LoginData
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
@@ -29,11 +32,15 @@ fun LoginScreen(
    authenticationViewModel.isStudentLoggedIn(sucess = {
         navController.navigate(ScreenNames.HomeScreen.name)
     })
-
-
-    Column (modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+    
+    Column (modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
+
+        Image(painter = painterResource(id = R.drawable.transparent_study_buddy), contentDescription = "StudyBuddyIcon")
+
         Text(
             text = "Login",
             style = MaterialTheme.typography.h5,
