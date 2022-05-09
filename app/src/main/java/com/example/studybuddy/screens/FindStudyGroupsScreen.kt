@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
 import com.example.studybuddy.R
+import com.example.studybuddy.data.api.model.SingleStudyGroup
 import com.example.studybuddy.data.api.model.getDummyGroups
 import com.example.studybuddy.viewmodel.StudyGroupViewModel
 import com.example.studybuddy.widgets.GroupButton
@@ -38,15 +39,18 @@ fun FindStudyGroupsContent(
             painter = painterResource(id = R.drawable.transparent_study_buddy),
             contentDescription = "StudyBuddyIcon"
         )
-        Text("FindStudyGroupsScreen")
-        //Todo: make it actually communicate with the backend ^^
-        val studyGroupList = studyGroupViewModel.studyGroupsSearchList.value
-        Log.d("join", "${studyGroupViewModel.studyGroupsSearchList.value}")
-        val studyGroupListDummy = getDummyGroups()
-        if (studyGroupList != null) {
+        //val studyGroupList = studyGroupViewModel.studyGroupsSearchList.value
+        studyGroupViewModel.getAllStudyGroups()
+        val studyGroupList = studyGroupViewModel.testList
+        if (studyGroupList.isNullOrEmpty()){
+            Log.d("join", "List is empty")
+        } else {
+            studyGroupList.forEach{it -> Log.d("join", "List content ${it}")}
+            //val studyGroupListDummy = getDummyGroups()
             LazyColumn {
                 items(studyGroupList) { studyGroup ->
                     StudyGroupRow(studyGroup = studyGroup) {
+                        //Todo: Implement if clause, checking with backend, if student is already a member of the group
                         GroupButton(
                             studyGroup = studyGroup, onButtonClicked =
                             { group ->
@@ -58,6 +62,7 @@ fun FindStudyGroupsContent(
                 }
             }
         }
+
     }
 }
 
