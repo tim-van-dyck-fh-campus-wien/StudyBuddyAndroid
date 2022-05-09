@@ -37,12 +37,14 @@ import org.w3c.dom.Text
 @Preview
 @Composable
 fun StudyGroupRow(
-            studyGroup: SingleStudyGroup = getDummyGroups()[0],
-            onItemClick: (String) -> Unit = {},
-            //test content for JoinStudyGroupButton
-            content: @Composable () -> Unit = {}
+    studyGroup: SingleStudyGroup = getDummyGroups()[0],
 
-            //onJoinButtonClick: (String) -> Unit = {},
+    onItemClick: (String) -> Unit = {},
+            //test content for JoinStudyGroupButton
+    content: @Composable () -> Unit = {},
+
+
+    //onJoinButtonClick: (String) -> Unit = {},
 ) {
     var showContent by remember {
         mutableStateOf(false)
@@ -74,9 +76,10 @@ fun StudyGroupRow(
                             .padding(horizontal = 15.dp, vertical = 17.dp)
                             .width(200.dp)
                     ) {
-                        // this displays generally visible StudyGroup Info
 
+                        // this displays generally visible StudyGroup Info
                         DisplayGeneralGroupTextInfo(studyGroup = studyGroup)
+                        content()
 
                         // show Content Icon is changed here, as well as Boolean value
                         when (showContent) {
@@ -126,8 +129,8 @@ fun StudyGroupRow(
                             }
                         }*/
                         DisplayArrowContent(showContent = showContent, studyGroup = studyGroup){
-                            content()
                         }
+
                         }
                     Column(modifier = Modifier
                         .padding(5.dp)){
@@ -167,11 +170,13 @@ fun DisplayArrowContent(
                 )
                 Divider(modifier = Modifier.padding(5.dp))
                 //this is the Join Button, if used when StudyGroupRow is called
-                content()
+
+               // content()
             }
 
         }
     }
 }
+
 
 

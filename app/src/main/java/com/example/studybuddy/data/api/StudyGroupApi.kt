@@ -29,9 +29,7 @@ interface StudyGroupApi {
     @POST("studyGroups/joinRequestToGroup")
     suspend fun issueJoinRequestToGroup(@Body joinRequest: JoinRequest):Response<Unit>
 
-    @GET("studyGroups/isStudentAbleToSendJoinRequest")
-    suspend fun canStudentSendJoinRequest(@Body singleGroupId: SingleGroupId):Response<Unit>
-
-
-
+    @POST("studyGroups/isStudentAbleToSendJoinRequest")
+    //suspend fun canStudentSendJoinRequest(@Body singleGroupId: SingleGroupId):Response<Unit>
+    suspend fun canStudentSendJoinRequest(@Body groupId: SingleGroupId) : Response<Unit>
 }

@@ -35,17 +35,17 @@ fun HomeContent(studyGroupList :List<SingleStudyGroup>,
         )
         LazyColumn {
             items(studyGroupList) { studyGroup ->
-                StudyGroupRow(studyGroup = getDummyGroups()[0],
+                StudyGroupRow(
+                    studyGroup = getDummyGroups()[0],
                     onItemClick = { studyGroupSingle ->
                         Log.d("navigation", "cur studyGroupID = $studyGroupSingle")
                         //navController.navigate(route= ScreenNames.ViewStudyGroupScreen.name)
 
                         navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/$studyGroupSingle")
-                    }
-                ) {
-                    //test with join button, actually not needed here
-                    //GroupButton()
-                }
+                    },
+                    {
+                    },
+                )
             }
         }
     }

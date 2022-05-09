@@ -1,12 +1,10 @@
 package com.example.studybuddy.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studybuddy.data.api.model.*
-import com.example.studybuddy.data.repositories.authentication.AuthenticationRepository
 import com.example.studybuddy.data.repositories.authentication.StudyGroupRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,11 +15,11 @@ class StudyGroupViewModel @Inject constructor(
     private val repository:StudyGroupRepository
 ) : ViewModel(){
     val errorMessage = MutableLiveData<String>()
-
     var studyGroupsSearchList =MutableLiveData<List<SingleStudyGroup>>()
 
     //Test for List of StudyGroups - works fine
     var testList = listOf<SingleStudyGroup>()
+    var canSendRQ:Boolean=false
 
     fun getAllStudyGroups() {
         Log.i("Test","test")
@@ -50,6 +48,30 @@ class StudyGroupViewModel @Inject constructor(
             }
         }
     }
+
+    fun canStudentSendJoinRequest(studyGroupId: SingleGroupId){
+        Log.i("Test","test")
+        Log.i("StudyGroupAPI", "message is $studyGroupId")
+        viewModelScope.launch {
+            val response = repository.canStudentSendJoinRequest(studyGroupId)
+            //Log.i("StudyGroupAPI", "checking if not member ${response.code()}")
+            Log.i("StudyGroupAPI", "API member response ${response}")
+            //response.body()?.forEach { it -> Log.i("StudyGroupAPI", "$it") }
+            //Log.i("StudyGroupAPI", "${response.body()}")
+
+            //added for testList purposes (see below)
+            if(response.code() == 200){
+                canSendRQ = true
+            } else if (response.code() == 400) {
+                canSendRQ = false
+            } else{
+                onError("Error: ${response.message()}")
+            }
+        }
+    }
+
+
+
 
     private fun onError(message:String){
 
