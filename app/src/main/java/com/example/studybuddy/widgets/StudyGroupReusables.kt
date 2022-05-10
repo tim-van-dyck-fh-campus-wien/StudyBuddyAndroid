@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.studybuddy.data.api.ApiConstants
 import com.example.studybuddy.data.api.model.SingleStudyGroup
 import com.example.studybuddy.data.api.model.getDummyGroups
 
@@ -80,6 +81,15 @@ fun DisplayStudyGroupIcon(
             modifier = Modifier.clip(RoundedCornerShape(corner= CornerSize(6.dp))).size(120.dp)
         )
     }
+}
+@Composable
+//Whatch out -> must concatinate the Image base url in some cases, see createStudyGroup
+fun groupIcon(url: String){
+
+    AsyncImage(model = url, contentDescription = "a study group icon",
+        contentScale = ContentScale.Crop, modifier = Modifier
+            .size(85.dp)
+            )
 }
 
 //@Preview

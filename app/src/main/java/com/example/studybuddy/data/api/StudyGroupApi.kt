@@ -32,4 +32,7 @@ interface StudyGroupApi {
     @POST("studyGroups/isStudentAbleToSendJoinRequest")
     //suspend fun canStudentSendJoinRequest(@Body singleGroupId: SingleGroupId):Response<Unit>
     suspend fun canStudentSendJoinRequest(@Body groupId: SingleGroupId) : Response<Unit>
+    @GET("images/groupImgList")
+    suspend fun getAvailableGroupImages():Response<List<String>>
+
 }

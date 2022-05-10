@@ -11,4 +11,6 @@ class StudyGroupRepository @Inject constructor (
     //async function...
     suspend fun getAllStudyGroups() = studyGroupApi.getAllStudyGroups()
     suspend fun canStudentSendJoinRequest(groupId:SingleGroupId) = studyGroupApi.canStudentSendJoinRequest(groupId)
+    suspend fun getAvailabelGroupImages() = studyGroupApi.getAvailableGroupImages()
+
 }

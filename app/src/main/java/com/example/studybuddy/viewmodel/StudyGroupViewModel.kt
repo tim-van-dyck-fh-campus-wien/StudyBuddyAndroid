@@ -16,7 +16,6 @@ class StudyGroupViewModel @Inject constructor(
 ) : ViewModel(){
     val errorMessage = MutableLiveData<String>()
     var studyGroupsSearchList =MutableLiveData<List<SingleStudyGroup>>()
-
     //Test for List of StudyGroups - works fine
     var testList = listOf<SingleStudyGroup>()
     var canSendRQ:Boolean=false
@@ -74,7 +73,7 @@ class StudyGroupViewModel @Inject constructor(
 
 
     private fun onError(message:String){
-
+            Log.w("StudyGroupVM,Error",message)
     }
 
 

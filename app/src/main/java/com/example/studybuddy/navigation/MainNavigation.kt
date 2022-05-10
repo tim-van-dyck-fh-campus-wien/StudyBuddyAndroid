@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.studybuddy.screens.*
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
+import com.example.studybuddy.viewmodel.CreateStudyGroupViewModel
 import com.example.studybuddy.viewmodel.StudyGroupViewModel
 
 @Composable
@@ -17,6 +18,7 @@ fun MainNavigation(){
     val navController = rememberNavController()
     val authenticationViewModel:AuthenticationViewModel = viewModel()
     val studyGroupViewModel : StudyGroupViewModel = viewModel()
+    val createStudyGroupViewModel:CreateStudyGroupViewModel = viewModel()
     NavHost(navController = navController, startDestination = ScreenNames.LoginScreen.name  ){
     //changed start destination to homeScreen to see the preview:
     //NavHost(navController = navController, startDestination = ScreenNames.HomeScreen.name  ){
@@ -33,7 +35,7 @@ fun MainNavigation(){
                 FindStudyGroupsScreen(navController = navController, studyGroupViewModel = studyGroupViewModel)
             }
             composable(ScreenNames.CreateStudyGroups.name){
-                CreateStudyGroupsScreen(navController = navController)
+                CreateStudyGroupsScreen(navController = navController,studyGroupViewModel=createStudyGroupViewModel)
             }
             composable(ScreenNames.ProfileScreen.name){
                 ProfileScreen(navController = navController)
