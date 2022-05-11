@@ -10,7 +10,7 @@ import retrofit2.http.*
 interface StudyGroupApi {
     //Retrofit creates the necessary code for us!
     @POST("studyGroups/create")
-    suspend fun createStudyGroup(@Body createStudyGroup: CreateStudyGroup):Response<SingleStudyGroup>//Is a async function
+    suspend fun createStudyGroup(@Body createStudyGroup: CreateStudyGroup):Response<Unit>//Is a async function
 
     @GET("studyGroups/{district}")
     suspend fun getFilteredStudyGroups(@Path("district") district:String):Response<List<SingleStudyGroup>>
@@ -34,5 +34,6 @@ interface StudyGroupApi {
     suspend fun canStudentSendJoinRequest(@Body groupId: SingleGroupId) : Response<Unit>
     @GET("images/groupImgList")
     suspend fun getAvailableGroupImages():Response<List<String>>
+
 
 }

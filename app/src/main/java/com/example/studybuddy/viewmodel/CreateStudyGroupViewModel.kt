@@ -17,6 +17,7 @@ class CreateStudyGroupViewModel @Inject constructor(
 ) : ViewModel(){
     var availableGroupImages = MutableLiveData<List<String>>()
     val selectedIconUrl = mutableStateOf("/group/calculator.png")
+
     //Test for List of StudyGroups - works fine
 
     fun getAvailableGroupimages(){
@@ -38,6 +39,20 @@ class CreateStudyGroupViewModel @Inject constructor(
             return true
         }
         return false
+    }
+
+    fun createStudyGroup(groupname:String,description:String,topic:String,location:String,onSuccess:()->Unit,onErr:(String)->Unit={}){
+        val group = CreateStudyGroup(groupname,location,description,topic,selectedIconUrl.value)
+        viewModelScope.launch{
+            val response = repository.createStudyGroup(group)
+            if(response.code()==200){
+                Log.i("group_ret",response.body().toString())
+                onSuccess()
+            }else{
+                onError("Error:Code:${response.code()};${response.message()}")
+                onErr("Code:${response.code()};${response.message()}")
+            }
+        }
     }
 
     private fun onError(message:String){

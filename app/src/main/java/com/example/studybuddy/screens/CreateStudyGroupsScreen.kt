@@ -2,7 +2,6 @@ package com.example.studybuddy.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
@@ -10,17 +9,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.studybuddy.DisplayBottomBar
 import com.example.studybuddy.R
 import com.example.studybuddy.data.api.ApiConstants
-import com.example.studybuddy.data.api.model.LoginData
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.CreateStudyGroupViewModel
+import com.example.studybuddy.widgets.TextFieldCloseOnEnter
 import com.example.studybuddy.widgets.groupIcon
 
 @Composable
@@ -28,12 +27,15 @@ fun CreateStudyGroupsScreen(
     navController: NavHostController,
     studyGroupViewModel: CreateStudyGroupViewModel
 ){
-    DisplayBottomBar (navController = navController) { CreateStudyGroupsContent(studyGroupViewModel = studyGroupViewModel) }
+    DisplayBottomBar (navController = navController) { CreateStudyGroupsContent(studyGroupViewModel = studyGroupViewModel,navController=navController) }
 
 }
 
 @Composable
-fun CreateStudyGroupsContent(studyGroupViewModel: CreateStudyGroupViewModel){
+fun CreateStudyGroupsContent(
+    studyGroupViewModel: CreateStudyGroupViewModel,
+    navController: NavHostController
+){
     studyGroupViewModel.getAvailableGroupimages()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
@@ -44,7 +46,17 @@ fun CreateStudyGroupsContent(studyGroupViewModel: CreateStudyGroupViewModel){
         displayGroupImages(urls = studyGroupViewModel.availableGroupImages.value,selectedIcon = studyGroupViewModel.selectedIconUrl.value){
             studyGroupViewModel.setSelectedIcon(it)
         }
-        form()
+        /*called when submit button is clicked!*/
+        form(onSubmit = {groupname, description, topic, location ->
+            studyGroupViewModel.createStudyGroup(groupname = groupname,
+                description = description,
+                topic = topic,
+                location=location,
+                onSuccess ={
+                    /*TODO Naviagate to freshly created group*/
+                    navController.navigate(ScreenNames.FindStudyGroups.name)
+                } )
+        })
     }
 }
 @Composable
@@ -72,34 +84,24 @@ fun displayGroupImages(urls: List<String>?,selectedIcon:String, iconSelected:(St
         groupIcon(url = ApiConstants.IMG_BASE_URL+url)
     }
 }
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun form(){
+fun form(groupname:String="",description:String="",topic:String="",location:String="",onSubmit:(groupname:String,description:String,topic:String,location:String)->Unit){
     var groupname by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+    var topic by remember { mutableStateOf("") }
+
     var location by remember { mutableStateOf("") }
-
-    OutlinedTextField(
-        value = groupname,
-        onValueChange = { value -> groupname = value },
-        label = { Text(text = "Group Name") }
-    )
-
-    OutlinedTextField(
-        value = description,
-        onValueChange = { value -> description = value },
-        label = { Text(text = "Group Description") }
-    )
-
-    OutlinedTextField(
-        value = location,
-        onValueChange = { value -> location = value },
-        label = { Text(text = "District") }
-    )
+    TextFieldCloseOnEnter(value=groupname,label="Group Name",maxLength = 20,onValueChange = {groupname=it})
+    TextFieldCloseOnEnter(value=description,label="Group Description",maxLength = 150,onValueChange = {description=it})
+    TextFieldCloseOnEnter(value=topic,label="Group Topic",maxLength = 50,onValueChange = {topic=it})
+    TextFieldCloseOnEnter(value=location,label="ZIP of district",maxLength = 4,onValueChange = {location=it})
     Button(
         modifier = Modifier.padding(16.dp),
         onClick = {
-           /*todo add behaviour*/
+           onSubmit(groupname, description, topic, location)
         }) {
         Text(text = "Submit")
     }
 }
+
