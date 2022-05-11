@@ -1,6 +1,7 @@
 package com.example.studybuddy.widgets
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -94,9 +97,21 @@ fun groupIconWithElevation(url:String,iconSize:Int=85,modifier: Modifier=Modifie
         modifier = modifier,
         //.fillMaxHeight(),
         shape = RoundedCornerShape(corner= CornerSize(6.dp)),
-        color = Color.LightGray,
-        elevation = 6.dp){
+        color=Color.White,
+        elevation = 6.dp
+    ){
+        Surface(Modifier
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colors.primary,
+                        MaterialTheme.colors.primaryVariant
+                    )
+                )
+            ),color=Color.Transparent){
             groupIcon(url = url,size=iconSize)
+        }
+
     }
 }
 @Composable

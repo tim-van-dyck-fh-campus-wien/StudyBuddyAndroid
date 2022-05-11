@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.studybuddy.data.api.ApiConstants
 import com.example.studybuddy.data.api.model.SingleStudyGroup
 import com.example.studybuddy.data.api.model.getDummyGroups
 import org.w3c.dom.Text
@@ -134,7 +135,9 @@ fun StudyGroupRow(
                         }
                     Column(modifier = Modifier
                         .padding(5.dp)){
-                        DisplayStudyGroupIcon(studyGroup = studyGroup)
+                        //DisplayStudyGroupIcon(studyGroup = studyGroup)
+                        groupIconWithElevation(url = ApiConstants.IMG_BASE_URL+studyGroup.icon,iconSize= 120)
+                        //groupIcon(url = ApiConstants.IMG_BASE_URL+studyGroup.icon,size=120)
                     }
                     }
                 }

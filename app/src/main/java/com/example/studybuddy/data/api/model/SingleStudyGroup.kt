@@ -49,7 +49,7 @@ fun getDummyGroups(): List<SingleStudyGroup>{
             joinRequests= listOf(
                 JoinRequest(groupId = "00001", text = "join request", sender_id = "4", _id = "23")
             ),
-            icon="https://d30y9cdsu7xlg0.cloudfront.net/png/409803-200.png",
+            icon="/group/calculator.png",
             hide=false,
         ),
         SingleStudyGroup(
@@ -71,7 +71,7 @@ fun getDummyGroups(): List<SingleStudyGroup>{
             joinRequests= listOf(
                 JoinRequest(groupId = "00001", text = "join request", sender_id = "4", _id = "25")
             ),
-            icon="https://d30y9cdsu7xlg0.cloudfront.net/png/409803-200.png",
+            icon="/group/calculator.png",
             hide=false,
         )
     )
