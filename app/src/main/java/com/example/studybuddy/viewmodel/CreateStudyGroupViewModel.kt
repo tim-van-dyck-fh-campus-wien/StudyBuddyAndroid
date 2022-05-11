@@ -16,7 +16,7 @@ class CreateStudyGroupViewModel @Inject constructor(
     private val repository:StudyGroupRepository
 ) : ViewModel(){
     var availableGroupImages = MutableLiveData<List<String>>()
-    val selectedIconUrl = mutableStateOf("")
+    val selectedIconUrl = mutableStateOf("/group/calculator.png")
     //Test for List of StudyGroups - works fine
 
     fun getAvailableGroupimages(){
@@ -24,10 +24,6 @@ class CreateStudyGroupViewModel @Inject constructor(
             val response = repository.getAvailabelGroupImages()
             if(response.code()==200){
                 availableGroupImages.postValue( response.body())
-                var firstUrl = response.body()!!.get(0)
-                if(firstUrl!=null){
-                    selectedIconUrl.value = firstUrl
-                }
             }else{
                 onError("Error:${response.message()}")
             }
