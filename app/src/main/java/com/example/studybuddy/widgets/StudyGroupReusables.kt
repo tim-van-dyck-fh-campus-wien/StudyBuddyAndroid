@@ -82,17 +82,30 @@ fun DisplayStudyGroupIcon(
                 .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.clip(RoundedCornerShape(corner= CornerSize(6.dp))).size(120.dp)
+            modifier = Modifier
+                .clip(RoundedCornerShape(corner = CornerSize(6.dp)))
+                .size(120.dp)
         )
     }
 }
 @Composable
-//Whatch out -> must concatinate the Image base url in some cases, see createStudyGroup
-fun groupIcon(url: String){
+fun groupIconWithElevation(url:String,iconSize:Int=85,modifier: Modifier=Modifier.size(iconSize.dp)){
+    Surface(
+        modifier = modifier,
+        //.fillMaxHeight(),
+        shape = RoundedCornerShape(corner= CornerSize(6.dp)),
+        color = Color.LightGray,
+        elevation = 6.dp){
+            groupIcon(url = url,size=iconSize)
+    }
+}
+@Composable
+//Watch out -> must concatinate the Image base url in some cases, see createStudyGroup
+fun groupIcon(url: String,size:Int=85){
 
     AsyncImage(model = url, contentDescription = "a study group icon",
         contentScale = ContentScale.Crop, modifier = Modifier
-            .size(85.dp)
+            .size(size.dp)
             )
 }
 /*A Textfield where the keyboard automatically closes when hitting the done button */
@@ -237,7 +250,8 @@ fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup = getDummyGr
                text = it
            }
        )
-       Surface(modifier = Modifier.padding(16.dp)
+       Surface(modifier = Modifier
+           .padding(16.dp)
            .height(55.dp),
        ) {
            Button(

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
+import com.example.studybuddy.data.api.ApiConstants
 import com.example.studybuddy.data.api.model.SingleStudyGroup
 import com.example.studybuddy.data.api.model.filterGroup
 import com.example.studybuddy.data.api.model.getDummyGroups
@@ -76,6 +77,7 @@ fun ViewStudyGroupContent(studyGroup:SingleStudyGroup = getDummyGroups()[1]) {
                         verticalArrangement = Arrangement.Top
                     ) {
                         DisplayStudyGroupIcon(studyGroup = studyGroup)
+                        //groupIcon(ApiConstants.IMG_BASE_URL+studyGroup.icon)
                     }
                 }
 
