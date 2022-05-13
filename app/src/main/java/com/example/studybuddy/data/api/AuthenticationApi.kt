@@ -1,10 +1,7 @@
 package com.example.studybuddy.data.api
 
 import com.example.studybuddy.data.api.ApiConstants
-import com.example.studybuddy.data.api.model.LoginData
-import com.example.studybuddy.data.api.model.RegisterData
-import com.example.studybuddy.data.api.model.SingleGroupId
-import com.example.studybuddy.data.api.model.test
+import com.example.studybuddy.data.api.model.*
 import retrofit2.http.GET
 import retrofit2.Call
 import retrofit2.Response
@@ -21,10 +18,15 @@ interface AuthenticationApi {
     suspend fun register(@Body registerData: RegisterData):Response<Unit>
 
     @POST("auth/login")
-    suspend fun login(@Body loginData:LoginData):Response<Unit>
+    suspend fun login(@Body loginData:LoginData):Response<BasicStudent>
 
     @GET("group/authorizationCheck")
     suspend fun checkIfStudentIsAdminOfGroup(@Body singleGroupId: SingleGroupId):Response<Unit>
     @GET("auth/checkAuthentication")
-    suspend fun isUserLoggedIn():Response<Unit>
+    suspend fun isUserLoggedIn():Response<BasicStudent>
+
+    @GET("auth/logout")
+    suspend fun logout():Response<Unit>
+    @POST("auth/updateStudentData")
+    suspend fun updateStudentData(@Body updatedProfileData: ProfileData):Response<Unit>
 }

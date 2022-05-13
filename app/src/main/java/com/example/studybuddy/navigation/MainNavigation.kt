@@ -38,7 +38,7 @@ fun MainNavigation(){
                 CreateStudyGroupsScreen(navController = navController,studyGroupViewModel=createStudyGroupViewModel)
             }
             composable(ScreenNames.ProfileScreen.name){
-                ProfileScreen(navController = navController)
+                ProfileScreen(navController = navController,authenticationViewModel=authenticationViewModel)
             }
 
         /*composable(ScreenNames.ViewStudyGroupScreen.name){

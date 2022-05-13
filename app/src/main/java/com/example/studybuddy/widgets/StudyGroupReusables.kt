@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -124,18 +125,33 @@ fun groupIcon(url: String,size:Int=85){
             )
 }
 /*A Textfield where the keyboard automatically closes when hitting the done button */
+
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun TextFieldCloseOnEnter(value:String="",label:String="",maxLength:Int=500,onValueChange:(String)->Unit={}){
+fun TextFieldCloseOnEnter(value:String="",label:String="",maxLength:Int=500,isPasswordField:Boolean=false,onValueChange:(String)->Unit={}){
     val keyboardController = LocalSoftwareKeyboardController.current
-    OutlinedTextField(
-        value = value,
-        onValueChange = { if(value.length<=maxLength) onValueChange(it) },
-        label = { Text(text = label) },
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(
-            onDone = {keyboardController?.hide()})
-    )
+    if(!isPasswordField){
+        OutlinedTextField(
+            value = value,
+            onValueChange = { if(value.length<=maxLength) onValueChange(it) },
+            label = { Text(text = label) },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {keyboardController?.hide()})
+        )
+    }else{
+        OutlinedTextField(
+            value = value,
+            onValueChange = { if(value.length<=maxLength) onValueChange(it) },
+            label = { Text(text = label) },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {keyboardController?.hide()}),
+            visualTransformation = PasswordVisualTransformation(),
+            )
+    }
+
 }
 
 //@Preview

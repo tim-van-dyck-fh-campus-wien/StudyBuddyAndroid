@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.studybuddy.data.api.model.LoginData
-import com.example.studybuddy.data.api.model.RegisterData
-import com.example.studybuddy.data.api.model.SingleGroupId
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.studybuddy.data.api.model.*
+import com.example.studybuddy.data.preferences.AppPreferences
 import com.example.studybuddy.data.repositories.authentication.AuthenticationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,6 +19,7 @@ class AuthenticationViewModel @Inject constructor(
     val errorMessage = MutableLiveData<String>()
 
     val isLoggedIn = MutableLiveData<Boolean>()
+    var profileData= BasicStudent("","","","","","",false)
 
 
     fun loadTest():String{
@@ -49,10 +50,28 @@ class AuthenticationViewModel @Inject constructor(
             val response = repository.login(loginData)
             if(response.isSuccessful){//If registering worked...
                 Log.i("login",response.code().toString())
+                val dat = response.body()
+                if(dat!=null){
+                    profileData=dat
+                }
                 success()
             }else{
                 failure(response.message())
                 onError("Error: ${response.message()}")
+            }
+        }
+    }
+    fun logout(success: () -> Unit={},failure: (String) -> Unit={}){
+        viewModelScope.launch {
+            val response = repository.logout()
+            if(response.isSuccessful){
+                AppPreferences.sessionId=""
+                isLoggedIn.postValue(false)
+                success()
+            }else{
+                failure("${response.code()}:${response.message()}")
+                onError("Error: ${response.message()}:${response.code()}")
+
             }
         }
     }
@@ -72,6 +91,10 @@ class AuthenticationViewModel @Inject constructor(
             val response = repository.isUserLoggedIn()
             if(response.isSuccessful){
                 Log.i("AuthAPI-LoggedIn",response.code().toString())
+                val dat = response.body()
+                if(dat!=null){
+                    profileData=dat
+                }
                 sucess()
             }else{
                 failure()
@@ -81,6 +104,18 @@ class AuthenticationViewModel @Inject constructor(
     }
     private fun onError(message:String){
         Log.w("Authentication",message)
+    }
+
+    fun updateProfileData(success:()->Unit={}, failure: (String) -> Unit={}, updatedProfileData: ProfileData){
+        viewModelScope.launch{
+            val response = repository.updateProfileData(updatedProfileData = updatedProfileData)
+            if(response.code()==200){
+                isStudentLoggedIn()
+                success()
+            }else{
+                failure("${response.code()}:${response.message()}")
+            }
+        }
     }
 
 

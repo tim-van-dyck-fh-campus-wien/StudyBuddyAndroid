@@ -87,11 +87,11 @@ fun displayGroupImages(urls: List<String>?,selectedIcon:String, iconSelected:(St
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun form(groupname:String="",description:String="",topic:String="",location:String="",onSubmit:(groupname:String,description:String,topic:String,location:String)->Unit){
-    var groupname by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var topic by remember { mutableStateOf("") }
+    var groupname by remember { mutableStateOf(groupname) }
+    var description by remember { mutableStateOf(description) }
+    var topic by remember { mutableStateOf(topic) }
 
-    var location by remember { mutableStateOf("") }
+    var location by remember { mutableStateOf(location) }
     TextFieldCloseOnEnter(value=groupname,label="Group Name",maxLength = 20,onValueChange = {groupname=it})
     TextFieldCloseOnEnter(value=description,label="Group Description",maxLength = 150,onValueChange = {description=it})
     TextFieldCloseOnEnter(value=topic,label="Group Topic",maxLength = 50,onValueChange = {topic=it})
