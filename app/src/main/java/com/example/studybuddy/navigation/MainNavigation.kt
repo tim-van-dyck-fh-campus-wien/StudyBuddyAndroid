@@ -29,24 +29,17 @@ fun MainNavigation(){
                 RegisterScreen(navController = navController, authenticationViewModel)
             }
             composable(ScreenNames.HomeScreen.name){
-                HomeScreen(navController = navController)
+                HomeScreen(navController = navController, studyGroupViewModel = studyGroupViewModel)
             }
             composable(ScreenNames.FindStudyGroups.name){
                 FindStudyGroupsScreen(navController = navController, studyGroupViewModel = studyGroupViewModel)
             }
             composable(ScreenNames.CreateStudyGroups.name){
-                CreateStudyGroupsScreen(navController = navController,studyGroupViewModel=createStudyGroupViewModel)
+                CreateStudyGroupsScreen(navController = navController,createStudyGroupViewModel=createStudyGroupViewModel, studyGroupViewModel = studyGroupViewModel)
             }
             composable(ScreenNames.ProfileScreen.name){
                 ProfileScreen(navController = navController,authenticationViewModel=authenticationViewModel)
             }
-
-        /*composable(ScreenNames.ViewStudyGroupScreen.name){
-            ViewStudyGroupScreen(navController = navController )
-        }
-
-         */
-
 
           composable(ScreenNames.ViewStudyGroupScreen.name + "/{studyGroup}",
               arguments=listOf(navArgument("studyGroup") {
@@ -55,8 +48,12 @@ fun MainNavigation(){
           {
               //to enable navigation to a specific group & display its info in ViewStudyGroupScreen
                   backStackEntry ->
-              Log.d("navigation", "cur backStackEntry $backStackEntry")
-              ViewStudyGroupScreen(navController = navController, studyGroupID = backStackEntry.arguments?.getString("studyGroup"))
+              Log.i("navigation", "cur backStackEntry $backStackEntry")
+              //var string = backStackEntry.arguments?.getString("studyGroup") as String
+              //Log.i("navigation", "id is $string")
+              //var test = studyGroupViewModel.detailedViewOfSingleStudyGroup(SingleGroupId(string))
+             // Log.i("navigation", "trying to load $test")
+              ViewStudyGroupScreen(navController = navController, studyGroupID = backStackEntry.arguments?.getString("studyGroup"), studyGroupViewModel = studyGroupViewModel)
           }
 
 

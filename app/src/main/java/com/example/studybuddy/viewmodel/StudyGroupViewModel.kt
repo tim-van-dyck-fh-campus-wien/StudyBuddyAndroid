@@ -9,6 +9,11 @@ import com.example.studybuddy.data.repositories.authentication.StudyGroupReposit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import java.io.FileReader;
+import java.util.ArrayList;
+
+import com.google.gson.Gson;
+
 
 @HiltViewModel
 class StudyGroupViewModel @Inject constructor(
@@ -18,6 +23,10 @@ class StudyGroupViewModel @Inject constructor(
     var studyGroupsSearchList =MutableLiveData<List<SingleStudyGroup>>()
     //Test for List of StudyGroups - works fine
     var testList = listOf<SingleStudyGroup>()
+    var myGroupList = listOf<SingleStudyGroup>()
+    var singleGroup = getDummyGroup()
+
+
     var canSendRQ:Boolean=false
 
     fun getAllStudyGroups() {
@@ -49,9 +58,9 @@ class StudyGroupViewModel @Inject constructor(
     }
 
     fun canStudentSendJoinRequest(studyGroupId: SingleGroupId){
-        Log.i("Test","test")
         Log.i("StudyGroupAPI", "message is $studyGroupId")
         viewModelScope.launch {
+
             val response = repository.canStudentSendJoinRequest(studyGroupId)
             //Log.i("StudyGroupAPI", "checking if not member ${response.code()}")
             Log.i("StudyGroupAPI", "API member response ${response}")
@@ -69,7 +78,38 @@ class StudyGroupViewModel @Inject constructor(
         }
     }
 
+    fun getOnlyMyGroups() {
+        viewModelScope.launch {
+            val response = repository.getMyGroups()
+            Log.i("StudyGroupAPI", "API myGroups $response")
+            if (response.isSuccessful || !response.body().isNullOrEmpty()) {
+                val myGroups = response.body()
+                Log.i("StudyGroupAPI", "getOnlyMyGroups  - Response: ${response.body()}")
+                //myGroups?.forEach { it -> Log.i("StudyGroupAPI", "$it") }
+                if (!myGroups.isNullOrEmpty()) {
+                    myGroupList = myGroups
+                } else{
+                onError("Error: ${response.message()}")
+            }
+            }
+        }
+    }
 
+
+    fun detailedViewOfSingleStudyGroup(groupId: SingleGroupId) : SingleStudyGroup{
+        Log.i("StudyGroupAPI", "current ID $groupId")
+        viewModelScope.launch {
+            val response = repository.getSingleStudyGroup(groupId = groupId)
+            if (response.message() == "OK" || response.code() == 200  ){
+          // Log.i("StudyGroupAPI", " Single Group in detailed View ${response.body()}")
+                singleGroup = response.body()!! }
+            else {
+
+                /*TODO: add behaviour for error to eliminate dummy group*/
+            onError("Error: ${response.message()}")
+        }}
+        return singleGroup
+    }
 
 
     private fun onError(message:String){

@@ -3,23 +3,22 @@ package com.example.studybuddy.data.api.model
 
 
 data class SingleStudyGroup(
-    val name:String,
-    val location:String,
-    val description:String,
-    val topic:String,
+    val name:String = "",
+    val location:String = "",
+    val description:String = "",
+    val topic:String = "",
     val admin:BasicStudent,
     val members:List<BasicStudent>,
     val appointments:List<Appointment>,
-    val _id:String,
+    val _id:String = "",
     val messages:List<Message>,
     val joinRequests:List<JoinRequest>,
-    val icon:String,
+    val icon:String = "",
     val hide:Boolean
 )
 
-fun getDummyGroups(): List<SingleStudyGroup>{
-    return listOf(
-        SingleStudyGroup(
+fun getDummyGroup(): SingleStudyGroup{
+    return SingleStudyGroup(
             name = "Dummy1",
             location = "1010",
             description = "studying AI",
@@ -51,8 +50,8 @@ fun getDummyGroups(): List<SingleStudyGroup>{
             ),
             icon="/group/calculator.png",
             hide=false,
-        ),
-        SingleStudyGroup(
+        )
+       /* SingleStudyGroup(
             name = "Dummy2",
             location = "1090",
             description = "learning all about Mobile App Development on Android",
@@ -74,9 +73,9 @@ fun getDummyGroups(): List<SingleStudyGroup>{
             icon="/group/calculator.png",
             hide=false,
         )
-    )
+    )*/
 }
 
-fun filterGroup(studyGroupID: String?) : SingleStudyGroup {
+/*fun filterGroup(studyGroupID: String?) : SingleStudyGroup {
     return getDummyGroups().filter {studyGroup -> studyGroup._id == studyGroupID}[0]
-}
+}*/

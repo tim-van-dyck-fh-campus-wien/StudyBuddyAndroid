@@ -36,7 +36,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.studybuddy.data.api.ApiConstants
 import com.example.studybuddy.data.api.model.SingleStudyGroup
-import com.example.studybuddy.data.api.model.getDummyGroups
 
 @Composable
 fun DisplayGeneralGroupTextInfo (studyGroup: SingleStudyGroup){
@@ -156,7 +155,7 @@ fun TextFieldCloseOnEnter(value:String="",label:String="",maxLength:Int=500,isPa
 
 //@Preview
 @Composable
-fun DisplayGroupMembers(studyGroup: SingleStudyGroup = getDummyGroups()[0]){
+fun DisplayGroupMembers(studyGroup: SingleStudyGroup ){
     Surface(
         modifier = Modifier
             .padding(5.dp)
@@ -190,9 +189,9 @@ fun DisplayGroupMembers(studyGroup: SingleStudyGroup = getDummyGroups()[0]){
             }
     }
 
-@Preview
+//@Preview
 @Composable
-fun DisplayMessaging(studyGroup: SingleStudyGroup = getDummyGroups()[1],
+fun DisplayMessaging(studyGroup: SingleStudyGroup ,
                      ) {
     Surface(
         color = MaterialTheme.colors.background
@@ -261,9 +260,9 @@ fun DisplayMessaging(studyGroup: SingleStudyGroup = getDummyGroups()[1],
     }
 }
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
-fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup = getDummyGroups()[0],
+fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup,
                                        content: @Composable () -> Unit = {}
                                       ){
     var text by remember { mutableStateOf(TextFieldValue("")) }

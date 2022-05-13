@@ -1,5 +1,6 @@
 package com.example.studybuddy.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
@@ -12,28 +13,37 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
-import com.example.studybuddy.data.api.ApiConstants
+import com.example.studybuddy.data.api.model.SingleGroupId
 import com.example.studybuddy.data.api.model.SingleStudyGroup
-import com.example.studybuddy.data.api.model.filterGroup
-import com.example.studybuddy.data.api.model.getDummyGroups
+import com.example.studybuddy.data.api.model.getDummyGroup
+import com.example.studybuddy.viewmodel.StudyGroupViewModel
 import com.example.studybuddy.widgets.*
 
 
 @Composable
 fun ViewStudyGroupScreen(
     navController: NavHostController = rememberNavController(),
-    studyGroupID: String? = "00001"){
-    DisplayBottomBar (navController = navController) { ViewStudyGroupContent(studyGroup = filterGroup(studyGroupID = studyGroupID)) }
+    studyGroupID: String? = "00001",
+    studyGroupViewModel: StudyGroupViewModel
+){
+    var currentGroup = getDummyGroup()
+    // get the group for detailed StudyGroup Info, if null or something goes wrong, it will be the dummy group
+    currentGroup = studyGroupID?.let {
+        SingleGroupId(
+            it
+        )
+    }?.let { studyGroupViewModel.detailedViewOfSingleStudyGroup(it) }!!
+    DisplayBottomBar (navController = navController) { ViewStudyGroupContent(studyGroup = currentGroup
+    ) }
 }
 
-@Preview
+//@Preview
 @Composable
-fun ViewStudyGroupContent(studyGroup:SingleStudyGroup = getDummyGroups()[1]) {
+fun ViewStudyGroupContent(studyGroup:SingleStudyGroup ) {
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState()) ){
         Surface(

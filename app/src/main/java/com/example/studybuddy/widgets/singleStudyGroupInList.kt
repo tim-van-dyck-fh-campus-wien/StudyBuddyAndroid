@@ -27,18 +27,16 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.studybuddy.data.api.ApiConstants
 import com.example.studybuddy.data.api.model.SingleStudyGroup
-import com.example.studybuddy.data.api.model.getDummyGroups
-import org.w3c.dom.Text
 
 
 /**
  * This function shows a simple display of a Study Group in a List of Study Groups
  * Intended for Group Lists
  */
-@Preview
+//@Preview
 @Composable
 fun StudyGroupRow(
-    studyGroup: SingleStudyGroup = getDummyGroups()[0],
+    studyGroup: SingleStudyGroup,
 
     onItemClick: (String) -> Unit = {},
             //test content for JoinStudyGroupButton
@@ -62,7 +60,7 @@ fun StudyGroupRow(
                     .heightIn(min = 130.dp)
                     .clickable {
                         Log.d("navigation", "cur StudyGroup is: ${studyGroup._id}")
-                        onItemClick(studyGroup._id)  //damit ich single study group besuchen kann (?) - funktioniert jetzt evtl anders
+                        onItemClick(studyGroup._id)  //emit singlestudygroup ID to send to backend
                     },
                 shape = RoundedCornerShape(corner = CornerSize(16.dp)),
                 elevation = 6.dp

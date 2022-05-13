@@ -19,42 +19,46 @@ import com.example.studybuddy.R
 import com.example.studybuddy.data.api.ApiConstants
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.CreateStudyGroupViewModel
+import com.example.studybuddy.viewmodel.StudyGroupViewModel
 import com.example.studybuddy.widgets.TextFieldCloseOnEnter
 import com.example.studybuddy.widgets.groupIcon
 
 @Composable
 fun CreateStudyGroupsScreen(
     navController: NavHostController,
-    studyGroupViewModel: CreateStudyGroupViewModel
+    createStudyGroupViewModel: CreateStudyGroupViewModel,
+    studyGroupViewModel: StudyGroupViewModel
 ){
-    DisplayBottomBar (navController = navController) { CreateStudyGroupsContent(studyGroupViewModel = studyGroupViewModel,navController=navController) }
+    DisplayBottomBar (navController = navController) { CreateStudyGroupsContent(
+        createStudyGroupViewModel = createStudyGroupViewModel,
+        navController=navController
+    ) }
 
 }
 
 @Composable
 fun CreateStudyGroupsContent(
-    studyGroupViewModel: CreateStudyGroupViewModel,
-    navController: NavHostController
+    createStudyGroupViewModel: CreateStudyGroupViewModel,
+    navController: NavHostController,
 ){
-    studyGroupViewModel.getAvailableGroupimages()
+    createStudyGroupViewModel.getAvailableGroupimages()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(id = R.drawable.transparent_study_buddy),
             contentDescription = "StudyBuddyIcon"
         )
         Text("Please select an icon for your study group:")
-        displayGroupImages(urls = studyGroupViewModel.availableGroupImages.value,selectedIcon = studyGroupViewModel.selectedIconUrl.value){
-            studyGroupViewModel.setSelectedIcon(it)
+        displayGroupImages(urls = createStudyGroupViewModel.availableGroupImages.value,selectedIcon = createStudyGroupViewModel.selectedIconUrl.value){
+            createStudyGroupViewModel.setSelectedIcon(it)
         }
         /*called when submit button is clicked!*/
         form(onSubmit = {groupname, description, topic, location ->
-            studyGroupViewModel.createStudyGroup(groupname = groupname,
+            createStudyGroupViewModel.createStudyGroup(groupname = groupname,
                 description = description,
                 topic = topic,
                 location=location,
                 onSuccess ={
-                    /*TODO Naviagate to freshly created group*/
-                    navController.navigate(ScreenNames.FindStudyGroups.name)
+                    navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/${createStudyGroupViewModel.studyGroupId._id}")
                 } )
         })
     }

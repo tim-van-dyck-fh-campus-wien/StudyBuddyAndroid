@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
@@ -13,14 +12,19 @@ import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
 import com.example.studybuddy.R
 import com.example.studybuddy.data.api.model.SingleStudyGroup
-import com.example.studybuddy.data.api.model.getDummyGroups
+
 import com.example.studybuddy.navigation.ScreenNames
+import com.example.studybuddy.viewmodel.StudyGroupViewModel
 import com.example.studybuddy.widgets.StudyGroupRow
 
 @Composable
-fun HomeScreen(navController: NavHostController = rememberNavController()){
+fun HomeScreen(
+    navController: NavHostController = rememberNavController(),
+    studyGroupViewModel: StudyGroupViewModel
+){
     DisplayBottomBar (navController = navController) {
-        HomeContent(navController = navController, studyGroupList = getDummyGroups())
+        studyGroupViewModel.getOnlyMyGroups()
+        HomeContent(navController = navController, studyGroupList = studyGroupViewModel.myGroupList)
     }
 }
 
@@ -35,13 +39,12 @@ fun HomeContent(studyGroupList :List<SingleStudyGroup>,
         )
         LazyColumn {
             items(studyGroupList) { studyGroup ->
+                Log.i("myStudyGroups", "show group $studyGroup")
                 StudyGroupRow(
-                    studyGroup = getDummyGroups()[0],
+                    studyGroup = studyGroup,
                     onItemClick = { studyGroupSingle ->
-                        Log.d("navigation", "cur studyGroupID = $studyGroupSingle")
-                        //navController.navigate(route= ScreenNames.ViewStudyGroupScreen.name)
-
-                        navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/$studyGroupSingle")
+                        Log.d("navigation", "cur studyGroupID = ${studyGroupSingle}")
+                        navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/${studyGroupSingle}")
                     },
                     {
                     },

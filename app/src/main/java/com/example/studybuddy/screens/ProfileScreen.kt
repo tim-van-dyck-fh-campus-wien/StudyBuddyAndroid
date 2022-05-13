@@ -51,7 +51,9 @@ fun ProfileContent(authenticationViewModel: AuthenticationViewModel, navControll
             modifier = Modifier.padding(bottom = 10.dp)
         )
 
-        form(authenticationViewModel.profileData.username,authenticationViewModel.profileData.location,{authenticationViewModel.updateProfileData(success = {
+        form(authenticationViewModel.profileData.username,authenticationViewModel.profileData.location,
+            {
+            authenticationViewModel.updateProfileData(success = {
             /*TODO ADD SUCCESS ACTION*/ navController.navigate(ScreenNames.HomeScreen.name)
         }, failure = {
             /*TODO Add failure action*/

@@ -6,15 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
 import com.example.studybuddy.R
 import com.example.studybuddy.data.api.model.SingleGroupId
-import com.example.studybuddy.data.api.model.SingleStudyGroup
-import com.example.studybuddy.data.api.model.getDummyGroups
 import com.example.studybuddy.viewmodel.StudyGroupViewModel
 import com.example.studybuddy.widgets.GroupButton
 import com.example.studybuddy.widgets.StudyGroupRow
@@ -26,6 +24,7 @@ fun FindStudyGroupsScreen(
 ){
     DisplayBottomBar (navController = navController) {
         studyGroupViewModel.getAllStudyGroups()
+
         FindStudyGroupsContent(navController = navController, studyGroupViewModel = studyGroupViewModel)
     }
 }
@@ -42,6 +41,7 @@ fun FindStudyGroupsContent(
             contentDescription = "StudyBuddyIcon"
         )
         //val studyGroupList = studyGroupViewModel.studyGroupsSearchList.value
+
         val studyGroupList = studyGroupViewModel.testList
         if (studyGroupList.isNullOrEmpty()){
             Log.d("join", "List is empty")
@@ -59,7 +59,7 @@ fun FindStudyGroupsContent(
                     }
                     StudyGroupRow(studyGroup = studyGroup) {
                         studyGroupViewModel.canStudentSendJoinRequest(SingleGroupId(studyGroup._id))
-                        //Todo: improve Request Check
+                        //Todo: improve Request Check - make canStudentSendJoinRequest return boolean
                         if (studyGroupViewModel.canSendRQ)
                             GroupButton(
                                 studyGroup = studyGroup, onButtonClicked =
