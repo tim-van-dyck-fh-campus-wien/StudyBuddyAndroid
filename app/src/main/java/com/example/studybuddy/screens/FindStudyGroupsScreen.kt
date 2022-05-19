@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
 import com.example.studybuddy.R
 import com.example.studybuddy.data.api.model.SingleGroupId
+import com.example.studybuddy.viewmodel.AuthenticationViewModel
 import com.example.studybuddy.viewmodel.StudyGroupViewModel
 import com.example.studybuddy.widgets.GroupButton
 import com.example.studybuddy.widgets.StudyGroupRow
@@ -20,11 +21,14 @@ import com.example.studybuddy.widgets.StudyGroupRow
 @Composable
 fun FindStudyGroupsScreen(
     navController: NavHostController = rememberNavController(),
-    studyGroupViewModel: StudyGroupViewModel
-){
-    DisplayBottomBar (navController = navController) {
-        studyGroupViewModel.getAllStudyGroups()
+    studyGroupViewModel: StudyGroupViewModel,
+    authenticationViewModel: AuthenticationViewModel,
 
+    ){
+    DisplayBottomBar (navController = navController) {
+       // studyGroupViewModel.getAllStudyGroups()
+        var district = authenticationViewModel.profileData.location
+        studyGroupViewModel.getFilteredStudyGroups(district = district)
         FindStudyGroupsContent(navController = navController, studyGroupViewModel = studyGroupViewModel)
     }
 }
@@ -42,25 +46,29 @@ fun FindStudyGroupsContent(
         )
         //val studyGroupList = studyGroupViewModel.studyGroupsSearchList.value
 
-        val studyGroupList = studyGroupViewModel.testList
-        if (studyGroupList.isNullOrEmpty()){
+        //val studyGroupList = studyGroupViewModel.testList
+        if (studyGroupViewModel.filteredStudyGroupList.value.isNullOrEmpty()){
             Log.d("join", "List is empty")
         } else {
             //studyGroupList.forEach{it -> Log.d("join", "List content ${it}")}
             //val studyGroupListDummy = getDummyGroups()
             LazyColumn {
-                items(studyGroupList) { studyGroup ->
-                    studyGroupViewModel.canStudentSendJoinRequest(SingleGroupId(studyGroup._id))
-                    var joinButton = false
-                    if (studyGroupViewModel.canSendRQ){
+                items(studyGroupViewModel.filteredStudyGroupList.value!!) { studyGroup ->
+                    //studyGroupViewModel.canStudentSendJoinRequest(SingleGroupId(studyGroup._id))
+                    //var joinButton = false
+                    var joinButton by remember{ mutableStateOf(false) }
+                    /*if (studyGroupViewModel.canSendRQ){
                         joinButton = true
                     } else if (!studyGroupViewModel.canSendRQ){
                         joinButton = false
-                    }
+                    }*/
+                    studyGroupViewModel.canStudentSendJoinRequest(SingleGroupId(studyGroup._id),
+                        callbackTest = {
+                            joinButton = it
+                        })
                     StudyGroupRow(studyGroup = studyGroup) {
-                        studyGroupViewModel.canStudentSendJoinRequest(SingleGroupId(studyGroup._id))
                         //Todo: improve Request Check - make canStudentSendJoinRequest return boolean
-                        if (studyGroupViewModel.canSendRQ)
+                        if (joinButton)
                             GroupButton(
                                 studyGroup = studyGroup, onButtonClicked =
                                 { group ->
@@ -68,7 +76,7 @@ fun FindStudyGroupsContent(
                                 },
                                 text = "Send Join Request"
                             ) {}
-                        else if (!studyGroupViewModel.canSendRQ) {
+                        else if (!joinButton) {
                             Text("You are a member of this group")
                         }
 

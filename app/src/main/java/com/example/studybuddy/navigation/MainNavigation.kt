@@ -32,7 +32,7 @@ fun MainNavigation(){
                 HomeScreen(navController = navController, studyGroupViewModel = studyGroupViewModel)
             }
             composable(ScreenNames.FindStudyGroups.name){
-                FindStudyGroupsScreen(navController = navController, studyGroupViewModel = studyGroupViewModel)
+                FindStudyGroupsScreen(navController = navController, studyGroupViewModel = studyGroupViewModel, authenticationViewModel = authenticationViewModel)
             }
             composable(ScreenNames.CreateStudyGroups.name){
                 CreateStudyGroupsScreen(navController = navController,createStudyGroupViewModel=createStudyGroupViewModel, studyGroupViewModel = studyGroupViewModel)

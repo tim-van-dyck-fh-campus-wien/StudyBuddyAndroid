@@ -25,6 +25,7 @@ class StudyGroupViewModel @Inject constructor(
     var testList = listOf<SingleStudyGroup>()
     var myGroupList = listOf<SingleStudyGroup>()
     var singleGroup = getDummyGroup()
+    var filteredStudyGroupList = MutableLiveData<List<SingleStudyGroup>>()
 
 
     var canSendRQ:Boolean=false
@@ -57,7 +58,24 @@ class StudyGroupViewModel @Inject constructor(
         }
     }
 
-    fun canStudentSendJoinRequest(studyGroupId: SingleGroupId){
+    fun getFilteredStudyGroups(district:String) {
+        viewModelScope.launch {
+            val response = repository.getFilteredStudyGroups(district = district)
+            //response.body()?.forEach { it -> Log.i("StudyGroupAPI", "$it") }
+            //Log.i("StudyGroupAPI", "${response.body()}")
+            if (response.isSuccessful || !response.body().isNullOrEmpty()) {
+                val forList = response.body()
+                filteredStudyGroupList.postValue(forList)
+                Log.i("StudyGroupAPI", "The filtered list ${filteredStudyGroupList.value}")
+
+            } else {
+                onError("Error: ${response.message()}")
+            }
+        }
+    }
+
+
+    fun canStudentSendJoinRequest(studyGroupId: SingleGroupId, callbackTest:(Boolean) -> Unit = {}){
         Log.i("StudyGroupAPI", "message is $studyGroupId")
         viewModelScope.launch {
 
@@ -69,9 +87,9 @@ class StudyGroupViewModel @Inject constructor(
 
             //added for testList purposes (see below)
             if(response.code() == 200){
-                canSendRQ = true
+                callbackTest(true)
             } else if (response.code() == 400) {
-                canSendRQ = false
+                callbackTest(false)
             } else{
                 onError("Error: ${response.message()}")
             }

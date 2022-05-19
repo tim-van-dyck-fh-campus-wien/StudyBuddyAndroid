@@ -72,7 +72,7 @@ fun LoginScreen(
                     authenticationViewModel.login(loginData = loginData,failure = {
                         //todo: Add behaviour if the login fails
                     }){
-                        navController.navigate(ScreenNames.HomeScreen.name)
+                        //navController.navigate(ScreenNames.HomeScreen.name)
                     }
 
                     // todo: check if password is correct
