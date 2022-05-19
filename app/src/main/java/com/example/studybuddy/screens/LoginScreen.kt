@@ -18,6 +18,7 @@ import com.example.studybuddy.R
 import com.example.studybuddy.data.api.model.LoginData
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
+import com.example.studybuddy.widgets.TextFieldCloseOnEnter
 import java.util.*
 
 
@@ -51,7 +52,7 @@ fun LoginScreen(
         var username by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
 
-        OutlinedTextField(
+        /*OutlinedTextField(
             value = username,
             onValueChange = { value -> username = value },
             label = { Text(text = "Username") }
@@ -61,7 +62,15 @@ fun LoginScreen(
             value = password,
             onValueChange = { value -> password = value },
             label = { Text(text = "Password") }
-        )
+        )*/
+
+        TextFieldCloseOnEnter(username, "Username"){
+                value -> username = value
+        }
+
+        TextFieldCloseOnEnter(password, "Password", true){
+                value -> password = value
+        }
 
         Button(
             modifier = Modifier.padding(16.dp),

@@ -20,8 +20,6 @@ fun MainNavigation(){
     val studyGroupViewModel : StudyGroupViewModel = viewModel()
     val createStudyGroupViewModel:CreateStudyGroupViewModel = viewModel()
     NavHost(navController = navController, startDestination = ScreenNames.LoginScreen.name  ){
-    //changed start destination to homeScreen to see the preview:
-    //NavHost(navController = navController, startDestination = ScreenNames.HomeScreen.name  ){
             composable(ScreenNames.LoginScreen.name){
                 LoginScreen(navController = navController, authenticationViewModel)
             }

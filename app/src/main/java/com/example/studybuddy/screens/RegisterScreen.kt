@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
+import com.example.studybuddy.widgets.TextFieldCloseOnEnter
 
 
 @Composable
@@ -42,7 +43,7 @@ fun RegisterScreen(
         var studentId by remember { mutableStateOf("") }
         var yearOfFinish by remember { mutableStateOf("") }     // muss string sein, weil sonst das OutlinedTextField nicht funktioniert?
 
-        OutlinedTextField(
+        /*OutlinedTextField(
             value = username,
             onValueChange = { value -> username = value },
             label = { Text(text = "Username") }
@@ -88,7 +89,39 @@ fun RegisterScreen(
             value = yearOfFinish,
             onValueChange = { value -> yearOfFinish = value },
             label = { Text(text = "I will finish my studies by ...") }
-        )
+        )*/
+
+        TextFieldCloseOnEnter(username, "Username"){
+                value -> username = value
+        }
+
+        TextFieldCloseOnEnter(email, "Email Address"){
+                value -> email = value
+        }
+
+        TextFieldCloseOnEnter(password, "Password", true){
+                value -> password = value
+        }
+
+        TextFieldCloseOnEnter(location, "Location (Zipcode)"){
+                value -> location = value
+        }
+
+        TextFieldCloseOnEnter(firstname, "First Name"){
+                value -> firstname = value
+        }
+
+        TextFieldCloseOnEnter(lastname, "Last Name"){
+                value -> lastname = value
+        }
+
+        TextFieldCloseOnEnter(studentId, "Identification Number (cXXX...)"){
+                value -> studentId = value
+        }
+
+        TextFieldCloseOnEnter(yearOfFinish, "I will finish my studies by ..."){
+                value -> yearOfFinish = value
+        }
 
         Button(
             modifier = Modifier.padding(16.dp),

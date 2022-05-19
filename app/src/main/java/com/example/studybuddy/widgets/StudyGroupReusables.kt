@@ -128,7 +128,7 @@ fun groupIcon(url: String,size:Int=85){
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun TextFieldCloseOnEnter(value:String="",label:String="",maxLength:Int=500,isPasswordField:Boolean=false,onValueChange:(String)->Unit={}){
+fun TextFieldCloseOnEnter(value:String="",label:String="",isPasswordField:Boolean=false,maxLength:Int=500,onValueChange:(String)->Unit={}){
     val keyboardController = LocalSoftwareKeyboardController.current
     if(!isPasswordField){
         OutlinedTextField(
