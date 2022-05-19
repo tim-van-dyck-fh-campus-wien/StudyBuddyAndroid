@@ -1,6 +1,7 @@
 package com.example.studybuddy.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,12 +33,22 @@ class AuthenticationViewModel @Inject constructor(
     }
 
     fun register(registerData: RegisterData=
-                     RegisterData("hans","test", "hansi", "hans123@stud.fh-campuswien.ac.at", "campus09", "c20104750555", "1070",2030), failure:(String)->Unit={},success:()->Unit={}){
+                     RegisterData("hans","test", "hansi", "hans123@stud.fh-campuswien.ac.at", "campus09", "c20104750555", "1070",2030), failure: (String)->Unit={}, success: ()->Unit={}){
         viewModelScope.launch {
            val response = repository.register(registerData)
             if(response.isSuccessful){//If registering worked...
                 success()
-            }else{
+            }
+            else if (response.code() == 500){
+                failure("Some error occurred")
+            }
+            else if (response.code() == 408){
+                failure("Username is already taken, choose another one!")
+            }
+            else if (response.code() == 406){
+                failure("Couldn't save student. Make sure to fill out all the fields!")
+            }
+            else{
                 failure(response.message())
                 onError("Error: ${response.message()}")
             }

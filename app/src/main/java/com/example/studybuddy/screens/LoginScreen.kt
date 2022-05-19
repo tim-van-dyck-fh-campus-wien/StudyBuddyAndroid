@@ -2,10 +2,7 @@ package com.example.studybuddy.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +49,8 @@ fun LoginScreen(
         var username by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
 
+        var openDialog = remember { mutableStateOf(false) }
+
         /*OutlinedTextField(
             value = username,
             onValueChange = { value -> username = value },
@@ -76,18 +75,17 @@ fun LoginScreen(
             modifier = Modifier.padding(16.dp),
             onClick = {
                 if (username.isNotEmpty() and password.isNotEmpty()) {
-                    // todo: login
-                        val loginData = LoginData(username,password)
+                    val loginData = LoginData(username,password)
                     authenticationViewModel.login(loginData = loginData,failure = {
-                        //todo: Add behaviour if the login fails
+                        openDialog.value = true
                     }){
-                        //navController.navigate(ScreenNames.HomeScreen.name)
+                        // success
+                        navController.navigate(ScreenNames.HomeScreen.name)
+                        username = ""
+                        password = ""
                     }
 
-                    // todo: check if password is correct
-                    navController.navigate(ScreenNames.HomeScreen.name)
-                    username = ""
-                    password = ""
+
                 }
             }) {
             Text(text = "Login")
@@ -102,6 +100,28 @@ fun LoginScreen(
                 password = ""
             }) {
             Text(text = "Register instead")
+        }
+
+        if(openDialog.value) {
+            AlertDialog(
+                onDismissRequest = {
+                    openDialog.value = false
+                },
+                title = {
+                    Text(text = "Invalid username or password")
+                },
+                text = {
+                    Text("Please try again.")
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            openDialog.value = false
+                        }) {
+                        Text("OK")
+                    }
+                },
+            )
         }
     }
 }

@@ -1,16 +1,15 @@
 package com.example.studybuddy.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.studybuddy.data.api.model.LoginData
+import com.example.studybuddy.data.api.model.RegisterData
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
 import com.example.studybuddy.widgets.TextFieldCloseOnEnter
@@ -24,7 +23,9 @@ fun RegisterScreen(
     //onLoginInsteadClick: () -> Unit = {},
 ){
 
-    Column (modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+    Column (modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
         Text(
@@ -41,7 +42,11 @@ fun RegisterScreen(
         var firstname by remember { mutableStateOf("") }
         var lastname by remember { mutableStateOf("") }
         var studentId by remember { mutableStateOf("") }
-        var yearOfFinish by remember { mutableStateOf("") }     // muss string sein, weil sonst das OutlinedTextField nicht funktioniert?
+        //var yearOfFinish by remember { mutableStateOf("") }     // muss string sein, weil sonst das OutlinedTextField nicht funktioniert?
+        var yearOfFinish by remember { mutableStateOf(0) }
+
+        var openDialog = remember { mutableStateOf(false) }
+        var responseMessage = remember { mutableStateOf("")}
 
         /*OutlinedTextField(
             value = username,
@@ -119,24 +124,35 @@ fun RegisterScreen(
                 value -> studentId = value
         }
 
-        TextFieldCloseOnEnter(yearOfFinish, "I will finish my studies by ..."){
-                value -> yearOfFinish = value
+        TextFieldCloseOnEnter(yearOfFinish.toString(), "I will finish my studies by ..."){
+                value -> yearOfFinish = value.toInt()
         }
 
         Button(
             modifier = Modifier.padding(16.dp),
             onClick = {
-                if (username.isNotEmpty() and password.isNotEmpty()) {
-                    // todo: register
-                    navController.navigate(ScreenNames.HomeScreen.name)
-                    username = ""
-                    email = ""
-                    password = ""
-                    location = ""
-                    firstname = ""
-                    lastname = ""
-                    studentId = ""
-                    yearOfFinish = ""
+                if (/*username.isNotEmpty() and password.isNotEmpty() and */!email.endsWith("@stud.fh-campuswien.ac.at")) {
+                    openDialog.value = true
+                    responseMessage.value = "Email must be a valid FH Campus Wien email address."
+                }
+                else {
+                    val registerData = RegisterData(firstname, lastname, username, email, password, studentId, location, yearOfFinish)
+                    // register
+                    authenticationViewModel.register(registerData = registerData, failure = {
+                        openDialog.value = true
+                        responseMessage.value = it
+                    }){
+                        //success
+                        navController.navigate(ScreenNames.HomeScreen.name)
+                        username = ""
+                        email = ""
+                        password = ""
+                        location = ""
+                        firstname = ""
+                        lastname = ""
+                        studentId = ""
+                        yearOfFinish = 0
+                    }
                 }
             }) {
             Text(text = "Register")
@@ -154,9 +170,44 @@ fun RegisterScreen(
                 firstname = ""
                 lastname = ""
                 studentId = ""
-                yearOfFinish = ""
+                yearOfFinish = 0
             }) {
             Text(text = "Login instead")
+        }
+
+        if(openDialog.value) {
+            AlertDialog(
+                onDismissRequest = {
+                    // Dismiss the dialog when the user clicks outside the dialog or on the back
+                    // button. If you want to disable that functionality, simply use an empty
+                    // onCloseRequest.
+                    openDialog.value = false
+                },
+                title = {
+                    Text(text = "Error")
+                },
+                text = {
+                    Text(text = responseMessage.value)
+                },
+                confirmButton = {
+                    Button(
+
+                        onClick = {
+                            openDialog.value = false
+                        }) {
+                        Text("OK")
+                    }
+                },
+                /*dismissButton = {
+                    Button(
+
+                        onClick = {
+                            openDialog.value = false
+                        }) {
+                        Text("This is the dismiss Button")
+                    }
+                }*/
+            )
         }
     }
 }
