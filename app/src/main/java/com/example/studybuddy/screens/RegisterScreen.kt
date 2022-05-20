@@ -34,6 +34,12 @@ fun RegisterScreen(
             color = MaterialTheme.colors.primaryVariant,
             modifier = Modifier.padding(bottom = 10.dp)
         )
+        Text(
+            text = "Please fill out all of the fields.",
+            style = MaterialTheme.typography.body2,
+            color = MaterialTheme.colors.primaryVariant,
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
 
         var username by remember { mutableStateOf("") }
         var email by remember { mutableStateOf("") }
@@ -42,8 +48,7 @@ fun RegisterScreen(
         var firstname by remember { mutableStateOf("") }
         var lastname by remember { mutableStateOf("") }
         var studentId by remember { mutableStateOf("") }
-        //var yearOfFinish by remember { mutableStateOf("") }     // muss string sein, weil sonst das OutlinedTextField nicht funktioniert?
-        var yearOfFinish by remember { mutableStateOf(0) }
+        var yearOfFinish by remember { mutableStateOf(2099) }
 
         var openDialog = remember { mutableStateOf(false) }
         var responseMessage = remember { mutableStateOf("")}
@@ -96,42 +101,19 @@ fun RegisterScreen(
             label = { Text(text = "I will finish my studies by ...") }
         )*/
 
-        TextFieldCloseOnEnter(username, "Username"){
-                value -> username = value
-        }
-
-        TextFieldCloseOnEnter(email, "Email Address"){
-                value -> email = value
-        }
-
-        TextFieldCloseOnEnter(password, "Password", true){
-                value -> password = value
-        }
-
-        TextFieldCloseOnEnter(location, "Location (Zipcode)"){
-                value -> location = value
-        }
-
-        TextFieldCloseOnEnter(firstname, "First Name"){
-                value -> firstname = value
-        }
-
-        TextFieldCloseOnEnter(lastname, "Last Name"){
-                value -> lastname = value
-        }
-
-        TextFieldCloseOnEnter(studentId, "Identification Number (cXXX...)"){
-                value -> studentId = value
-        }
-
-        TextFieldCloseOnEnter(yearOfFinish.toString(), "I will finish my studies by ..."){
-                value -> yearOfFinish = value.toInt()
-        }
+        TextFieldCloseOnEnter(firstname, "First Name (min. 3 characters)"){ value -> firstname = value }
+        TextFieldCloseOnEnter(lastname, "Last Name (min. 3 characters)"){ value -> lastname = value }
+        TextFieldCloseOnEnter(username, "Username (min. 3 characters)"){ value -> username = value }
+        TextFieldCloseOnEnter(email, "Email Address (FH Campus Wien)"){ value -> email = value }
+        TextFieldCloseOnEnter(password, "Password (min. 6 characters)", true){ value -> password = value }
+        TextFieldCloseOnEnter(location, "Location (Zipcode in Vienna)"){ value -> location = value }
+        TextFieldCloseOnEnter(studentId, "Identification Number (cXXX...)"){ value -> studentId = value }
+        TextFieldCloseOnEnter(yearOfFinish.toString(), "I will finish my studies by ..."){ value -> yearOfFinish = value.toInt() }
 
         Button(
             modifier = Modifier.padding(16.dp),
             onClick = {
-                if (/*username.isNotEmpty() and password.isNotEmpty() and */!email.endsWith("@stud.fh-campuswien.ac.at")) {
+                if (!email.endsWith("@stud.fh-campuswien.ac.at")) {
                     openDialog.value = true
                     responseMessage.value = "Email must be a valid FH Campus Wien email address."
                 }
@@ -151,7 +133,7 @@ fun RegisterScreen(
                         firstname = ""
                         lastname = ""
                         studentId = ""
-                        yearOfFinish = 0
+                        yearOfFinish = 2099
                     }
                 }
             }) {
@@ -170,7 +152,7 @@ fun RegisterScreen(
                 firstname = ""
                 lastname = ""
                 studentId = ""
-                yearOfFinish = 0
+                yearOfFinish = 2099
             }) {
             Text(text = "Login instead")
         }
