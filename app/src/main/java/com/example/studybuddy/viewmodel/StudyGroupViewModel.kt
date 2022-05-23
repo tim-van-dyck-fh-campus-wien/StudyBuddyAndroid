@@ -9,10 +9,6 @@ import com.example.studybuddy.data.repositories.authentication.StudyGroupReposit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import java.io.FileReader;
-import java.util.ArrayList;
-
-import com.google.gson.Gson;
 
 
 @HiltViewModel
@@ -75,7 +71,7 @@ class StudyGroupViewModel @Inject constructor(
     }
 
 
-    fun canStudentSendJoinRequest(studyGroupId: SingleGroupId, callbackTest:(Boolean) -> Unit = {}){
+    fun canStudentSendJoinRequest(studyGroupId: SingleGroupId, callback:(Boolean) -> Unit = {}){
         Log.i("StudyGroupAPI", "message is $studyGroupId")
         viewModelScope.launch {
 
@@ -87,9 +83,9 @@ class StudyGroupViewModel @Inject constructor(
 
             //added for testList purposes (see below)
             if(response.code() == 200){
-                callbackTest(true)
+                callback(true)
             } else if (response.code() == 400) {
-                callbackTest(false)
+                callback(false)
             } else{
                 onError("Error: ${response.message()}")
             }
@@ -134,8 +130,25 @@ class StudyGroupViewModel @Inject constructor(
             Log.w("StudyGroupVM,Error",message)
     }
 
+    fun sendJoinRequest(joinRequest: JoinRequest, callbackJoin:(Boolean) -> Unit = {}){
+            Log.i("StudyGroupAPI", "join request is $joinRequest")
+            viewModelScope.launch {
+                val response = repository.sendJoinRequest(joinRequest = joinRequest)
+                Log.i("StudyGroupAPI", "Join REQ response ${response}")
+                if(response.code() == 200){
+                    callbackJoin(true)
+                } else
+                    onError("Error: ${response.message()}")
+                }
+            }
 
-}
+
+        }
+
+
+
+
+
 /*
 class AuthenticationViewModel constructor(
     private val repository:AuthenticationRepository = AuthenticationRepository()

@@ -285,7 +285,7 @@ fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup,
            .height(55.dp),
        ) {
            Button(
-               colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+               //colors = ButtonDefaults.buttonColors(),
                onClick = { Log.d("message", "$text, to Group: ${studyGroup._id}")}) {
                Icon(imageVector = Icons.Default.Send, contentDescription = "sendButton")
            }
@@ -302,7 +302,7 @@ fun GroupButton(
 ) {
     Button(
         modifier = Modifier.padding(horizontal = 5.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+        //colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
         onClick = { onButtonClicked(studyGroup._id) }) {
         if (text != "") {
             Text(text = text, style = MaterialTheme.typography.button)

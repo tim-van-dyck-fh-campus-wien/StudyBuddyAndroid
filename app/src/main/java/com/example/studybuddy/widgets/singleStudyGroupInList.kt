@@ -156,11 +156,14 @@ fun DisplayArrowContent(
                         //search, but is not needed from List of my Study Groups
                         content: @Composable () -> Unit = {}
                         ) {
+
+
     Column(modifier = Modifier.width(200.dp)) {
         AnimatedVisibility(
             visible = showContent,
             enter = expandVertically(expandFrom = Alignment.Top)
         ) {
+            Card(){
             Column() {
                 Divider(modifier = Modifier.padding(5.dp))
 
@@ -170,11 +173,8 @@ fun DisplayArrowContent(
                     style = MaterialTheme.typography.caption
                 )
                 Divider(modifier = Modifier.padding(5.dp))
-                //this is the Join Button, if used when StudyGroupRow is called
-
-               // content()
+                }
             }
-
         }
     }
 }
