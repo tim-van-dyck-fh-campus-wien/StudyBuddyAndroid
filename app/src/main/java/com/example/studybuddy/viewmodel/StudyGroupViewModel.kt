@@ -23,7 +23,10 @@ class StudyGroupViewModel @Inject constructor(
     var singleGroup = getDummyGroup()
     var filteredStudyGroupList = MutableLiveData<List<SingleStudyGroup>>()
 
-
+    //added, because somehow, the first call seems to return an empty list
+    init {
+        getAllStudyGroups()
+    }
     var canSendRQ:Boolean=false
 
     fun getAllStudyGroups() {
@@ -54,7 +57,7 @@ class StudyGroupViewModel @Inject constructor(
         }
     }
 
-    fun getFilteredStudyGroups(district:String) {
+    fun getFilteredStudyGroups(district:String, filteredGroupsCallback:(Boolean)->Unit = {}) {
         viewModelScope.launch {
             val response = repository.getFilteredStudyGroups(district = district)
             //response.body()?.forEach { it -> Log.i("StudyGroupAPI", "$it") }
@@ -62,6 +65,7 @@ class StudyGroupViewModel @Inject constructor(
             if (response.isSuccessful || !response.body().isNullOrEmpty()) {
                 val forList = response.body()
                 filteredStudyGroupList.postValue(forList)
+                filteredGroupsCallback(true)
                 Log.i("StudyGroupAPI", "The filtered list ${filteredStudyGroupList.value}")
 
             } else {
