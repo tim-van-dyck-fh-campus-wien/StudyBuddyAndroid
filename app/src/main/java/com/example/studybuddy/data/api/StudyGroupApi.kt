@@ -31,12 +31,19 @@ interface StudyGroupApi {
     suspend fun issueJoinRequestToGroup(@Body joinRequest: JoinRequest):Response<Unit>
 
     @POST("studyGroups/isStudentAbleToSendJoinRequest")
-    suspend fun canStudentSendJoinRequest(@Body groupId: SingleGroupId) : Response<Unit> // TODO BOolean
+    suspend fun canStudentSendJoinRequest(@Body groupId: SingleGroupId) : Response<Unit>
     @GET("images/groupImgList")
     suspend fun getAvailableGroupImages():Response<List<String>>
 
     @POST("studyGroups/groups/singleGroup")
     suspend fun getSingleStudyGroup(@Body groupId: SingleGroupId) : Response<SingleStudyGroup>
+
+    @POST("studyGroups/updateGroupData")
+    suspend fun  updateGroupData(@Body changeableGroupData: ChangeableGroupData) :Response<Unit>
+
+    @POST("auth//group/authorizationCheck")
+    suspend fun  isUserAdmin(@Body groupId : SingleGroupId): Response<Unit>
+
 
 
 }

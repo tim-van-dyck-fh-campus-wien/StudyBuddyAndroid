@@ -52,7 +52,7 @@ fun CreateStudyGroupsContent(
             createStudyGroupViewModel.setSelectedIcon(it)
         }
         /*called when submit button is clicked!*/
-        form(onSubmit = {groupname, description, topic, location ->
+      form(onSubmit = {groupname, description, topic, location ->
             createStudyGroupViewModel.createStudyGroup(groupname = groupname,
                 description = description,
                 topic = topic,
@@ -61,6 +61,7 @@ fun CreateStudyGroupsContent(
                     navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/${createStudyGroupViewModel.studyGroupId._id}")
                 } )
         })
+
     }
 }
 @Composable

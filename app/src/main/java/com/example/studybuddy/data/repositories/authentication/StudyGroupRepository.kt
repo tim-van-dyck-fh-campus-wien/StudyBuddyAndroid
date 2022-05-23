@@ -1,10 +1,7 @@
 package com.example.studybuddy.data.repositories.authentication
 
 import com.example.studybuddy.data.api.StudyGroupApi
-import com.example.studybuddy.data.api.model.CreateStudyGroup
-import com.example.studybuddy.data.api.model.JoinRequest
-import com.example.studybuddy.data.api.model.SingleGroupId
-import com.example.studybuddy.data.api.model.SingleStudyGroup
+import com.example.studybuddy.data.api.model.*
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -21,4 +18,6 @@ class StudyGroupRepository @Inject constructor (
     suspend fun getSingleStudyGroup(groupId: SingleGroupId) = studyGroupApi.getSingleStudyGroup(groupId)
     suspend fun getFilteredStudyGroups(district: String) = studyGroupApi.getFilteredStudyGroups(district)
     suspend fun sendJoinRequest(joinRequest: JoinRequest) = studyGroupApi.issueJoinRequestToGroup(joinRequest)
+    suspend fun isUserAdmin(singleGroupId: SingleGroupId) = studyGroupApi.isUserAdmin(singleGroupId)
+    suspend fun updateGroupData(changeableGroupData: ChangeableGroupData) = studyGroupApi.updateGroupData(changeableGroupData)
 }

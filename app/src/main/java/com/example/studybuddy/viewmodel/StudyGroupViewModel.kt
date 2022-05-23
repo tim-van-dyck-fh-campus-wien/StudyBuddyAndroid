@@ -138,13 +138,43 @@ class StudyGroupViewModel @Inject constructor(
             Log.i("StudyGroupAPI", "join request is $joinRequest")
             viewModelScope.launch {
                 val response = repository.sendJoinRequest(joinRequest = joinRequest)
-                Log.i("StudyGroupAPI", "Join REQ response ${response}")
+                Log.i("StudyGroupAPI", "Join REQ response $response")
                 if(response.code() == 200){
                     callbackJoin(true)
                 } else
                     onError("Error: ${response.message()}")
                 }
             }
+
+    fun isUserAdmin(singleGroupId: SingleGroupId, callbackAdmin:(Boolean) -> Unit = {}){
+        Log.i("StudyGroupAPI", "Group to check is $singleGroupId")
+        viewModelScope.launch {
+            val response = repository.isUserAdmin(singleGroupId = singleGroupId)
+            Log.i("StudyGroupAPI", "Join REQ response $response")
+            if(response.code() == 200){
+                callbackAdmin(true)
+            } else if (response.code() == 400){
+                callbackAdmin(false)
+            }
+            else
+                onError("Error: ${response.message()}")
+        }
+    }
+
+    fun updateGroupData(changeableGroupData: ChangeableGroupData, callbackChangedData: (Boolean) -> Unit){
+        Log.i("StudyGroupAPI", "Content is $changeableGroupData")
+        viewModelScope.launch {
+            val response = repository.updateGroupData(changeableGroupData = changeableGroupData)
+            Log.i("StudyGroupAPI", "Join REQ response $response")
+            if(response.code() == 200){
+                callbackChangedData(true)
+            } else if (response.code() == 400){
+                callbackChangedData(false)
+            }
+            else
+                onError("Error: ${response.message()}")
+        }
+    }
 
 
         }
