@@ -311,3 +311,35 @@ fun GroupButton(
         }
     }
 }
+
+
+@Composable
+fun DesignForWidgets(content: @Composable () -> Unit = {}){
+    Row {
+        Surface() {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                //.heightIn(min = 50.dp),
+
+                shape = RoundedCornerShape(corner = CornerSize(16.dp)),
+                elevation = 6.dp
+            ) {
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.padding(5.dp)
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .padding(horizontal = 15.dp, vertical = 17.dp)
+                    ) {
+                        content()
+                    }
+                }
+            }
+        }
+    }
+}

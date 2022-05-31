@@ -24,21 +24,28 @@ fun HomeScreen(
 ){
     DisplayBottomBar (navController = navController) {
         studyGroupViewModel.getOnlyMyGroups()
-        HomeContent(navController = navController, studyGroupList = studyGroupViewModel.myGroupList)
+        Log.i("HomeScreen", "My StudyGroups are ${studyGroupViewModel.myGroupList.value}")
+        HomeContent(navController = navController, studyGroupViewModel = studyGroupViewModel)
     }
 }
 
 
 @Composable
-fun HomeContent(studyGroupList :List<SingleStudyGroup>,
-                navController: NavHostController = rememberNavController()){
+fun HomeContent(navController: NavHostController = rememberNavController(),
+                studyGroupViewModel: StudyGroupViewModel
+                ){
     Column {
         Image(
             painter = painterResource(id = R.drawable.transparent_study_buddy),
             contentDescription = "StudyBuddyIcon"
         )
+        studyGroupViewModel.getOnlyMyGroups()
         LazyColumn {
-            items(studyGroupList) { studyGroup ->
+            if (studyGroupViewModel.myGroupList.value.isNullOrEmpty()) {
+                Log.d("join", "List is empty")
+            } else {
+            items(studyGroupViewModel.myGroupList.value!!) {
+                    studyGroup ->
                 Log.i("myStudyGroups", "show group $studyGroup")
                 StudyGroupRow(
                     studyGroup = studyGroup,
@@ -46,14 +53,15 @@ fun HomeContent(studyGroupList :List<SingleStudyGroup>,
                         Log.d("navigation", "cur studyGroupID = ${studyGroupSingle}")
                         navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/${studyGroupSingle}")
                     },
-                    {
-                    },
+                    {},
                 )
             }
         }
     }
+    }
+}
        // StudyGroupRow()
 
 
-}
+
 

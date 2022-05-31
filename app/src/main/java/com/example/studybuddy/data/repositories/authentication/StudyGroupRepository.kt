@@ -20,4 +20,5 @@ class StudyGroupRepository @Inject constructor (
     suspend fun sendJoinRequest(joinRequest: JoinRequest) = studyGroupApi.issueJoinRequestToGroup(joinRequest)
     suspend fun isUserAdmin(singleGroupId: SingleGroupId) = studyGroupApi.isUserAdmin(singleGroupId)
     suspend fun updateGroupData(changeableGroupData: ChangeableGroupData) = studyGroupApi.updateGroupData(changeableGroupData)
+    suspend fun getJoinRequests(singleGroupId: SingleGroupId) = studyGroupApi.getJoinRequests(singleGroupId)
 }

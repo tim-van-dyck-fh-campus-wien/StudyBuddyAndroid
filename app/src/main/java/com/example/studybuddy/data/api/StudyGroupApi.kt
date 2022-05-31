@@ -44,6 +44,7 @@ interface StudyGroupApi {
     @POST("auth//group/authorizationCheck")
     suspend fun  isUserAdmin(@Body groupId : SingleGroupId): Response<Unit>
 
-
+    @POST("studyGroups/getJoinRequests")
+    suspend fun getJoinRequests(@Body groupId: SingleGroupId): Response<List<JoinRequestsReceivedForAdmin>>
 
 }
