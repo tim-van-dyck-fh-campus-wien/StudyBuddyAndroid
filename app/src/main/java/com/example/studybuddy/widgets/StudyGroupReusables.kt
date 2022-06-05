@@ -32,6 +32,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.studybuddy.data.api.model.BasicStudent
 import com.example.studybuddy.data.api.model.JoinRequestsReceivedForAdmin
 import com.example.studybuddy.data.api.model.Message
 import com.example.studybuddy.data.api.model.SingleStudyGroup
@@ -190,7 +191,7 @@ fun DisplayGroupMembers(studyGroup: SingleStudyGroup ){
 
 //@Preview
 @Composable
-fun DisplayMessaging(studyGroup: SingleStudyGroup ,
+fun DisplayMessaging(messages: List<Message> ,
                      ) {
     Surface(
         color = MaterialTheme.colors.background
@@ -212,7 +213,7 @@ fun DisplayMessaging(studyGroup: SingleStudyGroup ,
                     horizontalAlignment = Alignment.Start,
                 ) {
 
-                    if (studyGroup.messages.isEmpty()) {
+                    if (messages.isEmpty()) {
                         Divider(modifier = Modifier.padding(5.dp))
                         Text(
                             modifier = Modifier.padding(horizontal = 5.dp),
@@ -228,7 +229,7 @@ fun DisplayMessaging(studyGroup: SingleStudyGroup ,
                                 .padding(5.dp),
                             reverseLayout = true,
                         ) {
-                            items(studyGroup.messages.reversed()) { message ->
+                            items(messages.reversed()) { message ->
                                 DisplayMessage(message = message)
                             }
                         }
@@ -243,10 +244,11 @@ fun DisplayMessaging(studyGroup: SingleStudyGroup ,
 }
 
 //@Preview(showBackground = true)
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup,
-                                       content: @Composable () -> Unit = {}
+                                       content: @Composable (Message) -> Unit = {}
                                       ){
     var text by remember { mutableStateOf(TextFieldValue("")) }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -260,24 +262,34 @@ fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup,
            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
            label = { Text(text = "...") },
            placeholder = { Text(text = "Your Message") },
-
            onValueChange = {
                text = it
            },
+           //keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
            keyboardActions = KeyboardActions(
                onDone = {keyboardController?.hide()})
        )
-
-
-       Surface(modifier = Modifier
-           .padding(16.dp)
-           .height(55.dp),
-       ) {
-           Button(
-               //colors = ButtonDefaults.buttonColors(),
-               onClick = { Log.d("message", "$text, to Group: ${studyGroup._id}")}) {
-               Icon(imageVector = Icons.Default.Send, contentDescription = "sendButton")
+       val message = Message(text = text.text, groupId = studyGroup._id, sender_id = BasicStudent("", "", "", "", "", "", false))
+       var sendMessage by remember { mutableStateOf(false)       }
+       if (!sendMessage) {
+           Surface(
+               modifier = Modifier
+                   .padding(16.dp)
+                   .height(55.dp),
+           ) {
+               Button(
+                   //colors = ButtonDefaults.buttonColors(),
+                   onClick = {
+                       Log.d("message", "$text, to Group: ${studyGroup._id}")
+                       sendMessage = true
+                   }) {
+                   Icon(imageVector = Icons.Default.Send, contentDescription = "sendButton")
+               }
            }
+       }
+       if (sendMessage) {
+           content(message)
+           sendMessage = !sendMessage
        }
 
    }

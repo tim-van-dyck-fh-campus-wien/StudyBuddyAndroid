@@ -67,7 +67,9 @@ fun ViewStudyGroupContent(
 ) {
     //studyGroupViewModel.getJoinRequests(singleGroupId = SingleGroupId(studyGroup._id))
     var displayAdminStuff by remember { mutableStateOf(false) }
-
+    var studyGroupLocal by remember { mutableStateOf(listOf<Message>())    }
+    studyGroupLocal = studyGroup.messages
+    //var studyGroupLocalMessages = studyGroup.messages
     Log.d("ViewStudyGroup", "admin = $admin")
     Column(
         modifier = Modifier
@@ -160,9 +162,13 @@ fun ViewStudyGroupContent(
                 text = "Group Messages",
                 style = MaterialTheme.typography.subtitle2
             )
-            DisplayMessaging(studyGroup = studyGroup)
+            DisplayMessaging(messages = studyGroupLocal)
             Row() {
-                DisplayInputTextFieldAndSendButton(studyGroup = studyGroup)
+                DisplayInputTextFieldAndSendButton(studyGroup = studyGroup){
+                    message ->
+                    //Todo : update messages in message display as well
+                    studyGroupViewModel.sendMessageToGroup(message = message, callbackMessage = {studyGroupLocal = it})
+                }
             }
         }
         var showRequests by remember { mutableStateOf(false) }

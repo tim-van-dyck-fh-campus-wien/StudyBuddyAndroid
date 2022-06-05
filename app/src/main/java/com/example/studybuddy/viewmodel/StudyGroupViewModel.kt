@@ -132,6 +132,21 @@ class StudyGroupViewModel @Inject constructor(
                 }
             }
 
+    fun sendMessageToGroup(message: Message, callbackMessage:(List<Message>) -> Unit = {}){
+        Log.i("StudyGroupAPI", "Message is $message")
+        viewModelScope.launch {
+            val response = repository.sendMessageToGroup(message = message)
+            Log.i("StudyGroupAPI", "Message Response $response")
+            if(response.code() == 200){
+                val mes = response.body()
+                if (mes != null) {
+                    callbackMessage(mes.messages!!)
+                }
+            } else
+                onError("Error: ${response.message()}")
+        }
+    }
+
     /*fun isUserAdmin(singleGroupId: SingleGroupId, callbackAdmin:(Boolean) -> Unit = {}){
         Log.i("StudyGroupAPI", "Group to check is $singleGroupId")
         viewModelScope.launch {

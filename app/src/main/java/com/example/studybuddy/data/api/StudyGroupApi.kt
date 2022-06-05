@@ -38,5 +38,6 @@ interface StudyGroupApi {
     @POST("studyGroups/groups/singleGroup")
     suspend fun getSingleStudyGroup(@Body groupId: SingleGroupId) : Response<SingleStudyGroup>
 
-
+    @POST("message/newmessage")
+    suspend fun sendMessageToGroup(@Body message: Message) : Response<SingleStudyGroup>
 }
