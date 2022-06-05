@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.studybuddy.screens.*
+import com.example.studybuddy.viewmodel.AdminViewModel
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
 import com.example.studybuddy.viewmodel.CreateStudyGroupViewModel
 import com.example.studybuddy.viewmodel.StudyGroupViewModel
@@ -16,8 +17,10 @@ import com.example.studybuddy.viewmodel.StudyGroupViewModel
 @Composable
 fun MainNavigation(){
     val navController = rememberNavController()
+    val adminViewModel:AdminViewModel = viewModel()
     val authenticationViewModel:AuthenticationViewModel = viewModel()
     val studyGroupViewModel : StudyGroupViewModel = viewModel()
+
     val createStudyGroupViewModel:CreateStudyGroupViewModel = viewModel()
     NavHost(navController = navController, startDestination = ScreenNames.LoginScreen.name  ){
             composable(ScreenNames.LoginScreen.name){
@@ -51,7 +54,7 @@ fun MainNavigation(){
               //Log.i("navigation", "id is $string")
               //var test = studyGroupViewModel.detailedViewOfSingleStudyGroup(SingleGroupId(string))
              // Log.i("navigation", "trying to load $test")
-              ViewStudyGroupScreen(navController = navController, studyGroupID = backStackEntry.arguments?.getString("studyGroup"), studyGroupViewModel = studyGroupViewModel)
+              ViewStudyGroupScreen(navController = navController, studyGroupID = backStackEntry.arguments?.getString("studyGroup"), studyGroupViewModel = studyGroupViewModel, adminViewModel = adminViewModel)
           }
 
 

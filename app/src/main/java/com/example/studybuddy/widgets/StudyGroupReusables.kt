@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -30,11 +29,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.studybuddy.data.api.ApiConstants
+import com.example.studybuddy.data.api.model.JoinRequestsReceivedForAdmin
+import com.example.studybuddy.data.api.model.Message
 import com.example.studybuddy.data.api.model.SingleStudyGroup
 
 @Composable
@@ -230,24 +229,7 @@ fun DisplayMessaging(studyGroup: SingleStudyGroup ,
                             reverseLayout = true,
                         ) {
                             items(studyGroup.messages.reversed()) { message ->
-                                Divider(modifier = Modifier.padding(5.dp))
-                                Row {
-                                    Text(
-                                        modifier = Modifier.padding(horizontal = 5.dp),
-                                        text = "From: ",
-                                        style = MaterialTheme.typography.body2
-                                    )
-                                    Text(
-                                        modifier = Modifier.padding(horizontal = 5.dp),
-                                        text = message.sender_id.username,
-                                        style = MaterialTheme.typography.body2
-                                    )
-                                }
-                                Text(
-                                    modifier = Modifier.padding(horizontal = 5.dp),
-                                    text = message.text,
-                                    style = MaterialTheme.typography.caption
-                                )
+                                DisplayMessage(message = message)
                             }
                         }
                     }
@@ -261,11 +243,13 @@ fun DisplayMessaging(studyGroup: SingleStudyGroup ,
 }
 
 //@Preview(showBackground = true)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup,
                                        content: @Composable () -> Unit = {}
                                       ){
     var text by remember { mutableStateOf(TextFieldValue("")) }
+    val keyboardController = LocalSoftwareKeyboardController.current
    Row {
        OutlinedTextField(
            value = text,
@@ -276,10 +260,15 @@ fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup,
            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
            label = { Text(text = "...") },
            placeholder = { Text(text = "Your Message") },
+
            onValueChange = {
                text = it
-           }
+           },
+           keyboardActions = KeyboardActions(
+               onDone = {keyboardController?.hide()})
        )
+
+
        Surface(modifier = Modifier
            .padding(16.dp)
            .height(55.dp),
@@ -342,4 +331,48 @@ fun DesignForWidgets(content: @Composable () -> Unit = {}){
             }
         }
     }
+}
+
+@Composable
+fun DisplayMessage(message: Message){
+    Divider(modifier = Modifier.padding(5.dp))
+    Row {
+        Text(
+            modifier = Modifier.padding(horizontal = 5.dp),
+            text = "From: ",
+            style = MaterialTheme.typography.body2
+        )
+        Text(
+            modifier = Modifier.padding(horizontal = 5.dp),
+            text = message.sender_id.username,
+            style = MaterialTheme.typography.body2
+        )
+    }
+    Text(
+        modifier = Modifier.padding(horizontal = 5.dp),
+        text = message.text,
+        style = MaterialTheme.typography.caption
+    )
+}
+
+@Composable
+fun DisplayJoinRQ(joinRequestsReceivedForAdmin: JoinRequestsReceivedForAdmin){
+    Divider(modifier = Modifier.padding(5.dp))
+    Row {
+        Text(
+            modifier = Modifier.padding(horizontal = 5.dp),
+            text = "From: ",
+            style = MaterialTheme.typography.body2
+        )
+        Text(
+            modifier = Modifier.padding(horizontal = 5.dp),
+            text = joinRequestsReceivedForAdmin.sender_id.username,
+            style = MaterialTheme.typography.body2
+        )
+    }
+    Text(
+        modifier = Modifier.padding(horizontal = 5.dp),
+        text = joinRequestsReceivedForAdmin.text,
+        style = MaterialTheme.typography.caption
+    )
 }

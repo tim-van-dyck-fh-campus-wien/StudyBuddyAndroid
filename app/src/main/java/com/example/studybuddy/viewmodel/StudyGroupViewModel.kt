@@ -109,7 +109,6 @@ class StudyGroupViewModel @Inject constructor(
           // Log.i("StudyGroupAPI", " Single Group in detailed View ${response.body()}")
                 singleGroup = response.body()!! }
             else {
-
                 /*TODO: add behaviour for error to eliminate dummy group*/
             onError("Error: ${response.message()}")
         }}
@@ -133,18 +132,20 @@ class StudyGroupViewModel @Inject constructor(
                 }
             }
 
-    fun isUserAdmin(singleGroupId: SingleGroupId, callbackAdmin:(Boolean) -> Unit = {}){
+    /*fun isUserAdmin(singleGroupId: SingleGroupId, callbackAdmin:(Boolean) -> Unit = {}){
         Log.i("StudyGroupAPI", "Group to check is $singleGroupId")
         viewModelScope.launch {
             val response = repository.isUserAdmin(singleGroupId = singleGroupId)
-            Log.i("StudyGroupAPI", "Join REQ response $response")
-            if(response.code() == 200){
-                callbackAdmin(true)
-            } else if (response.code() == 400){
-                callbackAdmin(false)
+            Log.i("StudyGroupAPI", "User is admin response $response")
+            when {
+                response.code() == 200 -> {
+                    callbackAdmin(true)
+                }
+                response.code() == 400 -> {
+                    callbackAdmin(false)
+                }
+                else -> onError("Error: ${response.message()}")
             }
-            else
-                onError("Error: ${response.message()}")
         }
     }
 
@@ -165,7 +166,7 @@ class StudyGroupViewModel @Inject constructor(
         }
     }
 
-    fun getJoinRequests(singleGroupId: SingleGroupId, callbackJoinRQs:(ListOfJoinRequests) -> Unit = {}) {
+    fun getJoinRequests(singleGroupId: SingleGroupId, callbackJoinRQs:(List<JoinRequestsReceivedForAdmin>) -> Unit = {}) {
         Log.i("StudyGroupAPI", "Content is getting pending Join Requests for Group $singleGroupId")
         viewModelScope.launch {
             Log.i("StudyGroupAPI", "inside coroutine for join requests list ")
@@ -173,20 +174,30 @@ class StudyGroupViewModel @Inject constructor(
 
             //Log.i("StudyGroupAPI", "Join REQ list response ${response.body()}")
             if (response.isSuccessful || !response.body().isNullOrEmpty()) {
-                Log.i("StudyGroupAPI", "Join REQ list response ${response.body()}")
+                Log.i("StudyGroupAPI", "Join REQ list response ${response}")
                 val requests = response.body()
-                joinRequests.postValue(requests)
+                Log.i("StudyGroupAPI", "join req list from response $requests")
+                //if (requests != null) {
+                   // testList = requests
+                  //  Log.i("StudyGroupAPI", "Join testlist after post value ${testList}")
                 if (requests != null) {
-                    testList = requests
+                    callbackJoinRQs(requests)
                 }
-                Log.i("StudyGroupAPI", "Join testlist after post value ${testList}")
+                    joinRequests.postValue(requests)
+                    Log.i("StudyGroupAPI", "Join joinRequests after post value ${joinRequests.value}")
+                //}
+                //Log.i("StudyGroupAPI", "Join testlist after post value ${testList}")
                 Log.i("StudyGroupAPI", "Join joinRequests after post value ${joinRequests.value}")
                 //callbackJoinRQs(response.body()!!)
             } else {
                 onError("Error: ${response.message()}")
             }
         }
+
+
     }
+       */
+
 }
 
 

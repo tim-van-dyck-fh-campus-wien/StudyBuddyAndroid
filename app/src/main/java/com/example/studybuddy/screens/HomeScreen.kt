@@ -39,10 +39,10 @@ fun HomeContent(navController: NavHostController = rememberNavController(),
             painter = painterResource(id = R.drawable.transparent_study_buddy),
             contentDescription = "StudyBuddyIcon"
         )
-        studyGroupViewModel.getOnlyMyGroups()
+        //studyGroupViewModel.getOnlyMyGroups()
         LazyColumn {
             if (studyGroupViewModel.myGroupList.value.isNullOrEmpty()) {
-                Log.d("join", "List is empty")
+                Log.d("HomeScreen", "List is empty")
             } else {
             items(studyGroupViewModel.myGroupList.value!!) {
                     studyGroup ->

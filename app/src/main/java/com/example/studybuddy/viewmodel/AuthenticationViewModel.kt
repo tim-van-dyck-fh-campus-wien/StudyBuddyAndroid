@@ -55,7 +55,7 @@ class AuthenticationViewModel @Inject constructor(
         }
     }
 
-    fun login(loginData: LoginData,failure:(String)->Unit={},success:()->Unit={}){
+    fun login(loginData: LoginData,failure:(String)->Unit={},success:(Boolean)->Unit={}){
         Log.i("LOGIIN","WORKS")
         viewModelScope.launch{
             val response = repository.login(loginData)
@@ -65,7 +65,7 @@ class AuthenticationViewModel @Inject constructor(
                 if(dat!=null){
                     profileData=dat
                 }
-                success()
+                success(true)
             }else{
                 failure(response.message())
                 onError("Error: ${response.message()}")

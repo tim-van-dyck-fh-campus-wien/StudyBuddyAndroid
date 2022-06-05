@@ -27,9 +27,9 @@ fun LoginScreen(
                 //onRegisterInsteadClick: () -> Unit = {}
     ){
     //If the student is already logged in, go to the home screen!
-   authenticationViewModel.isStudentLoggedIn(sucess = {
-        navController.navigate(ScreenNames.HomeScreen.name)
-    })
+   //authenticationViewModel.isStudentLoggedIn(sucess = {
+    //    navController.navigate(ScreenNames.HomeScreen.name)
+    //})
     
     Column (modifier = Modifier
         .fillMaxWidth()
@@ -80,9 +80,11 @@ fun LoginScreen(
                         openDialog.value = true
                     }){
                         // success
-                        navController.navigate(ScreenNames.HomeScreen.name)
-                        username = ""
-                        password = ""
+                        if (it) {
+                            navController.navigate(ScreenNames.HomeScreen.name)
+                            //username = ""
+                            //password = ""
+                        }
                     }
 
 

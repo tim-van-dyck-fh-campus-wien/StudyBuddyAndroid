@@ -2,11 +2,13 @@ package com.example.studybuddy.di
 
 import android.content.Context
 import com.example.studybuddy.BaseApplication
+import com.example.studybuddy.data.api.AdminApi
 import com.example.studybuddy.data.api.ApiConstants
 import com.example.studybuddy.data.api.AuthenticationApi
 import com.example.studybuddy.data.api.StudyGroupApi
 import com.example.studybuddy.data.api.interceptors.GetCookiesInterceptor
 import com.example.studybuddy.data.api.interceptors.SetCookiesInterceptor
+import com.example.studybuddy.data.repositories.authentication.AdminRepository
 import com.example.studybuddy.data.repositories.authentication.AuthenticationRepository
 import com.example.studybuddy.data.repositories.authentication.StudyGroupRepository
 import com.google.gson.GsonBuilder
@@ -41,6 +43,20 @@ object AppModule {
     @Singleton
     @Provides //the repo for the API call
     fun provideAuthenticationRepository(api:AuthenticationApi) = AuthenticationRepository(api)
+
+    @Singleton
+    @Provides //the repo for the API call
+    fun provideAdminRepository(api:AdminApi) = AdminRepository(api)
+
+    @Singleton
+    @Provides //the API to the retrofit instance, thus be able to use the service
+    fun provideAdminApi():AdminApi{
+        return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(ApiConstants.BASE_URL)
+            .client(buildOkHttpWithInterceptors())
+            .build()
+            .create(AdminApi::class.java)
+    }
 
     @Singleton
     @Provides //the API to the retrofit instance, thus be able to use the service

@@ -38,13 +38,5 @@ interface StudyGroupApi {
     @POST("studyGroups/groups/singleGroup")
     suspend fun getSingleStudyGroup(@Body groupId: SingleGroupId) : Response<SingleStudyGroup>
 
-    @POST("studyGroups/updateGroupData")
-    suspend fun  updateGroupData(@Body changeableGroupData: ChangeableGroupData) :Response<Unit>
-
-    @POST("auth//group/authorizationCheck")
-    suspend fun  isUserAdmin(@Body groupId : SingleGroupId): Response<Unit>
-
-    @POST("studyGroups/getJoinRequests")
-    suspend fun getJoinRequests(@Body groupId: SingleGroupId): Response<List<JoinRequestsReceivedForAdmin>>
 
 }

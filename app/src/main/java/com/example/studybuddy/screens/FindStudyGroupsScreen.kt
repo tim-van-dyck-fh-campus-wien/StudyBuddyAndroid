@@ -39,14 +39,14 @@ fun FindStudyGroupsScreen(
        // studyGroupViewModel.getAllStudyGroups()
         var district = authenticationViewModel.profileData.location
         studyGroupViewModel.getFilteredStudyGroups(district = district)
-        FindStudyGroupsContent(navController = navController, studyGroupViewModel = studyGroupViewModel, district = district)
+        FindStudyGroupsContent( studyGroupViewModel = studyGroupViewModel, district = district)
     }
 }
 
 
 @Composable
 fun FindStudyGroupsContent(
-    navController: NavHostController,
+    //navController: NavHostController,
     studyGroupViewModel: StudyGroupViewModel,
     district: String
 ) {
@@ -123,7 +123,6 @@ fun FindStudyGroupsContent(
                                     joinButton = it
                                 })
                             StudyGroupRow(studyGroup = studyGroup) {
-                                //Todo: improve Request Check - make canStudentSendJoinRequest return boolean
                                 when (joinButton) {
                                     true -> GroupButton(
                                         studyGroup = studyGroup, onButtonClicked =
@@ -160,7 +159,7 @@ fun FindStudyGroupsContent(
             true -> {
                 Log.d("findStudyGroups", "allGroups is $allGroups, showing all existing studygroups")
                 if (studyGroupViewModel.studyGroupsSearchList.value.isNullOrEmpty()) {
-                    Log.d("join", "List is empty")
+                    Log.d("findStudyGroups", "StudyGroupslistList is empty")
                 } else {
                     LazyColumn {
                         items(studyGroupViewModel.studyGroupsSearchList.value!!) { studyGroup ->
