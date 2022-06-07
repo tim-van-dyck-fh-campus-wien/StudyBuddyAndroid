@@ -8,6 +8,7 @@ import com.example.studybuddy.data.api.model.*
 import com.example.studybuddy.data.repositories.authentication.StudyGroupRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 
@@ -33,55 +34,68 @@ class StudyGroupViewModel @Inject constructor(
     fun getAllStudyGroups() {
         Log.i("Test","test")
         viewModelScope.launch {
-            val response = repository.getAllStudyGroups()
-            if(response.isSuccessful || !response.body().isNullOrEmpty()){
-                val forList = response.body()
-                forList?.forEach{it -> Log.i("StudyGroupAPI", "$it")}
-                studyGroupsSearchList.postValue(forList)
-                Log.i("StudyGroupAPI","The List updated ${studyGroupsSearchList.value}")
-            }else{
-                onError("Error: ${response.message()}")
+            try {
+                val response = repository.getAllStudyGroups()
+                if (response.isSuccessful || !response.body().isNullOrEmpty()) {
+                    val forList = response.body()
+                    forList?.forEach { it -> Log.i("StudyGroupAPI", "$it") }
+                    studyGroupsSearchList.postValue(forList)
+                    Log.i("StudyGroupAPI", "The List updated ${studyGroupsSearchList.value}")
+                } else {
+                    onError("Error: ${response.message()}")
+                }
+            }catch(e:Exception){
+                Log.i("error",e.toString())
             }
         }
     }
 
     fun getOnlyMyGroups() {
         viewModelScope.launch {
-            val response = repository.getMyGroups()
-            Log.i("StudyGroupAPI", "API myGroups $response")
-            if (response.isSuccessful || !response.body().isNullOrEmpty()) {
-                val myGroups = response.body()
-                Log.i("StudyGroupAPI", "getOnlyMyGroups  - Response: ${response.body()}")
-                //myGroups?.forEach { it -> Log.i("StudyGroupAPI", "$it") }
-                myGroupList.postValue(myGroups)
-                Log.i("StudyGroupAPI", "My group list updated ${myGroupList.value}")
+            try {
+                val response = repository.getMyGroups()
+                Log.i("StudyGroupAPI", "API myGroups $response")
+                if (response.isSuccessful || !response.body().isNullOrEmpty()) {
+                    val myGroups = response.body()
+                    Log.i("StudyGroupAPI", "getOnlyMyGroups  - Response: ${response.body()}")
+                    //myGroups?.forEach { it -> Log.i("StudyGroupAPI", "$it") }
+                    myGroupList.postValue(myGroups)
+                    Log.i("StudyGroupAPI", "My group list updated ${myGroupList.value}")
                     //myGroupList = myGroups
-                } else{
+                } else {
                     onError("Error: ${response.message()}")
                 }
+            }catch(e:Exception){
+                Log.i("Error",e.toString())
             }
+        }
         }
 
 
 
     fun getFilteredStudyGroups(district:String, filteredGroupsCallback:(Boolean)->Unit = {}) {
         viewModelScope.launch {
-            val response = repository.getFilteredStudyGroups(district = district)
-            if (response.isSuccessful || !response.body().isNullOrEmpty()) {
-                val forList = response.body()
-                filteredStudyGroupList.postValue(forList)
-                filteredGroupsCallback(true)
-                Log.i("StudyGroupAPI", "The filtered list ${filteredStudyGroupList.value}")
-            } else {
-                onError("Error: ${response.message()}")
-            }
-        }
+          try {
+              val response = repository.getFilteredStudyGroups(district = district)
+              if (response.isSuccessful || !response.body().isNullOrEmpty()) {
+                  val forList = response.body()
+                  filteredStudyGroupList.postValue(forList)
+                  filteredGroupsCallback(true)
+                  Log.i("StudyGroupAPI", "The filtered list ${filteredStudyGroupList.value}")
+              } else {
+                  onError("Error: ${response.message()}")
+              }
+          }catch(e:Exception){
+              Log.i("Error",e.toString())
+          }
+          }
     }
 
 
     fun canStudentSendJoinRequest(studyGroupId: SingleGroupId, callback:(Boolean) -> Unit = {}){
         Log.i("StudyGroupAPI", "message is $studyGroupId")
         viewModelScope.launch {
+            try{
             val response = repository.canStudentSendJoinRequest(studyGroupId)
             //Log.i("StudyGroupAPI", "checking if not member ${response.code()}")
             Log.i("StudyGroupAPI", "API member response ${response}")
@@ -95,6 +109,8 @@ class StudyGroupViewModel @Inject constructor(
                 else -> {
                     onError("Error: ${response.message()}")
                 }
+            }}catch(e:Exception){
+                Log.i("Error",e.toString())
             }
         }
     }
@@ -104,6 +120,7 @@ class StudyGroupViewModel @Inject constructor(
     fun detailedViewOfSingleStudyGroup(groupId: SingleGroupId) : SingleStudyGroup{
         Log.i("StudyGroupAPI", "current ID $groupId")
         viewModelScope.launch {
+          try{
             val response = repository.getSingleStudyGroup(groupId = groupId)
             if (response.message() == "OK" || response.code() == 200  ){
           // Log.i("StudyGroupAPI", " Single Group in detailed View ${response.body()}")
@@ -111,6 +128,8 @@ class StudyGroupViewModel @Inject constructor(
             else {
                 /*TODO: add behaviour for error to eliminate dummy group*/
             onError("Error: ${response.message()}")
+        }}catch(e:Exception){
+            Log.i("Error",e.toString())
         }}
         return singleGroup
     }
@@ -123,27 +142,35 @@ class StudyGroupViewModel @Inject constructor(
     fun sendJoinRequest(joinRequest: JoinRequest, callbackJoin:(Boolean) -> Unit = {}){
             Log.i("StudyGroupAPI", "join request is $joinRequest")
             viewModelScope.launch {
-                val response = repository.sendJoinRequest(joinRequest = joinRequest)
-                Log.i("StudyGroupAPI", "Join REQ response $response")
-                if(response.code() == 200){
-                    callbackJoin(true)
-                } else
-                    onError("Error: ${response.message()}")
+              try {
+                  val response = repository.sendJoinRequest(joinRequest = joinRequest)
+                  Log.i("StudyGroupAPI", "Join REQ response $response")
+                  if (response.code() == 200) {
+                      callbackJoin(true)
+                  } else
+                      onError("Error: ${response.message()}")
+              }catch(e:Exception){
+                  Log.i("Error",e.toString())
+              }
                 }
             }
 
     fun sendMessageToGroup(message: Message, callbackMessage:(List<Message>) -> Unit = {}){
         Log.i("StudyGroupAPI", "Message is $message")
         viewModelScope.launch {
-            val response = repository.sendMessageToGroup(message = message)
-            Log.i("StudyGroupAPI", "Message Response $response")
-            if(response.code() == 200){
-                val mes = response.body()
-                if (mes != null) {
-                    callbackMessage(mes.messages!!)
-                }
-            } else
-                onError("Error: ${response.message()}")
+            try {
+                val response = repository.sendMessageToGroup(message = message)
+                Log.i("StudyGroupAPI", "Message Response $response")
+                if (response.code() == 200) {
+                    val mes = response.body()
+                    if (mes != null) {
+                        callbackMessage(mes.messages!!)
+                    }
+                } else
+                    onError("Error: ${response.message()}")
+            }catch(e:Exception){
+                Log.i("Error",e.toString())
+            }
         }
     }
 

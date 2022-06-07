@@ -10,6 +10,7 @@ import com.example.studybuddy.data.repositories.authentication.AdminRepository
 import com.example.studybuddy.data.repositories.authentication.StudyGroupRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 
@@ -38,78 +39,104 @@ class AdminViewModel @Inject constructor(
     }
 
     fun isUserAdmin(singleGroupId: SingleGroupId, callbackAdmin:(Boolean) -> Unit = {}){
-        Log.i("StudyGroupAPI", "Group to check is $singleGroupId")
-        viewModelScope.launch {
-            val response = repository.isUserAdmin(singleGroupId = singleGroupId)
-            Log.i("StudyGroupAPI", "User is admin response $response")
-            when {
-                response.code() == 200 -> {
-                    callbackAdmin(true)
+
+            Log.i("StudyGroupAPI", "Group to check is $singleGroupId")
+            viewModelScope.launch {
+                try {
+                    val response = repository.isUserAdmin(singleGroupId = singleGroupId)
+                    Log.i("StudyGroupAPI", "User is admin response $response")
+                    when {
+                        response.code() == 200 -> {
+                            callbackAdmin(true)
+                        }
+                        response.code() == 400 -> {
+                            callbackAdmin(false)
+                        }
+                        else -> onError("Error: ${response.message()}")
+                    }
+                }catch(e:Exception){
+                    Log.i("error",e.toString())
                 }
-                response.code() == 400 -> {
-                    callbackAdmin(false)
-                }
-                else -> onError("Error: ${response.message()}")
-            }
-        }
-    }
+    }}
 
     fun updateGroupData(changeableGroupData: ChangeableGroupData, callbackChangedData: (Boolean) -> Unit){
-        Log.i("StudyGroupAPI", "Content is $changeableGroupData")
-        viewModelScope.launch {
-            val response = repository.updateGroupData(changeableGroupData = changeableGroupData)
-            Log.i("StudyGroupAPI", "Update Group Data response $response")
-            when {
-                response.code() == 200 -> {
-                    callbackChangedData(true)
+
+            Log.i("StudyGroupAPI", "Content is $changeableGroupData")
+            viewModelScope.launch {
+                try {
+                    val response =
+                        repository.updateGroupData(changeableGroupData = changeableGroupData)
+                    Log.i("StudyGroupAPI", "Update Group Data response $response")
+                    when {
+                        response.code() == 200 -> {
+                            callbackChangedData(true)
+                        }
+                        response.code() == 400 -> {
+                            callbackChangedData(false)
+                        }
+                        else -> onError("Error: ${response.message()}")
+                    }
+                }catch(e:Exception){
+                    Log.i("error",e.toString())
                 }
-                response.code() == 400 -> {
-                    callbackChangedData(false)
-                }
-                else -> onError("Error: ${response.message()}")
             }
-        }
+
     }
 
     fun getJoinRequests(singleGroupId: SingleGroupId, callbackJoinRQs:(List<JoinRequestsReceivedForAdmin>) -> Unit = {}) {
+
         Log.i("StudyGroupAPI", "Content is getting pending Join Requests for Group $singleGroupId")
         viewModelScope.launch {
-            Log.i("StudyGroupAPI", "inside coroutine for join requests list ")
-            val response = repository.getJoinRequests(singleGroupId)
+           try {
+               Log.i("StudyGroupAPI", "inside coroutine for join requests list ")
+               val response = repository.getJoinRequests(singleGroupId)
 
-            //Log.i("StudyGroupAPI", "Join REQ list response ${response.body()}")
-            if (response.isSuccessful || !response.body().isNullOrEmpty()) {
-                Log.i("StudyGroupAPI", "Join REQ list response ${response}")
-                val requests = response.body()
-                Log.i("StudyGroupAPI", "join req list from response $requests")
-                //if (requests != null) {
+               //Log.i("StudyGroupAPI", "Join REQ list response ${response.body()}")
+               if (response.isSuccessful || !response.body().isNullOrEmpty()) {
+                   Log.i("StudyGroupAPI", "Join REQ list response ${response}")
+                   val requests = response.body()
+                   Log.i("StudyGroupAPI", "join req list from response $requests")
+                   //if (requests != null) {
                    // testList = requests
-                  //  Log.i("StudyGroupAPI", "Join testlist after post value ${testList}")
-                if (requests != null) {
-                    callbackJoinRQs(requests)
-                }
-                    joinRequests.postValue(requests)
-                    Log.i("StudyGroupAPI", "Join joinRequests after post value ${joinRequests.value}")
-                //}
-                //Log.i("StudyGroupAPI", "Join testlist after post value ${testList}")
-                Log.i("StudyGroupAPI", "Join joinRequests after post value ${joinRequests.value}")
-                //callbackJoinRQs(response.body()!!)
-            } else {
-                onError("Error: ${response.message()}")
-            }
+                   //  Log.i("StudyGroupAPI", "Join testlist after post value ${testList}")
+                   if (requests != null) {
+                       callbackJoinRQs(requests)
+                   }
+                   joinRequests.postValue(requests)
+                   Log.i(
+                       "StudyGroupAPI",
+                       "Join joinRequests after post value ${joinRequests.value}"
+                   )
+                   //}
+                   //Log.i("StudyGroupAPI", "Join testlist after post value ${testList}")
+                   Log.i(
+                       "StudyGroupAPI",
+                       "Join joinRequests after post value ${joinRequests.value}"
+                   )
+                   //callbackJoinRQs(response.body()!!)
+               } else {
+                   onError("Error: ${response.message()}")
+               }
+           }catch(e:Exception){
+               Log.i("error",e.toString())
+           }
         }
     }
     fun acceptOrDeclineJoinRequest(handleRequest: AcceptDeclineJR, callbackResponse: (Boolean) -> Unit){
         Log.i("StudyGroupAPI", "Reaction to JoinRequest is $handleRequest")
         viewModelScope.launch {
-            val response = repository.acceptOrDeclineJoinRequest(handleRequest = handleRequest)
-            Log.i("StudyGroupAPI", "Accept or Decline Join Request response $response")
-            when {
-                response.code() == 200 -> {
-                    callbackResponse(true)
+            try {
+                val response = repository.acceptOrDeclineJoinRequest(handleRequest = handleRequest)
+                Log.i("StudyGroupAPI", "Accept or Decline Join Request response $response")
+                when {
+                    response.code() == 200 -> {
+                        callbackResponse(true)
 
+                    }
+                    else -> onError("Error: ${response.message()}")
                 }
-                else -> onError("Error: ${response.message()}")
+            }catch(e:Exception){
+                Log.i("error",e.toString())
             }
         }
     }

@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.studybuddy.data.api.ApiConstants
 import com.example.studybuddy.data.api.AuthenticationApi
 import com.example.studybuddy.data.api.model.*
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
@@ -25,7 +26,15 @@ class AuthenticationRepository constructor (
         return response.text
     }
     suspend fun register(registerData: RegisterData) = authenticationApi.register(registerData)
-    suspend fun login(loginData: LoginData)= authenticationApi.login(loginData)
+   /* suspend fun login(loginData: LoginData): Response<BasicStudent>?{
+        return try{
+            authenticationApi.login(loginData)
+        } catch(e:Exception){
+            null
+        }
+    }*/
+    suspend fun login(loginData: LoginData) = authenticationApi.login(loginData)
+
     suspend fun logout() = authenticationApi.logout()
     suspend fun studentIsAdminOfGroup(singleGroupId: SingleGroupId)=authenticationApi.checkIfStudentIsAdminOfGroup(singleGroupId)
     suspend fun isUserLoggedIn()=authenticationApi.isUserLoggedIn()

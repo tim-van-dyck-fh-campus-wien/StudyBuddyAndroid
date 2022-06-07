@@ -9,6 +9,7 @@ import com.example.studybuddy.data.api.model.*
 import com.example.studybuddy.data.repositories.authentication.StudyGroupRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,11 +25,15 @@ class CreateStudyGroupViewModel @Inject constructor(
 
     fun getAvailableGroupimages(){
         viewModelScope.launch {
+            try{
             val response = repository.getAvailabelGroupImages()
             if(response.code()==200){
                 availableGroupImages.postValue( response.body())
             }else{
                 onError("Error:${response.message()}")
+            }
+            }catch(e:Exception){
+                Log.i("Error",e.toString())
             }
         }
     }
@@ -46,16 +51,21 @@ class CreateStudyGroupViewModel @Inject constructor(
     fun createStudyGroup(groupname:String,description:String,topic:String,location:String,onSuccess:()->Unit,onErr:(String)->Unit={}){
         val group = CreateStudyGroup(groupname,location,description,topic,selectedIconUrl.value)
         viewModelScope.launch{
-            val response = repository.createStudyGroup(group)
-            //Log.i("CreateStudyGroupAPI", "createStudyGroup returns $response")
-            //Log.i("CreateStudyGroupAPI", "createStudyGroup returns in body: ${response.body()}")
-            if(response.message() == "OK" || response.code()==200){
-                //Log.i("CreateStudyGroupAPI", "createStudyGroup returns in body successfully: ${response.body()}")
-                studyGroupId = response.body()!!  //set studyId to val from response, thus be able to navigate to detailed view
-                onSuccess()
-            }else{
-                onError("Error:Code:${response.code()};${response.message()}")
-                onErr("Code:${response.code()};${response.message()}")
+            try {
+                val response = repository.createStudyGroup(group)
+                //Log.i("CreateStudyGroupAPI", "createStudyGroup returns $response")
+                //Log.i("CreateStudyGroupAPI", "createStudyGroup returns in body: ${response.body()}")
+                if (response.message() == "OK" || response.code() == 200) {
+                    //Log.i("CreateStudyGroupAPI", "createStudyGroup returns in body successfully: ${response.body()}")
+                    studyGroupId =
+                        response.body()!!  //set studyId to val from response, thus be able to navigate to detailed view
+                    onSuccess()
+                } else {
+                    onError("Error:Code:${response.code()};${response.message()}")
+                    onErr("Code:${response.code()};${response.message()}")
+                }
+            }catch(e:Exception){
+                Log.i("Error",e.toString())
             }
         }
     }
