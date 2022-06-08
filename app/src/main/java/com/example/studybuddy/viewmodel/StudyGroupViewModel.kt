@@ -24,7 +24,7 @@ class StudyGroupViewModel @Inject constructor(
     var singleGroup = getDummyGroup()
     var filteredStudyGroupList = MutableLiveData<List<SingleStudyGroup>>()
     var joinRequests = MutableLiveData<List<JoinRequestsReceivedForAdmin>>()
-
+    var messages = MutableLiveData<List<Message>>()
     //added, because somehow, the first call seems to return an empty list
     /*init {
         getAllStudyGroups()
@@ -124,7 +124,10 @@ class StudyGroupViewModel @Inject constructor(
             val response = repository.getSingleStudyGroup(groupId = groupId)
             if (response.message() == "OK" || response.code() == 200  ){
           // Log.i("StudyGroupAPI", " Single Group in detailed View ${response.body()}")
-                singleGroup = response.body()!! }
+                singleGroup = response.body()!!
+                messages.postValue(response.body()!!.messages)
+                Log.i("StudyGroupAPI", "Messages from detailed view ${messages.value}")
+            }
             else {
                 /*TODO: add behaviour for error to eliminate dummy group*/
             onError("Error: ${response.message()}")
@@ -155,22 +158,48 @@ class StudyGroupViewModel @Inject constructor(
                 }
             }
 
-    fun sendMessageToGroup(message: Message, callbackMessage:(List<Message>) -> Unit = {}){
+    fun sendMessageToGroup(message: Message, callbackMessage:(Boolean) -> Unit = {}){
         Log.i("StudyGroupAPI", "Message is $message")
         viewModelScope.launch {
             try {
                 val response = repository.sendMessageToGroup(message = message)
                 Log.i("StudyGroupAPI", "Message Response $response")
                 if (response.code() == 200) {
-                    val mes = response.body()
+                    callbackMessage(true)
+                  /*  val mes = response.body()
+
                     if (mes != null) {
+                        messages.postValue(mes.messages)
                         callbackMessage(mes.messages!!)
-                    }
+                        Log.i("StudyGroupAPI", "message List ${messages.value}")
+                    }*/
                 } else
                     onError("Error: ${response.message()}")
             }catch(e:Exception){
                 Log.i("Error",e.toString())
             }
+        }
+    }
+
+    fun getMessagesOfGroup(singleGroupId: SingleGroupId){
+
+        viewModelScope.launch {
+            try {
+                val response = repository.getMessagesOfGroup(singleGroupId = singleGroupId)
+                Log.i("StudyGroupAPi", "Get Message Response $response")
+                if (response.code() == 200 || response.body().isNullOrEmpty()){
+                    messages.postValue(response.body())
+                    Log.i("StudyGroupAPI", "Messages are in response ${response.body()}")
+                    //Log.i("StudyGroupAPI", "Messages are in mutablelivedata ${messages.value} ")
+                    var list = messages.value
+                    list?.forEach { it -> Log.i("StudyGroupAPI", "$it") }
+                }
+             else
+                onError("Error: ${response.message()}")
+            }catch(e:Exception){
+                Log.i("Error",e.toString())
+            }
+
         }
     }
 

@@ -86,6 +86,8 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
+    //Livedata Compose (for states of MutableLiveData)
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
 }
 kapt {

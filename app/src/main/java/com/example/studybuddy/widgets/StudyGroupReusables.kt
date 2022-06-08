@@ -159,7 +159,8 @@ fun DisplayGroupMembers(studyGroup: SingleStudyGroup ){
     Surface(
         modifier = Modifier
             .padding(5.dp)
-            .widthIn(25.dp),
+            //.widthIn(25.dp)
+            .heightIn(min=50.dp, max=700.dp),
         //.fillMaxHeight(),
         shape = RoundedCornerShape(corner= CornerSize(6.dp)),
         elevation = 6.dp,
@@ -191,7 +192,7 @@ fun DisplayGroupMembers(studyGroup: SingleStudyGroup ){
 
 //@Preview
 @Composable
-fun DisplayMessaging(messages: List<Message> ,
+fun DisplayMessaging(messages: List<Message>? , content: @Composable () -> Unit
                      ) {
     Surface(
         color = MaterialTheme.colors.background
@@ -212,16 +213,17 @@ fun DisplayMessaging(messages: List<Message> ,
                 Column(
                     horizontalAlignment = Alignment.Start,
                 ) {
-
-                    if (messages.isEmpty()) {
-                        Divider(modifier = Modifier.padding(5.dp))
-                        Text(
-                            modifier = Modifier.padding(horizontal = 5.dp),
-                            text = "No Messages yet, be the first to talk to your Group Members",
-                            style = MaterialTheme.typography.body2
-                        )
-                        Divider(modifier = Modifier.padding(5.dp))
-                    } else {
+                    if (messages == null || messages.isEmpty()) {
+                        //if (messages.isEmpty()) {
+                            Divider(modifier = Modifier.padding(5.dp))
+                            Text(
+                                modifier = Modifier.padding(horizontal = 5.dp),
+                                text = "No Messages yet, be the first to talk to your Group Members",
+                                style = MaterialTheme.typography.body2
+                            )
+                            Divider(modifier = Modifier.padding(5.dp))
+                        }
+                    else {
 
                         LazyColumn(
                             modifier =
@@ -241,16 +243,18 @@ fun DisplayMessaging(messages: List<Message> ,
 
         }
     }
+  // content()
 }
 
 //@Preview(showBackground = true)
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup,
+fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup, username : String = "",
                                        content: @Composable (Message) -> Unit = {}
                                       ){
     var text by remember { mutableStateOf(TextFieldValue("")) }
+    var test by remember { mutableStateOf(TextFieldValue("")) }
     val keyboardController = LocalSoftwareKeyboardController.current
    Row {
        OutlinedTextField(
@@ -259,17 +263,17 @@ fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup,
            modifier = Modifier
                .padding(8.dp)
                .width(220.dp),
-           keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+           //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
            label = { Text(text = "...") },
            placeholder = { Text(text = "Your Message") },
            onValueChange = {
                text = it
            },
-           //keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+           keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
            keyboardActions = KeyboardActions(
                onDone = {keyboardController?.hide()})
        )
-       val message = Message(text = text.text, groupId = studyGroup._id, sender_id = BasicStudent("", "", "", "", "", "", false))
+       val message = Message(text = text.text, groupId = studyGroup._id, sender_id = BasicStudent("", "", "", "", username, "", false))
        var sendMessage by remember { mutableStateOf(false)       }
        if (!sendMessage) {
            Surface(
@@ -282,6 +286,7 @@ fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup,
                    onClick = {
                        Log.d("message", "$text, to Group: ${studyGroup._id}")
                        sendMessage = true
+                       //text = test
                    }) {
                    Icon(imageVector = Icons.Default.Send, contentDescription = "sendButton")
                }
@@ -289,6 +294,7 @@ fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup,
        }
        if (sendMessage) {
            content(message)
+           text = test
            sendMessage = !sendMessage
        }
 

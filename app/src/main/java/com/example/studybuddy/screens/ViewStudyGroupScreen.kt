@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,7 +32,8 @@ fun ViewStudyGroupScreen(
     navController: NavHostController = rememberNavController(),
     studyGroupID: String? = "00001",
     studyGroupViewModel: StudyGroupViewModel,
-    adminViewModel: AdminViewModel
+    adminViewModel: AdminViewModel,
+    username :String
 ){
     var currentGroup = getDummyGroup()
     //var joinRQs = listOf<JoinRequestsReceivedForAdmin>()
@@ -43,6 +45,7 @@ fun ViewStudyGroupScreen(
     }?.let { studyGroupViewModel.detailedViewOfSingleStudyGroup(it)}!!
     var admin by remember { mutableStateOf(false) }
     var joinRQs by remember{ mutableStateOf(listOf<JoinRequestsReceivedForAdmin>())}
+    studyGroupViewModel.getMessagesOfGroup(SingleGroupId(currentGroup._id))
     //studyGroupViewModel.detailedViewOfSingleStudyGroup(SingleGroupId(currentGroup._id))
     adminViewModel.isUserAdmin(singleGroupId = SingleGroupId(currentGroup._id), callbackAdmin = {
         admin = it
@@ -52,7 +55,7 @@ fun ViewStudyGroupScreen(
     }
    // Log.i("ViewStudyGroupScreen", "list of joinRQs = $joinRQs")
     DisplayBottomBar (navController = navController) {
-        ViewStudyGroupContent(admin = admin, studyGroup = currentGroup, navController = navController, studyGroupViewModel = studyGroupViewModel, adminViewModel = adminViewModel, joinRequests = joinRQs) }
+        ViewStudyGroupContent(admin = admin, username = username, studyGroup = currentGroup, navController = navController, studyGroupViewModel = studyGroupViewModel, adminViewModel = adminViewModel, joinRequests = joinRQs) }
 }
 
 //@Preview
@@ -63,12 +66,12 @@ fun ViewStudyGroupContent(
     adminViewModel: AdminViewModel,
     admin: Boolean,
     joinRequests: List<JoinRequestsReceivedForAdmin>,
-    studyGroupViewModel: StudyGroupViewModel
+    studyGroupViewModel: StudyGroupViewModel, username:String
 ) {
     //studyGroupViewModel.getJoinRequests(singleGroupId = SingleGroupId(studyGroup._id))
     var displayAdminStuff by remember { mutableStateOf(false) }
     var studyGroupLocal by remember { mutableStateOf(listOf<Message>())    }
-    studyGroupLocal = studyGroup.messages
+    //studyGroupLocal = studyGroup.messages
     //var studyGroupLocalMessages = studyGroup.messages
     Log.d("ViewStudyGroup", "admin = $admin")
     Column(
@@ -82,7 +85,7 @@ fun ViewStudyGroupContent(
                 modifier = Modifier
                     .padding(4.dp)
                     .fillMaxWidth()
-                    .heightIn(min = 130.dp, max = 700.dp),
+                    .heightIn(min = 50.dp, max = 400.dp),
 
                 shape = RoundedCornerShape(corner = CornerSize(16.dp)),
                 elevation = 6.dp
@@ -100,15 +103,9 @@ fun ViewStudyGroupContent(
                     ) {
                         // this displays generally visible StudyGroup Info
                         DisplayGeneralGroupTextInfo(studyGroup = studyGroup)
-                        Surface(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                            Column(modifier = Modifier.heightIn(min = 200.dp, max=450.dp)) {
-                                Text(
-                                    modifier = Modifier.padding(horizontal = 5.dp),
-                                    text = "Current Group Members",
-                                    style = MaterialTheme.typography.subtitle2
-                                )
-                                /*Todo: Change this to its own widget, where I can choose to get the info displayed*/
-                                DisplayGroupMembers(studyGroup = studyGroup)
+                        Surface(/*modifier = Modifier.verticalScroll(rememberScrollState())*/) {
+                            //Column(modifier = Modifier.heightIn(min = 20.dp, max=400.dp)) {
+
                                 if (admin) {
                                     Button(
                                         modifier = Modifier.padding(10.dp),
@@ -123,7 +120,7 @@ fun ViewStudyGroupContent(
                                     }
                                 }
                             }
-                        }
+                      //  }
                     }
                     Column(
                         horizontalAlignment = Alignment.End,
@@ -140,43 +137,157 @@ fun ViewStudyGroupContent(
                 }
             }
         }
-        if (displayAdminStuff) {
-            DesignForWidgets() {
-                form(onSubmit = { groupname, description, topic, location ->
-                    adminViewModel.updateGroupData(changeableGroupData = ChangeableGroupData(
-                        groupName = groupname,
-                        description = description,
-                        topic = topic,
-                        location = location, groupId = studyGroup._id
-                    ),
-                        callbackChangedData = {
-                            displayAdminStuff = !it             //if successful, it closes
-                            navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/${studyGroup._id}")
-                        })
-                })
-            }
-        }
-        DesignForWidgets {
-            Text(
-                modifier = Modifier.padding(horizontal = 5.dp),
-                text = "Group Messages",
-                style = MaterialTheme.typography.subtitle2
-            )
-            DisplayMessaging(messages = studyGroupLocal)
-            Row() {
-                DisplayInputTextFieldAndSendButton(studyGroup = studyGroup){
-                    message ->
-                    //Todo : update messages in message display as well
-                    studyGroupViewModel.sendMessageToGroup(message = message, callbackMessage = {studyGroupLocal = it})
+
+            if (displayAdminStuff) {
+                DesignForWidgets() {
+                    form(onSubmit = { groupname, description, topic, location ->
+                        adminViewModel.updateGroupData(changeableGroupData = ChangeableGroupData(
+                            groupName = groupname,
+                            description = description,
+                            topic = topic,
+                            location = location, groupId = studyGroup._id
+                        ),
+                            callbackChangedData = {
+                                displayAdminStuff = !it             //if successful, it closes
+                                navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/${studyGroup._id}")
+                            })
+                    })
                 }
             }
-        }
-        var showRequests by remember { mutableStateOf(false) }
-        var showButtons by remember { mutableStateOf(true)}
-        if (admin) {
-            when (showRequests) {
-                true -> {
-                    DesignForWidgets() {
+            DesignForWidgets() {
+                Text(
+                    modifier = Modifier.padding(horizontal = 5.dp),
+                    text = "Current Group Members",
+                    style = MaterialTheme.typography.subtitle2
+                )
+                DisplayGroupMembers(studyGroup = studyGroup)
+            }
+            var success by remember{ mutableStateOf(false)}
+            val list by studyGroupViewModel.messages.observeAsState()
+            DesignForWidgets {
+                Text(
+                    modifier = Modifier.padding(horizontal = 5.dp),
+                    text = "Group Messages",
+                    style = MaterialTheme.typography.subtitle2
+                )
+                if (list == null) {
+                    Log.d("ViewStudyGroupScreen", "Messaging is empty")
+                } else {
+                    DisplayMessaging(messages = list) {
+
+                    }
+                    Row() {
+                        DisplayInputTextFieldAndSendButton(studyGroup = studyGroup, username=username) { message ->
+                            //Todo : update messages in message display as well
+                            studyGroupViewModel.sendMessageToGroup(
+                                message = message,
+                                callbackMessage = {
+                                    success = it
+                                    if(it){
+                                        studyGroupViewModel.messages.value =  studyGroupViewModel.messages.value?.plus(
+                                            message
+                                        )?:listOf(message)
+                                        Log.i("ViewStudygroupscreen", "updated messages ${list}")
+                                        //studyGroupViewModel.getMessagesOfGroup(SingleGroupId(studyGroup._id))
+                                    }
+                                    Log.i("viewStudyGroupScreen", "success send message = $success")
+                                })
+                            if (success) {
+                                success = !success
+                            }
+                        }
+                    }
+                }
+            }
+            var showRequests by remember { mutableStateOf(false) }
+            var showButtons by remember { mutableStateOf(true)}
+            if (admin) {
+                when (showRequests) {
+                    true -> {
+                        DesignForWidgets() {
+                            Row(
+                                verticalAlignment = Alignment.Top,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.padding(5.dp)
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.Start,
+                                    modifier = Modifier
+                                        .padding(horizontal = 15.dp, vertical = 17.dp)
+                                        .width(250.dp)
+                                ) {
+                                    Button(onClick = { showRequests = !showRequests }) {
+                                        if (!showRequests) {
+                                            Text(text = "Check Join Requests")
+                                        }
+                                        if (showRequests) {
+                                            Text(text = "Close Join Requests")
+                                        }
+                                    }}}
+                            Surface(modifier = Modifier.heightIn(min = 50.dp, max = 150.dp)) {
+                                LazyColumn {
+                                    items(joinRequests) { rq ->
+                                        Log.i("myStudyGroups", "show request $rq")
+                                        DisplayJoinRQ(joinRequestsReceivedForAdmin = rq)
+                                        Row(
+                                            horizontalArrangement = Arrangement.End,
+                                            modifier = Modifier
+                                                .padding(horizontal = 15.dp, vertical = 17.dp)
+                                        ) {
+                                            if (showButtons) {
+                                                Button(
+                                                    onClick = {
+                                                        val request = AcceptDeclineJR(
+                                                            groupId = studyGroup._id,
+                                                            joinRequestId = rq._id,
+                                                            accept = true
+                                                        );
+                                                        adminViewModel.acceptOrDeclineJoinRequest(
+                                                            request
+                                                        ) {
+                                                            if (it) {
+                                                                showButtons = false
+                                                                //studyGroupViewModel.detailedViewOfSingleStudyGroup(groupId = SingleGroupId(studyGroup._id))
+                                                            }
+                                                        }
+                                                    },
+                                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
+                                                ) {
+                                                    Text(text = "Accept")
+                                                }
+                                                Button(
+                                                    onClick = {
+                                                        val request = AcceptDeclineJR(
+                                                            groupId = studyGroup._id,
+                                                            joinRequestId = rq._id,
+                                                            accept = false
+                                                        );
+                                                        adminViewModel.acceptOrDeclineJoinRequest(
+                                                            request
+                                                        ) {
+                                                            if (it) {
+                                                                showButtons = false
+                                                            }
+                                                        }
+                                                    },
+                                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+                                                ) {
+                                                    Text(text = "Decline")
+                                                }
+                                            } else if (!showButtons) {
+                                                Text(
+                                                    modifier = Modifier.padding(horizontal = 5.dp),
+                                                    text = "Your Response has been processed.",
+                                                    style = MaterialTheme.typography.caption
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    false -> DesignForWidgets() {
                         Row(
                             verticalAlignment = Alignment.Top,
                             horizontalArrangement = Arrangement.Center,
@@ -188,105 +299,23 @@ fun ViewStudyGroupContent(
                                     .padding(horizontal = 15.dp, vertical = 17.dp)
                                     .width(250.dp)
                             ) {
-                        Button(onClick = { showRequests = !showRequests }) {
-                            if (!showRequests) {
-                                Text(text = "Check Join Requests")
-                            }
-                            if (showRequests) {
-                                Text(text = "Close Join Requests")
-                            }
-                        }}}
-                        Surface(modifier = Modifier.heightIn(min = 50.dp, max = 150.dp)) {
-                            LazyColumn {
-                                items(joinRequests) { rq ->
-                                    Log.i("myStudyGroups", "show request $rq")
-                                    DisplayJoinRQ(joinRequestsReceivedForAdmin = rq)
-                                    Row(
-                                        horizontalArrangement = Arrangement.End,
-                                        modifier = Modifier
-                                            .padding(horizontal = 15.dp, vertical = 17.dp)
-                                    ) {
-                                        if (showButtons) {
-                                            Button(
-                                                onClick = {
-                                                    val request = AcceptDeclineJR(
-                                                        groupId = studyGroup._id,
-                                                        joinRequestId = rq._id,
-                                                        accept = true
-                                                    );
-                                                    adminViewModel.acceptOrDeclineJoinRequest(
-                                                        request
-                                                    ) {
-                                                        if (it) {
-                                                            showButtons = false
-                                                            //studyGroupViewModel.detailedViewOfSingleStudyGroup(groupId = SingleGroupId(studyGroup._id))
-                                                        }
-                                                    }
-                                                },
-                                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
-                                            ) {
-                                                Text(text = "Accept")
-                                            }
-                                            Button(
-                                                onClick = {
-                                                    val request = AcceptDeclineJR(
-                                                        groupId = studyGroup._id,
-                                                        joinRequestId = rq._id,
-                                                        accept = false
-                                                    );
-                                                    adminViewModel.acceptOrDeclineJoinRequest(
-                                                        request
-                                                    ) {
-                                                        if (it) {
-                                                            showButtons = false
-                                                        }
-                                                    }
-                                                },
-                                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
-                                            ) {
-                                                Text(text = "Decline")
-                                            }
-                                        } else if (!showButtons) {
-                                            Text(
-                                                modifier = Modifier.padding(horizontal = 5.dp),
-                                                text = "Your Response has been processed.",
-                                                style = MaterialTheme.typography.caption
-                                            )
-                                        }
+                                Button(onClick = { showRequests = !showRequests }) {
+                                    if (!showRequests) {
+                                        Text(text = "Check Join Requests")
+                                    }
+                                    if (showRequests) {
+                                        Text(text = "Close Join Requests")
                                     }
                                 }
-                            }
-                        }
-                    }
+
+                            }}}
                 }
-                false -> DesignForWidgets() {
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(5.dp)
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.Start,
-                            modifier = Modifier
-                                .padding(horizontal = 15.dp, vertical = 17.dp)
-                                .width(250.dp)
-                        ) {
-                    Button(onClick = { showRequests = !showRequests }) {
-                        if (!showRequests) {
-                            Text(text = "Check Join Requests")
-                        }
-                        if (showRequests) {
-                            Text(text = "Close Join Requests")
-                        }
-                    }
 
-                }}}
+
             }
-
-
         }
     }
-}
+//}
 
 
 

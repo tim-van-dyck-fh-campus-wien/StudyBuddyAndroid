@@ -19,4 +19,5 @@ class StudyGroupRepository @Inject constructor (
     suspend fun getFilteredStudyGroups(district: String) = studyGroupApi.getFilteredStudyGroups(district)
     suspend fun sendJoinRequest(joinRequest: JoinRequest) = studyGroupApi.issueJoinRequestToGroup(joinRequest)
     suspend fun sendMessageToGroup(message: Message) = studyGroupApi.sendMessageToGroup(message)
+    suspend fun getMessagesOfGroup(singleGroupId: SingleGroupId) = studyGroupApi.getMessagesOfGroup(singleGroupId)
 }

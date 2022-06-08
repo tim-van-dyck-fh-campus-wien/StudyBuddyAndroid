@@ -54,7 +54,7 @@ fun MainNavigation(){
               //Log.i("navigation", "id is $string")
               //var test = studyGroupViewModel.detailedViewOfSingleStudyGroup(SingleGroupId(string))
              // Log.i("navigation", "trying to load $test")
-              ViewStudyGroupScreen(navController = navController, studyGroupID = backStackEntry.arguments?.getString("studyGroup"), studyGroupViewModel = studyGroupViewModel, adminViewModel = adminViewModel)
+              ViewStudyGroupScreen(navController = navController, studyGroupID = backStackEntry.arguments?.getString("studyGroup"), studyGroupViewModel = studyGroupViewModel, adminViewModel = adminViewModel, username = authenticationViewModel.profileData.username)
           }
 
 

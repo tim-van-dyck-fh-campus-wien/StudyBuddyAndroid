@@ -22,11 +22,6 @@ interface StudyGroupApi {
     @GET("studyGroups/groups/myGroups")
     suspend fun getMyGroups():Response<List<SingleStudyGroup>>
 
-    //Use this if the logged in student is NO Admin!
-    //Function for admins in ManageStudyGroupApi
-    @DELETE("studyGroups/leaveStudyGroup")
-    suspend fun leaveStudyGroupNoAdmin(@Body leaveStudyGroupNotAdmin: LeaveStudyGroupNotAdmin):Response<String>
-
     @POST("studyGroups/joinRequestToGroup")
     suspend fun issueJoinRequestToGroup(@Body joinRequest: JoinRequest):Response<Unit>
 
@@ -39,5 +34,8 @@ interface StudyGroupApi {
     suspend fun getSingleStudyGroup(@Body groupId: SingleGroupId) : Response<SingleStudyGroup>
 
     @POST("message/newmessage")
-    suspend fun sendMessageToGroup(@Body message: Message) : Response<SingleStudyGroup>
+    suspend fun sendMessageToGroup(@Body message: Message) : Response<Unit>
+
+    @POST("message/group/mess")
+    suspend fun getMessagesOfGroup(@Body groupId: SingleGroupId) : Response<List<Message>>
 }
