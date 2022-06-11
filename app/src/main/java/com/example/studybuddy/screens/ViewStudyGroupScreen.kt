@@ -70,6 +70,8 @@ fun ViewStudyGroupContent(
 ) {
     //studyGroupViewModel.getJoinRequests(singleGroupId = SingleGroupId(studyGroup._id))
     var displayAdminStuff by remember { mutableStateOf(false) }
+    var displayGroupMembers by remember { mutableStateOf(false) }
+    var displayGroupMessages by remember { mutableStateOf(false) }
     var studyGroupLocal by remember { mutableStateOf(listOf<Message>())    }
     //studyGroupLocal = studyGroup.messages
     //var studyGroupLocalMessages = studyGroup.messages
@@ -120,6 +122,28 @@ fun ViewStudyGroupContent(
                                     }
                                 }
                             }
+                        Button(
+                            modifier = Modifier.padding(10.dp),
+                            onClick = {
+                                displayGroupMembers = !displayGroupMembers
+                            }) {
+                            if (displayGroupMembers) {
+                                Text("Hide Group Members")
+                            } else if (!displayGroupMembers) {
+                                Text(text = "Show Group Members")
+                            }
+                        }
+                        Button(
+                            modifier = Modifier.padding(10.dp),
+                            onClick = {
+                                displayGroupMessages = !displayGroupMessages
+                            }) {
+                            if (displayGroupMessages) {
+                                Text("Hide Group Messages")
+                            } else if (!displayGroupMessages) {
+                                Text(text = "Show Group Messages")
+                            }
+                        }
                       //  }
                     }
                     Column(
@@ -154,51 +178,56 @@ fun ViewStudyGroupContent(
                     })
                 }
             }
-            DesignForWidgets() {
-                Text(
-                    modifier = Modifier.padding(horizontal = 5.dp),
-                    text = "Current Group Members",
-                    style = MaterialTheme.typography.subtitle2
-                )
-                DisplayGroupMembers(studyGroup = studyGroup)
+            if (displayGroupMembers){
+                DesignForWidgets() {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        text = "Current Group Members",
+                        style = MaterialTheme.typography.subtitle2
+                    )
+                    DisplayGroupMembers(studyGroup = studyGroup)
+                }
             }
             var success by remember{ mutableStateOf(false)}
             val list by studyGroupViewModel.messages.observeAsState()
-            DesignForWidgets {
-                Text(
-                    modifier = Modifier.padding(horizontal = 5.dp),
-                    text = "Group Messages",
-                    style = MaterialTheme.typography.subtitle2
-                )
-                if (list == null) {
-                    Log.d("ViewStudyGroupScreen", "Messaging is empty")
-                } else {
-                    DisplayMessaging(messages = list) {
+            if (displayGroupMessages){
+                DesignForWidgets {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        text = "Group Messages",
+                        style = MaterialTheme.typography.subtitle2
+                    )
+                    if (list == null) {
+                        Log.d("ViewStudyGroupScreen", "Messaging is empty")
+                    } else {
+                        DisplayMessaging(messages = list) {
 
-                    }
-                    Row() {
-                        DisplayInputTextFieldAndSendButton(studyGroup = studyGroup, username=username) { message ->
-                            //Todo : update messages in message display as well
-                            studyGroupViewModel.sendMessageToGroup(
-                                message = message,
-                                callbackMessage = {
-                                    success = it
-                                    if(it){
-                                        studyGroupViewModel.messages.value =  studyGroupViewModel.messages.value?.plus(
-                                            message
-                                        )?:listOf(message)
-                                        Log.i("ViewStudygroupscreen", "updated messages ${list}")
-                                        //studyGroupViewModel.getMessagesOfGroup(SingleGroupId(studyGroup._id))
-                                    }
-                                    Log.i("viewStudyGroupScreen", "success send message = $success")
-                                })
-                            if (success) {
-                                success = !success
+                        }
+                        Row() {
+                            DisplayInputTextFieldAndSendButton(studyGroup = studyGroup, username=username) { message ->
+                                //Todo : update messages in message display as well
+                                studyGroupViewModel.sendMessageToGroup(
+                                    message = message,
+                                    callbackMessage = {
+                                        success = it
+                                        if(it){
+                                            studyGroupViewModel.messages.value =  studyGroupViewModel.messages.value?.plus(
+                                                message
+                                            )?:listOf(message)
+                                            Log.i("ViewStudygroupscreen", "updated messages ${list}")
+                                            //studyGroupViewModel.getMessagesOfGroup(SingleGroupId(studyGroup._id))
+                                        }
+                                        Log.i("viewStudyGroupScreen", "success send message = $success")
+                                    })
+                                if (success) {
+                                    success = !success
+                                }
                             }
                         }
                     }
                 }
             }
+
             var showRequests by remember { mutableStateOf(false) }
             var showButtons by remember { mutableStateOf(true)}
             if (admin) {
