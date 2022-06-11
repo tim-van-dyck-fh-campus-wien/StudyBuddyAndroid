@@ -105,23 +105,6 @@ fun ViewStudyGroupContent(
                     ) {
                         // this displays generally visible StudyGroup Info
                         DisplayGeneralGroupTextInfo(studyGroup = studyGroup)
-                        Surface(/*modifier = Modifier.verticalScroll(rememberScrollState())*/) {
-                            //Column(modifier = Modifier.heightIn(min = 20.dp, max=400.dp)) {
-
-                                if (admin) {
-                                    Button(
-                                        modifier = Modifier.padding(10.dp),
-                                        onClick = {
-                                            displayAdminStuff = !displayAdminStuff
-                                        }) {
-                                        if (displayAdminStuff) {
-                                            Text("Cancel Update")
-                                        } else if (!displayAdminStuff) {
-                                            Text(text = "Update Group Data")
-                                        }
-                                    }
-                                }
-                            }
                         Button(
                             modifier = Modifier.padding(10.dp),
                             onClick = {
@@ -144,6 +127,23 @@ fun ViewStudyGroupContent(
                                 Text(text = "Show Group Messages")
                             }
                         }
+                        Surface(/*modifier = Modifier.verticalScroll(rememberScrollState())*/) {
+                            //Column(modifier = Modifier.heightIn(min = 20.dp, max=400.dp)) {
+
+                                if (admin) {
+                                    Button(
+                                        modifier = Modifier.padding(10.dp),
+                                        onClick = {
+                                            displayAdminStuff = !displayAdminStuff
+                                        }) {
+                                        if (displayAdminStuff) {
+                                            Text("Cancel Update")
+                                        } else if (!displayAdminStuff) {
+                                            Text(text = "Update Group Data")
+                                        }
+                                    }
+                                }
+                            }
                       //  }
                     }
                     Column(
@@ -161,23 +161,6 @@ fun ViewStudyGroupContent(
                 }
             }
         }
-
-            if (displayAdminStuff) {
-                DesignForWidgets() {
-                    form(onSubmit = { groupname, description, topic, location ->
-                        adminViewModel.updateGroupData(changeableGroupData = ChangeableGroupData(
-                            groupName = groupname,
-                            description = description,
-                            topic = topic,
-                            location = location, groupId = studyGroup._id
-                        ),
-                            callbackChangedData = {
-                                displayAdminStuff = !it             //if successful, it closes
-                                navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/${studyGroup._id}")
-                            })
-                    })
-                }
-            }
             if (displayGroupMembers){
                 DesignForWidgets() {
                     Text(
@@ -185,7 +168,7 @@ fun ViewStudyGroupContent(
                         text = "Current Group Members",
                         style = MaterialTheme.typography.subtitle2
                     )
-                    DisplayGroupMembers(studyGroup = studyGroup)
+                    DisplayGroupMembers(studyGroup = studyGroup, admin = admin, adminViewModel = adminViewModel)
                 }
             }
             var success by remember{ mutableStateOf(false)}
@@ -225,6 +208,22 @@ fun ViewStudyGroupContent(
                             }
                         }
                     }
+                }
+            }
+            if (displayAdminStuff) {
+                DesignForWidgets() {
+                    form(onSubmit = { groupname, description, topic, location ->
+                        adminViewModel.updateGroupData(changeableGroupData = ChangeableGroupData(
+                            groupName = groupname,
+                            description = description,
+                            topic = topic,
+                            location = location, groupId = studyGroup._id
+                        ),
+                            callbackChangedData = {
+                                displayAdminStuff = !it             //if successful, it closes
+                                navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/${studyGroup._id}")
+                            })
+                    })
                 }
             }
 

@@ -20,4 +20,7 @@ interface AdminApi {
 
     @POST("studyGroups/joinRequests")
     suspend fun acceptOrDeclineJoinRequest(@Body handleRequest: AcceptDeclineJR): Response<Unit>
+
+    @DELETE("studyGroups/deleteMember")
+    suspend fun deleteMember(@Body deleteMemberFromGroupData: DeleteMemberFromGroupData): Response<Unit>
 }

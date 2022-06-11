@@ -2,6 +2,8 @@ package com.example.studybuddy.widgets
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Send
@@ -32,10 +35,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.studybuddy.data.api.model.BasicStudent
-import com.example.studybuddy.data.api.model.JoinRequestsReceivedForAdmin
-import com.example.studybuddy.data.api.model.Message
-import com.example.studybuddy.data.api.model.SingleStudyGroup
+import com.example.studybuddy.data.api.model.*
+import com.example.studybuddy.viewmodel.AdminViewModel
 
 @Composable
 fun DisplayGeneralGroupTextInfo (studyGroup: SingleStudyGroup){
@@ -155,12 +156,12 @@ fun TextFieldCloseOnEnter(value:String="",label:String="",isPasswordField:Boolea
 
 //@Preview
 @Composable
-fun DisplayGroupMembers(studyGroup: SingleStudyGroup ){
+fun DisplayGroupMembers(studyGroup: SingleStudyGroup, admin: Boolean, adminViewModel: AdminViewModel){
     Surface(
         modifier = Modifier
             .padding(5.dp)
             //.widthIn(25.dp)
-            .heightIn(min=50.dp, max=700.dp),
+            .heightIn(min = 50.dp, max = 700.dp),
         //.fillMaxHeight(),
         shape = RoundedCornerShape(corner= CornerSize(6.dp)),
         elevation = 6.dp,
@@ -169,25 +170,40 @@ fun DisplayGroupMembers(studyGroup: SingleStudyGroup ){
                 items(studyGroup.members) { member ->
                     Divider(modifier = Modifier.padding(5.dp))
                     Row {
-                        Text(
-                            modifier = Modifier.padding(horizontal = 5.dp),
-                            text = "Name: ",
-                            style = MaterialTheme.typography.body2
-                        )
-                        Text(
-                            modifier = Modifier.padding(horizontal = 5.dp),
-                            text = "${member.firstname}, ${member.lastname}",
-                            style = MaterialTheme.typography.body2
-                        )
-                    }
-                        Text(
-                            modifier = Modifier.padding(horizontal = 5.dp),
-                            text = "Email: ${member.email}",
-                            style = MaterialTheme.typography.caption
-                        )
+                        Column (modifier = Modifier.width(300.dp)) {
+                            Row {
+                                Text(
+                                    modifier = Modifier.padding(horizontal = 5.dp),
+                                    text = "Name: ",
+                                    style = MaterialTheme.typography.body2
+                                )
+                                Text(
+                                    modifier = Modifier.padding(horizontal = 5.dp),
+                                    text = "${member.firstname}, ${member.lastname}",
+                                    style = MaterialTheme.typography.body2
+                                )
+                            }
+                            Text(
+                                modifier = Modifier.padding(horizontal = 5.dp),
+                                text = "Email: ${member.email}",
+                                style = MaterialTheme.typography.caption
+                            )
+                        }
+                        if (admin){
+                            Column(horizontalAlignment = Alignment.End) {
+                                Icon(imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete Member",
+                                    modifier = Modifier.clickable {
+                                        adminViewModel.deleteMember(deleteMemberFromGroupData = DeleteMemberFromGroupData(studyGroup._id, member._id), callbackDeleteMember = {
+                                            //todo: delete member
+                                        })
+                                    })
+                            }
+                        }
                     }
                 }
             }
+        }
     }
 
 //@Preview

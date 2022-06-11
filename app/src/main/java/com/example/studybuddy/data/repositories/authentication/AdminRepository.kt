@@ -13,4 +13,5 @@ class AdminRepository constructor (
     suspend fun updateGroupData(changeableGroupData: ChangeableGroupData) = adminApi.updateGroupData(changeableGroupData)
     suspend fun getJoinRequests(singleGroupId: SingleGroupId) = adminApi.getJoinRequests(singleGroupId)
     suspend fun acceptOrDeclineJoinRequest(handleRequest: AcceptDeclineJR) = adminApi.acceptOrDeclineJoinRequest(handleRequest)
+    suspend fun deleteMember (deleteMemberFromGroupData: DeleteMemberFromGroupData) = adminApi.deleteMember(deleteMemberFromGroupData)
 }
