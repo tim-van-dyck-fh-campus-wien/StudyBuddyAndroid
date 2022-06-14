@@ -77,7 +77,7 @@ fun StudyGroupRow(
                     ) {
 
                         // this displays generally visible StudyGroup Info
-                        DisplayGeneralGroupTextInfo(studyGroup = studyGroup)
+                        DisplayGeneralGroupTextInfo(studyGroup = studyGroup, showHeading = true)
                         content()
 
                         // show Content Icon is changed here, as well as Boolean value

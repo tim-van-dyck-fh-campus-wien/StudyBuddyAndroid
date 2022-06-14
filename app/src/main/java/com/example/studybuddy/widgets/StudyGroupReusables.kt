@@ -1,9 +1,7 @@
 package com.example.studybuddy.widgets
 
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,6 +30,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -39,13 +38,14 @@ import com.example.studybuddy.data.api.model.*
 import com.example.studybuddy.viewmodel.AdminViewModel
 
 @Composable
-fun DisplayGeneralGroupTextInfo (studyGroup: SingleStudyGroup){
+fun DisplayGeneralGroupTextInfo (studyGroup: SingleStudyGroup, showHeading:Boolean){
+    if (showHeading){
     Text(
         modifier = Modifier.padding(horizontal = 5.dp),
         text = studyGroup.name,
         style = MaterialTheme.typography.h5,
         fontStyle = FontStyle.Italic
-    )
+    )}
     Divider(modifier = Modifier.padding(5.dp))
     Text(modifier = Modifier.padding(horizontal = 7.dp),
         text = studyGroup.topic,
@@ -172,34 +172,40 @@ fun DisplayGroupMembers(studyGroup: SingleStudyGroup, admin: Boolean, adminViewM
                     Row {
                         Column (modifier = Modifier.width(300.dp)) {
                             Row {
-                                Text(
-                                    modifier = Modifier.padding(horizontal = 5.dp),
-                                    text = "Name: ",
-                                    style = MaterialTheme.typography.body2
-                                )
-                                Text(
-                                    modifier = Modifier.padding(horizontal = 5.dp),
-                                    text = "${member.firstname}, ${member.lastname}",
-                                    style = MaterialTheme.typography.body2
-                                )
+                                Column(modifier = Modifier.width(250.dp)) {
+                                    Text(
+                                        modifier = Modifier.padding(horizontal = 5.dp),
+                                        text = "Name: ",
+                                        style = MaterialTheme.typography.body2
+                                    )
+                                    Text(
+                                        modifier = Modifier.padding(horizontal = 5.dp),
+                                        text = "${member.firstname}, ${member.lastname}",
+                                        style = MaterialTheme.typography.body2
+                                    )
+                                }
+
+                                if (admin){
+                                    Column( modifier = Modifier.width(50.dp),
+                                        horizontalAlignment = Alignment.End) {
+                                        Icon(imageVector = Icons.Default.Delete,
+                                            contentDescription = "Delete Member",
+                                            modifier = Modifier.clickable {
+                                                adminViewModel.deleteMember(deleteMemberFromGroupData = DeleteMemberFromGroupData(studyGroup._id, member._id), callbackDeleteMember = {
+                                                    //todo: delete member
+                                                })
+                                            })
+                                    }
+                                }
                             }
                             Text(
                                 modifier = Modifier.padding(horizontal = 5.dp),
                                 text = "Email: ${member.email}",
                                 style = MaterialTheme.typography.caption
                             )
+
                         }
-                        if (admin){
-                            Column(horizontalAlignment = Alignment.End) {
-                                Icon(imageVector = Icons.Default.Delete,
-                                    contentDescription = "Delete Member",
-                                    modifier = Modifier.clickable {
-                                        adminViewModel.deleteMember(deleteMemberFromGroupData = DeleteMemberFromGroupData(studyGroup._id, member._id), callbackDeleteMember = {
-                                            //todo: delete member
-                                        })
-                                    })
-                            }
-                        }
+
                     }
                 }
             }
@@ -351,7 +357,7 @@ fun DesignForWidgets(content: @Composable () -> Unit = {}){
             ) {
                 Row(
                     verticalAlignment = Alignment.Top,
-                    horizontalArrangement = Arrangement.Start,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.padding(5.dp)
                 ) {
                     Column(
@@ -410,3 +416,13 @@ fun DisplayJoinRQ(joinRequestsReceivedForAdmin: JoinRequestsReceivedForAdmin){
         style = MaterialTheme.typography.caption
     )
 }
+
+
+
+
+@Preview
+@Composable
+fun test() {
+
+}
+
