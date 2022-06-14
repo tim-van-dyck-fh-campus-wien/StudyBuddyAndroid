@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -19,6 +18,7 @@ import com.example.studybuddy.data.api.model.ProfileData
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
 import com.example.studybuddy.widgets.TextFieldCloseOnEnter
+import com.example.studybuddy.widgets.displayLogo
 
 @Composable
 fun ProfileScreen(
@@ -31,10 +31,11 @@ fun ProfileScreen(
 @Composable
 fun ProfileContent(authenticationViewModel: AuthenticationViewModel, navController: NavHostController){
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = painterResource(id = R.drawable.transparent_study_buddy),
+        displayLogo()
+        /*Image(
+            painter = painterResource(id = R.drawable.transparent_study_buddy_backup),
             contentDescription = "StudyBuddyIcon"
-        )
+        )*/
         Button(
             modifier = Modifier.padding(16.dp),
             onClick = {

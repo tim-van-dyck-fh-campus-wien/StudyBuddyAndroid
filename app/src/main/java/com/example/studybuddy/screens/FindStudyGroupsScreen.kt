@@ -27,6 +27,7 @@ import com.example.studybuddy.viewmodel.AuthenticationViewModel
 import com.example.studybuddy.viewmodel.StudyGroupViewModel
 import com.example.studybuddy.widgets.GroupButton
 import com.example.studybuddy.widgets.StudyGroupRow
+import com.example.studybuddy.widgets.displayLogo
 
 @Composable
 fun FindStudyGroupsScreen(
@@ -51,10 +52,11 @@ fun FindStudyGroupsContent(
     district: String
 ) {
     Column {
-        Image(
-            painter = painterResource(id = R.drawable.transparent_study_buddy),
+        displayLogo()
+        /*Image(
+            painter = painterResource(id = R.drawable.transparent_study_buddy_backup),
             contentDescription = "StudyBuddyIcon"
-        )
+        )*/
         var allGroups by remember { mutableStateOf(false) }
         var showFilter by remember { mutableStateOf(false) }
         Surface(

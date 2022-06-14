@@ -21,6 +21,7 @@ import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.CreateStudyGroupViewModel
 import com.example.studybuddy.viewmodel.StudyGroupViewModel
 import com.example.studybuddy.widgets.TextFieldCloseOnEnter
+import com.example.studybuddy.widgets.displayLogo
 import com.example.studybuddy.widgets.groupIcon
 
 @Composable
@@ -43,10 +44,11 @@ fun CreateStudyGroupsContent(
 ){
     createStudyGroupViewModel.getAvailableGroupimages()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = painterResource(id = R.drawable.transparent_study_buddy),
+        /*Image(
+            painter = painterResource(id = R.drawable.transparent_study_buddy_backup),
             contentDescription = "StudyBuddyIcon"
-        )
+        )*/
+        displayLogo()
         Text("Please select an icon for your study group:")
         displayGroupImages(urls = createStudyGroupViewModel.availableGroupImages.value,selectedIcon = createStudyGroupViewModel.selectedIconUrl.value){
             createStudyGroupViewModel.setSelectedIcon(it)

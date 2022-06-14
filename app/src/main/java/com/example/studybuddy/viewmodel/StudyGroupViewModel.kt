@@ -21,7 +21,7 @@ class StudyGroupViewModel @Inject constructor(
     //Test for List of StudyGroups - works fine
     var testList = listOf<JoinRequestsReceivedForAdmin>()
     var myGroupList = MutableLiveData<List<SingleStudyGroup>>()
-    var singleGroup = getDummyGroup()
+    var singleGroup = MutableLiveData<SingleStudyGroup>()
     var filteredStudyGroupList = MutableLiveData<List<SingleStudyGroup>>()
     var joinRequests = MutableLiveData<List<JoinRequestsReceivedForAdmin>>()
     var messages = MutableLiveData<List<Message>>()
@@ -117,16 +117,18 @@ class StudyGroupViewModel @Inject constructor(
 
 
 
-    fun detailedViewOfSingleStudyGroup(groupId: SingleGroupId) : SingleStudyGroup{
+    fun detailedViewOfSingleStudyGroup(groupId: SingleGroupId) /*: SingleStudyGroup*/{
         Log.i("StudyGroupAPI", "current ID $groupId")
         viewModelScope.launch {
           try{
             val response = repository.getSingleStudyGroup(groupId = groupId)
             if (response.message() == "OK" || response.code() == 200  ){
           // Log.i("StudyGroupAPI", " Single Group in detailed View ${response.body()}")
-                singleGroup = response.body()!!
+                //singleGroup = response.body()!!
+                singleGroup.postValue(response.body()!!)
                 messages.postValue(response.body()!!.messages)
                 Log.i("StudyGroupAPI", "Messages from detailed view ${messages.value}")
+                Log.i("StudyGroupAPI", "Messages from detailed view ${singleGroup.value}")
             }
             else {
                 /*TODO: add behaviour for error to eliminate dummy group*/
@@ -134,7 +136,7 @@ class StudyGroupViewModel @Inject constructor(
         }}catch(e:Exception){
             Log.i("Error",e.toString())
         }}
-        return singleGroup
+        //return singleGroup
     }
 
 

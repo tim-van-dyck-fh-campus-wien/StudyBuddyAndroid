@@ -5,6 +5,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -22,9 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -34,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.studybuddy.R
 import com.example.studybuddy.data.api.model.*
 import com.example.studybuddy.viewmodel.AdminViewModel
 
@@ -46,11 +50,14 @@ fun DisplayGeneralGroupTextInfo (studyGroup: SingleStudyGroup, showHeading:Boole
         style = MaterialTheme.typography.h5,
         fontStyle = FontStyle.Italic
     )}
-    Divider(modifier = Modifier.padding(5.dp))
-    Text(modifier = Modifier.padding(horizontal = 7.dp),
-        text = studyGroup.topic,
-        style = MaterialTheme.typography.body2
-    )
+    if (studyGroup.topic != "") {
+        Divider(modifier = Modifier.padding(5.dp))
+        Text(
+            modifier = Modifier.padding(horizontal = 7.dp),
+            text = "Our Topics: ${studyGroup.topic}",
+            style = MaterialTheme.typography.body2
+        )
+    }
     Divider(modifier = Modifier.padding(5.dp))
     Text(
         modifier = Modifier.padding(horizontal = 7.dp),
@@ -426,3 +433,18 @@ fun test() {
 
 }
 
+@Preview
+@Composable
+fun displayLogo(){
+    Surface(
+        modifier = Modifier
+            .padding(12.dp),
+        shape = RectangleShape,
+        elevation = 6.dp
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.transparent_study_buddy_backup),
+            contentDescription = "StudyBuddyIcon"
+        )
+    }
+}

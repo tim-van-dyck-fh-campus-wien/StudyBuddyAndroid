@@ -98,35 +98,7 @@ fun StudyGroupRow(
                             )
 
                         }
-                        // actual Content is defined here, depending on current state of showContent
-                        // todo: delete this part, if join button actually works as intended
-                        // see Work in Progress below, needs testing
-                       /** Column(modifier = Modifier.width(200.dp)) {
-                            AnimatedVisibility(
-                                visible = showContent,
-                                enter = expandVertically(expandFrom = Alignment.Top)
-                            ) {
-                                Column() {
-                                    Divider(modifier = Modifier.padding(5.dp))
 
-                                    Text(
-                                        modifier = Modifier.padding(horizontal = 5.dp),
-                                        text = "How we describe ourselves: ${studyGroup.description}",
-                                        style = MaterialTheme.typography.caption)
-                                    Divider(modifier = Modifier.padding(5.dp))
-
-                                    Button(
-                                        modifier = Modifier.padding(horizontal = 5.dp),
-                                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
-                                        onClick = { onJoinButtonClick(studyGroup._id) }) {
-                                        Text(text = "Send Join Request")
-                                    }
-
-                                    Divider(modifier = Modifier.padding(5.dp))
-                                }
-
-                            }
-                        }*/
                         DisplayArrowContent(showContent = showContent, studyGroup = studyGroup){
                         }
 
@@ -166,18 +138,29 @@ fun DisplayArrowContent(
             Card(){
             Column() {
                 Divider(modifier = Modifier.padding(5.dp))
-
+                if (studyGroup.description != "") {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        text = "How we describe ourselves: ${studyGroup.description}",
+                        style = MaterialTheme.typography.caption
+                    )
+                    Divider(modifier = Modifier.padding(5.dp))
+                }
+             else {
                 Text(
                     modifier = Modifier.padding(horizontal = 5.dp),
-                    text = "How we describe ourselves: ${studyGroup.description}",
+                    text = "The group didn't provide any additional info to show here.",
                     style = MaterialTheme.typography.caption
                 )
                 Divider(modifier = Modifier.padding(5.dp))
-                }
+
             }
         }
     }
 }
+    }
+}
+
 
 
 

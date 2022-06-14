@@ -42,24 +42,35 @@ fun ViewStudyGroupScreen(
     adminViewModel: AdminViewModel,
     username :String
 ){
-    var currentGroup = getDummyGroup()
     //var joinRQs = listOf<JoinRequestsReceivedForAdmin>()
     // get the group for detailed StudyGroup Info, if null or something goes wrong, it will be the dummy group
-    currentGroup = studyGroupID?.let {
+    var id = studyGroupID?.let {
         SingleGroupId(
             it
         )
-    }?.let { studyGroupViewModel.detailedViewOfSingleStudyGroup(it)}!!
+    }
     var admin by remember { mutableStateOf(false) }
     var joinRQs by remember{ mutableStateOf(listOf<JoinRequestsReceivedForAdmin>())}
-    studyGroupViewModel.getMessagesOfGroup(SingleGroupId(currentGroup._id))
-    //studyGroupViewModel.detailedViewOfSingleStudyGroup(SingleGroupId(currentGroup._id))
-    adminViewModel.isUserAdmin(singleGroupId = SingleGroupId(currentGroup._id), callbackAdmin = {
-        admin = it
-    })
-    if(admin){adminViewModel.getJoinRequests(singleGroupId = SingleGroupId(currentGroup._id))
-    {list -> joinRQs = list}
+    Log.i("ViewStudyGroupScreen", "current ID in here is $id")
+    if (id != null) {
+        studyGroupViewModel.detailedViewOfSingleStudyGroup(id)
+        adminViewModel.isUserAdmin(singleGroupId = id, callbackAdmin = {
+            admin = it
+        })
+        if(admin){adminViewModel.getJoinRequests(singleGroupId = id)
+        {list -> joinRQs = list}
+        }
     }
+    //val currentGroup by studyGroupViewModel.singleGroup.observeAsState()
+
+    //if (studyGroupViewModel.singleGroup.value == null){
+    //    Text(text = "sorry, something went wrong")
+    //} else{
+//    studyGroupViewModel.getMessagesOfGroup(SingleGroupId(studyGroupViewModel.singleGroup.value!!._id))
+
+
+    //test
+
 
 
     Scaffold(
@@ -79,15 +90,15 @@ fun ViewStudyGroupScreen(
     ) {
    // Log.i("ViewStudyGroupScreen", "list of joinRQs = $joinRQs")
     DisplayBottomBar (navController = navController) {
-        ViewStudyGroupContent(admin = admin, username = username, studyGroup = currentGroup, navController = navController, studyGroupViewModel = studyGroupViewModel, adminViewModel = adminViewModel, joinRequests = joinRQs)
+        ViewStudyGroupContent(admin = admin, username = username, /*studyGroup = studyGroupViewModel.singleGroup.value!!,*/ navController = navController, studyGroupViewModel = studyGroupViewModel, adminViewModel = adminViewModel, joinRequests = joinRQs)
     }
-    }
-}
+    }}
+//}
 
 //@Preview
 @Composable
 fun ViewStudyGroupContent(
-    studyGroup: SingleStudyGroup,
+    //studyGroup: SingleStudyGroup,
     navController: NavHostController,
     adminViewModel: AdminViewModel,
     admin: Boolean,
@@ -99,34 +110,41 @@ fun ViewStudyGroupContent(
     var displayGroupMembers by remember { mutableStateOf(false) }
     var displayGroupMessages by remember { mutableStateOf(false) }
 
-    Log.d("ViewStudyGroup", "admin = $admin")
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxWidth(),
-    ) {
-        Surface(
 
 
+    if (studyGroupViewModel.singleGroup.value == null) {
+        Text("Sorry, something went wrong")
+    } else if (studyGroupViewModel.singleGroup.value != null){
+        var studyGroup = studyGroupViewModel.singleGroup.value!!
+        Log.d("ViewStudyGroup", "admin = $admin")
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth(),
         ) {
-            Row(horizontalArrangement = Arrangement.Center,
-            ){
-            DesignForWidgets() {
-                    Text(
-                        modifier = Modifier.padding(horizontal = 5.dp),
-                        text = studyGroup.name,
-                        style = MaterialTheme.typography.h3,
-                        fontStyle = FontStyle.Normal
-                    )
+            Surface(
+
+
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    DesignForWidgets() {
+                        Text(
+                            modifier = Modifier.padding(horizontal = 5.dp),
+                            text = studyGroup.name,
+                            style = MaterialTheme.typography.h3,
+                            fontStyle = FontStyle.Normal
+                        )
+                    }
                 }
+
             }
 
-        }
-
-    //    Surface(
-      //      color = MaterialTheme.colors.background
-       // ) {
-         /*   Card(
+            //    Surface(
+            //      color = MaterialTheme.colors.background
+            // ) {
+            /*   Card(
                 modifier = Modifier
                     .padding(20.dp)
                     .fillMaxWidth()
@@ -146,28 +164,29 @@ fun ViewStudyGroupContent(
                             .padding(horizontal = 15.dp, vertical = 17.dp)
                             .width(250.dp)
                     ) {*/
-        DesignForWidgets(){
-                        // this displays generally visible StudyGroup Info
-            DisplayGeneralGroupTextInfo(studyGroup = studyGroup, showHeading = false)
-            Column(
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(vertical = 20.dp)
-            ) {
-                groupIconWithElevation(
-                    url = ApiConstants.IMG_BASE_URL + studyGroup.icon,
-                    iconSize = 120
-                )
+            DesignForWidgets() {
+                // this displays generally visible StudyGroup Info
+                DisplayGeneralGroupTextInfo(studyGroup = studyGroup, showHeading = false)
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(vertical = 20.dp)
+                ) {
+                    groupIconWithElevation(
+                        url = ApiConstants.IMG_BASE_URL + studyGroup.icon,
+                        iconSize = 120
+                    )
+                }
             }
-        }
 
-         //       }
-          //  }
-      //  }
+            //       }
+            //  }
+            //  }
 
-        DesignForWidgets() {
+            DesignForWidgets() {
 
                 /**Display Group Members*/
+
                 Button(
                     modifier = Modifier
                         .padding(10.dp)
@@ -181,6 +200,7 @@ fun ViewStudyGroupContent(
                         Text(text = "Show Group Members")
                     }
                 }
+
                 if (displayGroupMembers) {
                     DesignForWidgets() {
                         Text(
@@ -434,7 +454,10 @@ fun ViewStudyGroupContent(
 
             }
         }
-        }
+    }
+}
+//}
+
 
 
 

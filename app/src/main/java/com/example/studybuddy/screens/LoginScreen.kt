@@ -16,7 +16,7 @@ import com.example.studybuddy.data.api.model.LoginData
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.AuthenticationViewModel
 import com.example.studybuddy.widgets.TextFieldCloseOnEnter
-import java.util.*
+import com.example.studybuddy.widgets.displayLogo
 
 
 @Composable
@@ -30,14 +30,14 @@ fun LoginScreen(
    //authenticationViewModel.isStudentLoggedIn(sucess = {
     //    navController.navigate(ScreenNames.HomeScreen.name)
     //})
-    
+
     Column (modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
-
-        Image(painter = painterResource(id = R.drawable.transparent_study_buddy), contentDescription = "StudyBuddyIcon")
+        displayLogo()
+        //Image(modifier = Modifier.width(300.dp), painter = painterResource(id = R.drawable.transparent_study_buddy_backup), contentDescription = "StudyBuddyIcon")
 
         Text(
             text = "Login",

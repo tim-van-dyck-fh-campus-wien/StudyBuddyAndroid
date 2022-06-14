@@ -11,11 +11,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.studybuddy.DisplayBottomBar
 import com.example.studybuddy.R
-import com.example.studybuddy.data.api.model.SingleStudyGroup
 
 import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.StudyGroupViewModel
+import com.example.studybuddy.widgets.DesignForWidgets
 import com.example.studybuddy.widgets.StudyGroupRow
+import com.example.studybuddy.widgets.displayLogo
 
 @Composable
 fun HomeScreen(
@@ -35,29 +36,31 @@ fun HomeContent(navController: NavHostController = rememberNavController(),
                 studyGroupViewModel: StudyGroupViewModel
                 ){
     Column {
-        Image(
-            painter = painterResource(id = R.drawable.transparent_study_buddy),
+        /* Image(
+            painter = painterResource(id = R.drawable.transparent_study_buddy_backup),
             contentDescription = "StudyBuddyIcon"
-        )
+        )*/
+        displayLogo()
         //studyGroupViewModel.getOnlyMyGroups()
-        LazyColumn {
-            if (studyGroupViewModel.myGroupList.value.isNullOrEmpty()) {
-                Log.d("HomeScreen", "List is empty")
-            } else {
-            items(studyGroupViewModel.myGroupList.value!!) {
-                    studyGroup ->
-                Log.i("myStudyGroups", "show group $studyGroup")
-                StudyGroupRow(
-                    studyGroup = studyGroup,
-                    onItemClick = { studyGroupSingle ->
-                        Log.d("navigation", "cur studyGroupID = ${studyGroupSingle}")
-                        navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/${studyGroupSingle}")
-                    },
-                    {},
-                )
+        DesignForWidgets() {
+            LazyColumn {
+                if (studyGroupViewModel.myGroupList.value.isNullOrEmpty()) {
+                    Log.d("HomeScreen", "List is empty")
+                } else {
+                    items(studyGroupViewModel.myGroupList.value!!) { studyGroup ->
+                        Log.i("myStudyGroups", "show group $studyGroup")
+                        StudyGroupRow(
+                            studyGroup = studyGroup,
+                            onItemClick = { studyGroupSingle ->
+                                Log.d("navigation", "cur studyGroupID = ${studyGroupSingle}")
+                                navController.navigate(route = ScreenNames.ViewStudyGroupScreen.name + "/${studyGroupSingle}")
+                            },
+                            {},
+                        )
+                    }
+                }
             }
         }
-    }
     }
 }
        // StudyGroupRow()
