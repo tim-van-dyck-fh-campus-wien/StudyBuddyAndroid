@@ -26,11 +26,7 @@ class StudyGroupViewModel @Inject constructor(
     var joinRequests = MutableLiveData<List<JoinRequestsReceivedForAdmin>>()
     var messages = MutableLiveData<List<Message>>()
     var members = MutableLiveData<List<BasicStudent>>()
-    //added, because somehow, the first call seems to return an empty list
-    /*init {
-        getAllStudyGroups()
-        getOnlyMyGroups()
-    }*/
+
 
     fun getAllStudyGroups() {
         Log.i("Test","test")
@@ -98,7 +94,6 @@ class StudyGroupViewModel @Inject constructor(
         viewModelScope.launch {
             try{
             val response = repository.canStudentSendJoinRequest(studyGroupId)
-            //Log.i("StudyGroupAPI", "checking if not member ${response.code()}")
             Log.i("StudyGroupAPI", "API member response ${response}")
             when {
                 response.code() == 200 -> {
@@ -118,14 +113,12 @@ class StudyGroupViewModel @Inject constructor(
 
 
 
-    fun detailedViewOfSingleStudyGroup(groupId: SingleGroupId) /*: SingleStudyGroup*/{
+    fun detailedViewOfSingleStudyGroup(groupId: SingleGroupId){
         Log.i("StudyGroupAPI", "current ID $groupId")
         viewModelScope.launch {
           try{
             val response = repository.getSingleStudyGroup(groupId = groupId)
             if (response.message() == "OK" || response.code() == 200  ){
-          // Log.i("StudyGroupAPI", " Single Group in detailed View ${response.body()}")
-                //singleGroup = response.body()!!
                 singleGroup.postValue(response.body()!!)
                 messages.postValue(response.body()!!.messages)
                 members.postValue(response.body()!!.members)
@@ -139,7 +132,7 @@ class StudyGroupViewModel @Inject constructor(
         }}catch(e:Exception){
             Log.i("Error",e.toString())
         }}
-        //return singleGroup
+
     }
 
 
@@ -171,13 +164,6 @@ class StudyGroupViewModel @Inject constructor(
                 Log.i("StudyGroupAPI", "Message Response $response")
                 if (response.code() == 200) {
                     callbackMessage(true)
-                  /*  val mes = response.body()
-
-                    if (mes != null) {
-                        messages.postValue(mes.messages)
-                        callbackMessage(mes.messages!!)
-                        Log.i("StudyGroupAPI", "message List ${messages.value}")
-                    }*/
                 } else
                     onError("Error: ${response.message()}")
             }catch(e:Exception){
@@ -187,7 +173,6 @@ class StudyGroupViewModel @Inject constructor(
     }
 
     fun getMessagesOfGroup(singleGroupId: SingleGroupId){
-
         viewModelScope.launch {
             try {
                 val response = repository.getMessagesOfGroup(singleGroupId = singleGroupId)
@@ -195,7 +180,6 @@ class StudyGroupViewModel @Inject constructor(
                 if (response.code() == 200 || response.body().isNullOrEmpty()){
                     messages.postValue(response.body())
                     Log.i("StudyGroupAPI", "Messages are in response ${response.body()}")
-                    //Log.i("StudyGroupAPI", "Messages are in mutablelivedata ${messages.value} ")
                     var list = messages.value
                     list?.forEach { it -> Log.i("StudyGroupAPI", "$it") }
                 }
@@ -207,73 +191,6 @@ class StudyGroupViewModel @Inject constructor(
 
         }
     }
-
-    /*fun isUserAdmin(singleGroupId: SingleGroupId, callbackAdmin:(Boolean) -> Unit = {}){
-        Log.i("StudyGroupAPI", "Group to check is $singleGroupId")
-        viewModelScope.launch {
-            val response = repository.isUserAdmin(singleGroupId = singleGroupId)
-            Log.i("StudyGroupAPI", "User is admin response $response")
-            when {
-                response.code() == 200 -> {
-                    callbackAdmin(true)
-                }
-                response.code() == 400 -> {
-                    callbackAdmin(false)
-                }
-                else -> onError("Error: ${response.message()}")
-            }
-        }
-    }
-
-    fun updateGroupData(changeableGroupData: ChangeableGroupData, callbackChangedData: (Boolean) -> Unit){
-        Log.i("StudyGroupAPI", "Content is $changeableGroupData")
-        viewModelScope.launch {
-            val response = repository.updateGroupData(changeableGroupData = changeableGroupData)
-            Log.i("StudyGroupAPI", "Update Group Data response $response")
-            when {
-                response.code() == 200 -> {
-                    callbackChangedData(true)
-                }
-                response.code() == 400 -> {
-                    callbackChangedData(false)
-                }
-                else -> onError("Error: ${response.message()}")
-            }
-        }
-    }
-
-    fun getJoinRequests(singleGroupId: SingleGroupId, callbackJoinRQs:(List<JoinRequestsReceivedForAdmin>) -> Unit = {}) {
-        Log.i("StudyGroupAPI", "Content is getting pending Join Requests for Group $singleGroupId")
-        viewModelScope.launch {
-            Log.i("StudyGroupAPI", "inside coroutine for join requests list ")
-            val response = repository.getJoinRequests(singleGroupId)
-
-            //Log.i("StudyGroupAPI", "Join REQ list response ${response.body()}")
-            if (response.isSuccessful || !response.body().isNullOrEmpty()) {
-                Log.i("StudyGroupAPI", "Join REQ list response ${response}")
-                val requests = response.body()
-                Log.i("StudyGroupAPI", "join req list from response $requests")
-                //if (requests != null) {
-                   // testList = requests
-                  //  Log.i("StudyGroupAPI", "Join testlist after post value ${testList}")
-                if (requests != null) {
-                    callbackJoinRQs(requests)
-                }
-                    joinRequests.postValue(requests)
-                    Log.i("StudyGroupAPI", "Join joinRequests after post value ${joinRequests.value}")
-                //}
-                //Log.i("StudyGroupAPI", "Join testlist after post value ${testList}")
-                Log.i("StudyGroupAPI", "Join joinRequests after post value ${joinRequests.value}")
-                //callbackJoinRQs(response.body()!!)
-            } else {
-                onError("Error: ${response.message()}")
-            }
-        }
-
-
-    }
-       */
-
 }
 
 
@@ -281,16 +198,3 @@ class StudyGroupViewModel @Inject constructor(
 
 
 
-/*
-class AuthenticationViewModel constructor(
-    private val repository:AuthenticationRepository = AuthenticationRepository()
-) : ViewModel(){
-    fun loadTest():String{
-        //launch an async coroutine
-        viewModelScope.launch{
-            val result = repository.getTest()
-            Log.i("test",result.text)
-        }
-        return "asdf"
-    }
-}*/

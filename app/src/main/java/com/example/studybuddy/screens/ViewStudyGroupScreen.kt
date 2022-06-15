@@ -42,7 +42,7 @@ fun ViewStudyGroupScreen(
     adminViewModel: AdminViewModel,
     username :String
 ){
-    //var joinRQs = listOf<JoinRequestsReceivedForAdmin>()
+
     // get the group for detailed StudyGroup Info, if null or something goes wrong, it will be the dummy group
     var id = studyGroupID?.let {
         SingleGroupId(
@@ -61,16 +61,6 @@ fun ViewStudyGroupScreen(
         {list -> joinRQs = list}
         }
     }
-    //val currentGroup by studyGroupViewModel.singleGroup.observeAsState()
-
-    //if (studyGroupViewModel.singleGroup.value == null){
-    //    Text(text = "sorry, something went wrong")
-    //} else{
-//    studyGroupViewModel.getMessagesOfGroup(SingleGroupId(studyGroupViewModel.singleGroup.value!!._id))
-
-
-    //test
-
 
 
     Scaffold(
@@ -90,7 +80,7 @@ fun ViewStudyGroupScreen(
     ) {
    // Log.i("ViewStudyGroupScreen", "list of joinRQs = $joinRQs")
     DisplayBottomBar (navController = navController) {
-        ViewStudyGroupContent(admin = admin, username = username, /*studyGroup = studyGroupViewModel.singleGroup.value!!,*/ navController = navController, studyGroupViewModel = studyGroupViewModel, adminViewModel = adminViewModel, joinRequests = joinRQs)
+        ViewStudyGroupContent(admin = admin, username = username, navController = navController, studyGroupViewModel = studyGroupViewModel, adminViewModel = adminViewModel, joinRequests = joinRQs)
     }
     }}
 //}
@@ -123,8 +113,6 @@ fun ViewStudyGroupContent(
                 .fillMaxWidth(),
         ) {
             Surface(
-
-
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
@@ -141,29 +129,6 @@ fun ViewStudyGroupContent(
 
             }
 
-            //    Surface(
-            //      color = MaterialTheme.colors.background
-            // ) {
-            /*   Card(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxWidth()
-                    .heightIn(min = 50.dp, max = 400.dp),
-
-                shape = RoundedCornerShape(corner = CornerSize(16.dp)),
-                elevation = 6.dp,
-            ) {
-                Row(
-                    verticalAlignment = Alignment.Top,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(5.dp)
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.Start,
-                        modifier = Modifier
-                            .padding(horizontal = 15.dp, vertical = 17.dp)
-                            .width(250.dp)
-                    ) {*/
             DesignForWidgets() {
                 // this displays generally visible StudyGroup Info
                 DisplayGeneralGroupTextInfo(studyGroup = studyGroup, showHeading = false)
@@ -179,14 +144,10 @@ fun ViewStudyGroupContent(
                 }
             }
 
-            //       }
-            //  }
-            //  }
 
             DesignForWidgets() {
 
                 /**Display Group Members*/
-
                 Button(
                     modifier = Modifier
                         .padding(10.dp)
@@ -227,7 +188,6 @@ fun ViewStudyGroupContent(
                                     studyGroupViewModel.members.value = list.toList()
                                 }
                                 Log.i("ViewStudyGroupScreen", "StudyGroup Member List Updated ${studyGroupViewModel.members.value}")
-                                   // studyGroupViewModel.singleGroup.value?.members.
                             },
                             content = {}
                         )
@@ -259,9 +219,7 @@ fun ViewStudyGroupContent(
                         if (list == null) {
                             Log.d("ViewStudyGroupScreen", "Messaging is empty")
                         } else {
-                            DisplayMessaging(messages = list) {
-
-                            }
+                            DisplayMessaging(messages = list)
                             Row() {
                                 DisplayInputTextFieldAndSendButton(
                                     studyGroup = studyGroup,
@@ -280,7 +238,6 @@ fun ViewStudyGroupContent(
                                                     "ViewStudygroupscreen",
                                                     "updated messages ${list}"
                                                 )
-                                                //studyGroupViewModel.getMessagesOfGroup(SingleGroupId(studyGroup._id))
                                             }
                                             Log.i(
                                                 "viewStudyGroupScreen",
@@ -347,27 +304,6 @@ fun ViewStudyGroupContent(
                     when (showRequests) {
                         true -> {
                             DesignForWidgets() {
-                                Row(
-                                    verticalAlignment = Alignment.Top,
-                                    horizontalArrangement = Arrangement.Center,
-                                    modifier = Modifier.padding(5.dp)
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.Start,
-                                        modifier = Modifier
-                                            .padding(horizontal = 15.dp, vertical = 17.dp)
-                                            .width(250.dp)
-                                    ) {
-                                        /*Button(onClick = { showRequests = !showRequests }) {
-                                        if (!showRequests) {
-                                            Text(text = "Check Join Requests")
-                                        }
-                                        if (showRequests) {
-                                            Text(text = "Close Join Requests")
-                                        }
-                                    }*/
-                                    }
-                                }
                                 Surface(modifier = Modifier.heightIn(min = 50.dp, max = 150.dp)) {
                                     if (joinRequests.isNullOrEmpty()) {
 
@@ -444,29 +380,6 @@ fun ViewStudyGroupContent(
                                 }
                             }
                         }
-                        /*    false -> DesignForWidgets() {
-                     /*   Row(
-                            verticalAlignment = Alignment.Top,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.padding(5.dp)
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.Start,
-                                modifier = Modifier
-                                    .padding(horizontal = 15.dp, vertical = 17.dp)
-                                    .width(250.dp)
-                            ) {
-                                Button(onClick = { showRequests = !showRequests }) {
-                                    if (!showRequests) {
-                                        Text(text = "Check Join Requests")
-                                    }
-                                    if (showRequests) {
-                                        Text(text = "Close Join Requests")
-                                    }
-                                }
-
-                            }*/
-                        }*/
                     }
                 }
 
@@ -474,55 +387,11 @@ fun ViewStudyGroupContent(
         }
     }
 }
-//}
 
 
 
 
 
-  /*          if (admin) {
-
-
-
-            }*/
-
-  //  }
-//}
-
-
-
-
-
-//@Composable
-/*fun DesignForWidgets(content: @Composable () -> Unit = {}){
-    Row (modifier=Modifier.padding(5.dp)) {
-        Surface() {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                //.heightIn(min = 50.dp),
-
-                shape = RoundedCornerShape(corner = CornerSize(16.dp)),
-                elevation = 6.dp
-            ) {
-                Row(
-                    verticalAlignment = Alignment.Top,
-                   // horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier.padding(5.dp)
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .padding(horizontal = 15.dp, vertical = 17.dp)
-                    ) {
-                        content()
-                    }
-                }
-            }
-        }
-    }
-}*/
 
 
 

@@ -69,7 +69,7 @@ fun DisplayGeneralGroupTextInfo (studyGroup: SingleStudyGroup, showHeading:Boole
     Divider(modifier = Modifier.padding(5.dp))
 }
 
-@Composable
+/*@Composable
 fun DisplayStudyGroupIcon(
     studyGroup: SingleStudyGroup,
     //studyGroup: DummyModel = getDummyGroups()[0]
@@ -79,14 +79,12 @@ fun DisplayStudyGroupIcon(
         modifier = Modifier
             .size(120.dp)
             .padding(12.dp),
-        //.fillMaxHeight(),
         shape = RoundedCornerShape(corner= CornerSize(6.dp)),
         color = Color.LightGray,
         elevation = 6.dp,
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                //.data(studyGroup.icon)
                 .data(
                     Icon(modifier = Modifier
                     .padding(5.dp),imageVector = Icons.Default.Edit, contentDescription = "IconDummy")
@@ -100,12 +98,11 @@ fun DisplayStudyGroupIcon(
                 .size(120.dp)
         )
     }
-}
+}*/
 @Composable
 fun groupIconWithElevation(url:String,iconSize:Int=85,modifier: Modifier=Modifier.size(iconSize.dp)){
     Surface(
         modifier = modifier,
-        //.fillMaxHeight(),
         shape = RoundedCornerShape(corner= CornerSize(6.dp)),
         color=Color.White,
         elevation = 6.dp
@@ -163,22 +160,17 @@ fun TextFieldCloseOnEnter(value:String="",label:String="",isPasswordField:Boolea
 
 }
 
-//@Preview
+
 @Composable
 fun DisplayGroupMembers(studyGroupMembers: List<BasicStudent>, studyGroupID:SingleGroupId, admin: Boolean, content: @Composable () -> Unit, onDelete:(BasicStudent) -> Unit = {}, adminViewModel: AdminViewModel){
     Surface(
         modifier = Modifier
             .padding(5.dp)
-            //.widthIn(25.dp)
             .heightIn(min = 50.dp, max = 700.dp),
-        //.fillMaxHeight(),
         shape = RoundedCornerShape(corner= CornerSize(6.dp)),
         elevation = 6.dp,
-    ) {     //var members = mutableStateListOf<>(studyGroup.members)
-            //val list by studyGroupViewModel.messages.observeAsState()
-
+    ) {
             LazyColumn() {
-                //items(studyGroup.members) { member ->
                 items(studyGroupMembers){ member ->
                     Divider(modifier = Modifier.padding(5.dp))
                     Row {
@@ -198,6 +190,7 @@ fun DisplayGroupMembers(studyGroupMembers: List<BasicStudent>, studyGroupID:Sing
                                 }
 
                                 if (admin){
+                                    content()
                                     Column( modifier = Modifier.width(50.dp),
                                         horizontalAlignment = Alignment.End) {
                                         Icon(imageVector = Icons.Default.Delete,
@@ -208,14 +201,6 @@ fun DisplayGroupMembers(studyGroupMembers: List<BasicStudent>, studyGroupID:Sing
                                                         if(it){
                                                             onDelete(member)
                                                         }
-
-                                                /* if (it){
-                                                        var mutableList = (studyGroup.members.toMutableList())
-                                                        var index = studyGroup.members.indexOf(member)
-                                                        mutableList.removeAt(index)
-                                                        studyGroup.members = mutableList.toList()
-                                                    }*/
-                                                //todo: delete member
                                                 })
                                             })
                                     }
@@ -237,7 +222,7 @@ fun DisplayGroupMembers(studyGroupMembers: List<BasicStudent>, studyGroupID:Sing
 
 //@Preview
 @Composable
-fun DisplayMessaging(messages: List<Message>? , content: @Composable () -> Unit
+fun DisplayMessaging(messages: List<Message>?
                      ) {
     Surface(
         color = MaterialTheme.colors.background
@@ -288,10 +273,9 @@ fun DisplayMessaging(messages: List<Message>? , content: @Composable () -> Unit
 
         }
     }
-  // content()
 }
 
-//@Preview(showBackground = true)
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -308,7 +292,6 @@ fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup, username : 
            modifier = Modifier
                .padding(8.dp)
                .width(220.dp),
-           //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
            label = { Text(text = "...") },
            placeholder = { Text(text = "Your Message") },
            onValueChange = {
@@ -327,11 +310,9 @@ fun DisplayInputTextFieldAndSendButton(studyGroup: SingleStudyGroup, username : 
                    .height(55.dp),
            ) {
                Button(
-                   //colors = ButtonDefaults.buttonColors(),
                    onClick = {
                        Log.d("message", "$text, to Group: ${studyGroup._id}")
                        sendMessage = true
-                       //text = test
                    }) {
                    Icon(imageVector = Icons.Default.Send, contentDescription = "sendButton")
                }
@@ -354,7 +335,6 @@ fun GroupButton(
 ) {
     Button(
         modifier = Modifier.padding(horizontal = 5.dp),
-        //colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
         onClick = { onButtonClicked(studyGroup._id) }) {
         if (text != "") {
             Text(text = text, style = MaterialTheme.typography.button)
@@ -373,7 +353,6 @@ fun DesignForWidgets(content: @Composable () -> Unit = {}){
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(4.dp),
-                //.heightIn(min = 50.dp),
 
                 shape = RoundedCornerShape(corner = CornerSize(16.dp)),
                 elevation = 6.dp
@@ -440,14 +419,6 @@ fun DisplayJoinRQ(joinRequestsReceivedForAdmin: JoinRequestsReceivedForAdmin){
     )
 }
 
-
-
-
-@Preview
-@Composable
-fun test() {
-
-}
 
 @Preview
 @Composable
