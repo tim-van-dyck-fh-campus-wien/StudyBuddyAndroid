@@ -8,7 +8,7 @@ data class SingleStudyGroup(
     val description:String = "",
     val topic:String = "",
     val admin:BasicStudent,
-    val members:List<BasicStudent>,
+    var members:List<BasicStudent>,
     val appointments:List<Appointment>,
     val _id:String = "",
     val messages:List<Message>,

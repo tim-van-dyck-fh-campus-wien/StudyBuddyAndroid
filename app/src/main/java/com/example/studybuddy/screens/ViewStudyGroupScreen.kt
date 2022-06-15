@@ -201,6 +201,7 @@ fun ViewStudyGroupContent(
                     }
                 }
 
+                val studyGroupLocal by studyGroupViewModel.members.observeAsState()
                 if (displayGroupMembers) {
                     DesignForWidgets() {
                         Text(
@@ -209,9 +210,26 @@ fun ViewStudyGroupContent(
                             style = MaterialTheme.typography.subtitle2
                         )
                         DisplayGroupMembers(
-                            studyGroup = studyGroup,
+                            studyGroupID = SingleGroupId(studyGroup._id),
+                            studyGroupMembers = studyGroupLocal!!,
                             admin = admin,
-                            adminViewModel = adminViewModel
+                            adminViewModel = adminViewModel,
+                            onDelete = {
+                                //var index = studyGroupViewModel.members.indexOf(it)
+                                var list = studyGroupViewModel.members.value?.toMutableList()
+                                var index = list?.indexOf(it)
+                                if (list != null) {
+                                    if (index != null) {
+                                        list.removeAt(index)
+                                    }
+                                }
+                                if (list != null) {
+                                    studyGroupViewModel.members.value = list.toList()
+                                }
+                                Log.i("ViewStudyGroupScreen", "StudyGroup Member List Updated ${studyGroupViewModel.members.value}")
+                                   // studyGroupViewModel.singleGroup.value?.members.
+                            },
+                            content = {}
                         )
                     }
                 }
@@ -381,7 +399,7 @@ fun ViewStudyGroupContent(
                                                                 ) {
                                                                     if (it) {
                                                                         showButtons = false
-                                                                        //studyGroupViewModel.detailedViewOfSingleStudyGroup(groupId = SingleGroupId(studyGroup._id))
+                                                                        studyGroupViewModel.detailedViewOfSingleStudyGroup(groupId = SingleGroupId(studyGroup._id))
                                                                     }
                                                                 }
                                                             },

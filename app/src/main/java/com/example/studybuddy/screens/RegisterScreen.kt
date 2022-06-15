@@ -108,7 +108,12 @@ fun RegisterScreen(
         TextFieldCloseOnEnter(password, "Password (min. 6 characters)", true){ value -> password = value }
         TextFieldCloseOnEnter(location, "Location (Zipcode in Vienna)"){ value -> location = value }
         TextFieldCloseOnEnter(studentId, "Identification Number (cXXX...)"){ value -> studentId = value }
-        TextFieldCloseOnEnter(yearOfFinish.toString(), "I will finish my studies by ..."){ value -> yearOfFinish = value.toInt() }
+        TextFieldCloseOnEnter(yearOfFinish.toString(), "I will finish my studies by ..."){ value ->
+            try {
+            yearOfFinish = value.toInt()
+            } catch (e: NumberFormatException ){
+                print(e.message)
+            }            }
 
         Button(
             modifier = Modifier.padding(16.dp),

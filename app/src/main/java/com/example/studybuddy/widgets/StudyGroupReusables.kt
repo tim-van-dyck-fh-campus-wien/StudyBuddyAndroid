@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -40,6 +41,7 @@ import coil.request.ImageRequest
 import com.example.studybuddy.R
 import com.example.studybuddy.data.api.model.*
 import com.example.studybuddy.viewmodel.AdminViewModel
+import io.reactivex.Single
 
 @Composable
 fun DisplayGeneralGroupTextInfo (studyGroup: SingleStudyGroup, showHeading:Boolean){
@@ -163,7 +165,7 @@ fun TextFieldCloseOnEnter(value:String="",label:String="",isPasswordField:Boolea
 
 //@Preview
 @Composable
-fun DisplayGroupMembers(studyGroup: SingleStudyGroup, admin: Boolean, adminViewModel: AdminViewModel){
+fun DisplayGroupMembers(studyGroupMembers: List<BasicStudent>, studyGroupID:SingleGroupId, admin: Boolean, content: @Composable () -> Unit, onDelete:(BasicStudent) -> Unit = {}, adminViewModel: AdminViewModel){
     Surface(
         modifier = Modifier
             .padding(5.dp)
@@ -172,9 +174,12 @@ fun DisplayGroupMembers(studyGroup: SingleStudyGroup, admin: Boolean, adminViewM
         //.fillMaxHeight(),
         shape = RoundedCornerShape(corner= CornerSize(6.dp)),
         elevation = 6.dp,
-    ) {
+    ) {     //var members = mutableStateListOf<>(studyGroup.members)
+            //val list by studyGroupViewModel.messages.observeAsState()
+
             LazyColumn() {
-                items(studyGroup.members) { member ->
+                //items(studyGroup.members) { member ->
+                items(studyGroupMembers){ member ->
                     Divider(modifier = Modifier.padding(5.dp))
                     Row {
                         Column (modifier = Modifier.width(300.dp)) {
@@ -198,8 +203,19 @@ fun DisplayGroupMembers(studyGroup: SingleStudyGroup, admin: Boolean, adminViewM
                                         Icon(imageVector = Icons.Default.Delete,
                                             contentDescription = "Delete Member",
                                             modifier = Modifier.clickable {
-                                                adminViewModel.deleteMember(deleteMemberFromGroupData = DeleteMemberFromGroupData(studyGroup._id, member._id), callbackDeleteMember = {
-                                                    //todo: delete member
+                                                Log.i("StudyGroupReusables", "Group ID: ${studyGroupID}, member ID: ${member._id}")
+                                                adminViewModel.deleteMember(deleteMemberFromGroupData = DeleteMemberFromGroupData(studyGroupID.groupId, member._id), callbackDeleteMember = {
+                                                        if(it){
+                                                            onDelete(member)
+                                                        }
+
+                                                /* if (it){
+                                                        var mutableList = (studyGroup.members.toMutableList())
+                                                        var index = studyGroup.members.indexOf(member)
+                                                        mutableList.removeAt(index)
+                                                        studyGroup.members = mutableList.toList()
+                                                    }*/
+                                                //todo: delete member
                                                 })
                                             })
                                     }

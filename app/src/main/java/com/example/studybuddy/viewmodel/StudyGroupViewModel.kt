@@ -25,6 +25,7 @@ class StudyGroupViewModel @Inject constructor(
     var filteredStudyGroupList = MutableLiveData<List<SingleStudyGroup>>()
     var joinRequests = MutableLiveData<List<JoinRequestsReceivedForAdmin>>()
     var messages = MutableLiveData<List<Message>>()
+    var members = MutableLiveData<List<BasicStudent>>()
     //added, because somehow, the first call seems to return an empty list
     /*init {
         getAllStudyGroups()
@@ -127,8 +128,10 @@ class StudyGroupViewModel @Inject constructor(
                 //singleGroup = response.body()!!
                 singleGroup.postValue(response.body()!!)
                 messages.postValue(response.body()!!.messages)
+                members.postValue(response.body()!!.members)
                 Log.i("StudyGroupAPI", "Messages from detailed view ${messages.value}")
-                Log.i("StudyGroupAPI", "Messages from detailed view ${singleGroup.value}")
+                Log.i("StudyGroupAPI", "SingleGroup from detailed view ${singleGroup.value}")
+                Log.i("StudyGroupAPI", "Members from detailed view ${members.value}")
             }
             else {
                 /*TODO: add behaviour for error to eliminate dummy group*/

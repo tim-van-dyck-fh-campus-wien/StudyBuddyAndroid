@@ -140,12 +140,13 @@ class AdminViewModel @Inject constructor(
             }
         }
     }
-    fun deleteMember(deleteMemberFromGroupData: DeleteMemberFromGroupData, callbackDeleteMember: (DeleteMemberFromGroupData) -> Unit){
+    fun deleteMember(deleteMemberFromGroupData: DeleteMemberFromGroupData, callbackDeleteMember: (Boolean) -> Unit){
+        Log.i("StudyGroupAPI", "Delete this member is $deleteMemberFromGroupData")
         viewModelScope.launch {
             try {
                 val response = repository.deleteMember(deleteMemberFromGroupData = deleteMemberFromGroupData)
                 if (response.isSuccessful){
-                    callbackDeleteMember(deleteMemberFromGroupData)
+                    callbackDeleteMember(true)
                 } else { onError("Error: ${response.message()}") }
             } catch(e:Exception){
                 Log.i("error",e.toString())
