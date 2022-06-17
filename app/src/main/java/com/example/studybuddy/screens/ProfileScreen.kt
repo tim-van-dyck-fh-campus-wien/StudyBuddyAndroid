@@ -3,9 +3,13 @@ package com.example.studybuddy.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +40,9 @@ fun ProfileContent(authenticationViewModel: AuthenticationViewModel, navControll
             painter = painterResource(id = R.drawable.transparent_study_buddy_backup),
             contentDescription = "StudyBuddyIcon"
         )*/
+
+            Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "ProfileScreen", modifier = Modifier.size(128.dp))
+
         Button(
             modifier = Modifier.padding(16.dp),
             onClick = {
