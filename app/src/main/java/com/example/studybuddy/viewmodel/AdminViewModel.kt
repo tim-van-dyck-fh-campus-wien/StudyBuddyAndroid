@@ -19,19 +19,7 @@ class AdminViewModel @Inject constructor(
     private val repository:AdminRepository
 ) : ViewModel(){
     val errorMessage = MutableLiveData<String>()
-    //var studyGroupsSearchList =MutableLiveData<List<SingleStudyGroup>>()
-    //Test for List of StudyGroups - works fine
-    //var testList = listOf<JoinRequestsReceivedForAdmin>()
-    //var myGroupList = MutableLiveData<List<SingleStudyGroup>>()
-    //var singleGroup = getDummyGroup()
-    //var filteredStudyGroupList = MutableLiveData<List<SingleStudyGroup>>()
     var joinRequests = MutableLiveData<List<JoinRequestsReceivedForAdmin>>()
-
-    //added, because somehow, the first call seems to return an empty list
-    /*init {
-        getAllStudyGroups()
-        getOnlyMyGroups()
-    }*/
 
 
     private fun onError(message:String){
@@ -153,6 +141,37 @@ class AdminViewModel @Inject constructor(
             }
         }
     }
+
+
+    fun hideSettings(hideShowGroup: HideShowGroup, callBackHide: (Boolean) -> Unit){
+        Log.i("StudyGroupAPI", "HideShowSettings for $hideShowGroup")
+        viewModelScope.launch {
+            try {
+                val response = repository.hideSettings(hideShowGroup = hideShowGroup)
+                if (response.isSuccessful){
+                    callBackHide(true)
+                } else { onError("Error: ${response.message()}") }
+            } catch(e:Exception){
+                Log.i("error",e.toString())
+            }
+        }
+    }
+
+    fun deleteGroup(singleGroupId: SingleGroupId, callBackDeleteGroup: (Boolean) -> Unit){
+        Log.i("StudyGroupAPI", "delete group $singleGroupId")
+        viewModelScope.launch {
+            try {
+                val response = repository.deleteGroup(singleGroupId = singleGroupId)
+                if (response.isSuccessful){
+                    callBackDeleteGroup(true)
+                } else { onError("Error: ${response.message()}") }
+            } catch(e:Exception){
+                Log.i("error",e.toString())
+            }
+        }
+    }
+
+
 }
 
 

@@ -23,4 +23,11 @@ interface AdminApi {
 
     @POST("studyGroups/deleteMember")
     suspend fun deleteMember(@Body deleteMemberFromGroupData: DeleteMemberFromGroupData): Response<Unit>
+
+    @POST("studyGroups/hideThisGroup")
+    suspend fun hideSettings(@Body hideShowGroup: HideShowGroup): Response<Unit>
+
+    @POST("studyGroups/deleteThisStudyGroup")
+    suspend fun deleteThisGroup(@Body singleGroupId: SingleGroupId): Response<Unit>
+
 }

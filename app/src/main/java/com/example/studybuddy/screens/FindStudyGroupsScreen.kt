@@ -53,10 +53,7 @@ fun FindStudyGroupsContent(
 ) {
     Column {
         displayLogo()
-        /*Image(
-            painter = painterResource(id = R.drawable.transparent_study_buddy_backup),
-            contentDescription = "StudyBuddyIcon"
-        )*/
+
         var allGroups by remember { mutableStateOf(false) }
         var showFilter by remember { mutableStateOf(false) }
         Surface(
@@ -115,6 +112,11 @@ fun FindStudyGroupsContent(
                 Log.d("findStudyGroups", "allGroups is $allGroups, showing filtered result")
                 Log.d("findStudyGroups", "filtered list: ${studyGroupViewModel.filteredStudyGroupList.value}")
                 if (studyGroupViewModel.filteredStudyGroupList.value.isNullOrEmpty()) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        text = "You see this, because we couldn't load any groups. Either try reload or be the first to create a group for this district.",
+                        style = MaterialTheme.typography.body1
+                    )
                     Log.d("join", "List is empty")
                 } else {
                     LazyColumn {

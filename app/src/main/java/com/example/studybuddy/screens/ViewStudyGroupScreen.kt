@@ -1,14 +1,11 @@
 package com.example.studybuddy.screens
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -17,10 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -31,7 +26,6 @@ import com.example.studybuddy.navigation.ScreenNames
 import com.example.studybuddy.viewmodel.AdminViewModel
 import com.example.studybuddy.viewmodel.StudyGroupViewModel
 import com.example.studybuddy.widgets.*
-import io.reactivex.Single
 
 
 @Composable
@@ -99,13 +93,16 @@ fun ViewStudyGroupContent(
     var displayAdminStuff by remember { mutableStateOf(false) }
     var displayGroupMembers by remember { mutableStateOf(false) }
     var displayGroupMessages by remember { mutableStateOf(false) }
+    var deleteGroup by remember { mutableStateOf(false)}
+
 
 
 
     if (studyGroupViewModel.singleGroup.value == null) {
-        Text("Sorry, something went wrong")
+        Text("Sorry, something went wrong. Try reloading the group.")
     } else if (studyGroupViewModel.singleGroup.value != null){
         var studyGroup = studyGroupViewModel.singleGroup.value!!
+        var hideGroup by remember { mutableStateOf(studyGroup.hide)}
         Log.d("ViewStudyGroup", "admin = $admin")
         Column(
             modifier = Modifier
@@ -255,7 +252,11 @@ fun ViewStudyGroupContent(
 
                 /** Display Admin Stuff*/
                 if (admin) {
-
+                    Text(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        text = "Admin Functionalities: ",
+                        style = MaterialTheme.typography.caption
+                    )
                     //Group Data Update
                     Button(
                         modifier = Modifier
@@ -381,12 +382,85 @@ fun ViewStudyGroupContent(
                             }
                         }
                     }
+                    var showText by remember {mutableStateOf(false)}
+                    //Hide Button
+                    Button(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .width(250.dp),
+                        onClick = {
+                            hideGroup = !hideGroup
+                            adminViewModel.hideSettings(HideShowGroup(hideSetting = hideGroup, groupId = studyGroup._id),
+                                callBackHide = {if (it){ showText = true } })
+                        }) {
+                        if (hideGroup) {
+                            Text("Show Group in Search")
+                        } else if (!hideGroup) {
+                            showText = false
+                            Text(text = "Hide Group from Search")
+                        }
+                        }
+
+                        if (showText){
+                            Text(
+                                modifier = Modifier.padding(horizontal = 5.dp),
+                                text = "Your Group is currently hidden from Search List.",
+                                style = MaterialTheme.typography.body2
+                            )
+                        }
+
+                    // Delete this StudyGroup
+
+                    Button(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .width(250.dp),
+                        onClick = {
+                            deleteGroup = !deleteGroup
+                        }) {
+                        if (!deleteGroup) {
+                            Text("Delete this Study Group")
+                        } else if (deleteGroup) {
+                            showText = false
+                            Text(text = "Close")
+                        }
+                    }
+                    if (deleteGroup) {
+                        Button(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .width(250.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color.Red
+                            ),
+                            onClick = {
+                                adminViewModel.deleteGroup(
+                                    SingleGroupId(studyGroup._id),
+                                    callBackDeleteGroup = {if (it){
+                                        navController.navigate(ScreenNames.HomeScreen.name)
+                                    } })
+                            }) {
+                            Text("Delete this Study Group.")
+                        }
+
+                        Text(
+                            modifier = Modifier.padding(horizontal = 5.dp),
+                            text = "Careful, this cannot be undone!",
+                            style = MaterialTheme.typography.body2
+                        )
+
+
+                    }
+                        }
+
+
+                    }
                 }
 
             }
         }
-    }
-}
+
+
 
 
 
